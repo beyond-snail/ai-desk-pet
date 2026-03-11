@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>赛博机器人形象预览</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0e14;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'PingFang SC', sans-serif;
+    gap: 60px;
+    flex-wrap: wrap;
+    padding: 40px;
+  }
+  .stage { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .label { color: rgba(77,208,225,0.5); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; }
+  .pet-wrap { position: relative; width: 120px; height: 110px; cursor: pointer; }
+  .mood-btns { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; max-width: 320px; }
+  .mood-btn {
+    padding: 6px 14px;
+    border: 1px solid rgba(77,208,225,0.2);
+    border-radius: 4px;
+    background: rgba(77,208,225,0.05);
+    color: rgba(77,208,225,0.6);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: monospace;
+  }
+  .mood-btn:hover, .mood-btn.active {
+    background: rgba(77,208,225,0.15);
+    border-color: rgba(77,208,225,0.5);
+    color: #4dd0e1;
+  }
+
+  /* 待机悬浮 */
+  @keyframes hover-float {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-4px); }
+  }
+  /* 高兴 */
+  @keyframes happy-bounce {
+    0%, 100% { transform: translateY(0) scaleY(1); }
+    40%       { transform: translateY(-10px) scaleY(0.95); }
+    60%       { transform: translateY(-12px) scaleY(1.05); }
+  }
+  /* 困惑摇头 */
+  @keyframes confused-shake {
+    0%, 100% { transform: rotate(0deg); }
+    25%       { transform: rotate(-4deg); }
+    75%       { transform: rotate(4deg); }
+  }
+  /* 睡觉 */
+  @keyframes sleep-tilt {
+    0%, 100% { transform: rotate(-6deg) translateY(0); }
+    50%       { transform: rotate(-6deg) translateY(-2px); }
+  }
+  /* 说话 */
+  @keyframes talking {
+    0%, 100% { transform: translateY(0); }
+    25%       { transform: translateY(-1.5px); }
+    75%       { transform: translateY(1px); }
+  }
+  /* 眩晕 */
+  @keyframes dizzy-sway {
+    0%, 100% { transform: rotate(-3deg); }
+    50%       { transform: rotate(3deg); }
+  }
+  /* LED 扫描线 */
+  @keyframes scan-line {
+    0%   { transform: translateY(-100%); opacity: 0.6; }
+    100% { transform: translateY(200%); opacity: 0; }
+  }
+  /* 天线脉冲 */
+  @keyframes antenna-pulse {
+    0%, 100% { opacity: 0.7; r: 4px; }
+    50%       { opacity: 1; r: 5.5px; }
+  }
+  /* 履带滚动 */
+  @keyframes track-roll {
+    from { stroke-dashoffset: 0; }
+    to   { stroke-dashoffset: -20; }
+  }
+  /* 眩晕螺旋 */
+  @keyframes spiral-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  /* LED 闪烁 */
+  @keyframes led-blink {
+    0%, 90%, 100% { opacity: 1; }
+    95%            { opacity: 0.1; }
+  }
+
+  .body-group { animation: hover-float 2.5s ease-in-out infinite; transform-origin: center bottom; }
+  .mood-happy   .body-group { animation: happy-bounce 0.5s ease-in-out infinite !important; }
+  .mood-confused .body-group { animation: confused-shake 0.45s ease-in-out infinite !important; }
+  .mood-sleep   .body-group { animation: sleep-tilt 2.5s ease-in-out infinite !important; }
+  .mood-talking .body-group { animation: talking 0.28s ease-in-out infinite !important; }
+  .mood-dizzy   .body-group { animation: dizzy-sway 0.5s ease-in-out infinite !important; transform-origin: 60px 55px; }
+
+  .scan { animation: scan-line 2s linear infinite; }
+  .track-l { stroke-dasharray: 6 4; animation: track-roll 0.8s linear infinite; }
+  .track-r { stroke-dasharray: 6 4; animation: track-roll 0.8s linear infinite reverse; }
+  .antenna-dot { animation: antenna-pulse 1.2s ease-in-out infinite; }
+  .led-eye { animation: led-blink 3s ease-in-out infinite; }
+
+  .dizzy-eye-l { transform-origin: 42px 46px; animation: spiral-spin 1.1s linear infinite; }
+  .dizzy-eye-r { transform-origin: 78px 46px; animation: spiral-spin 1.1s linear infinite reverse; }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="label">CYBER-BOT · SYSTEM ONLINE</div>
+  <div class="pet-wrap" id="mainPet">
+    <svg width="120" height="110" viewBox="0 0 120 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- 金属渐变 -->
+        <linearGradient id="shellGrad" x1="20" y1="20" x2="100" y2="90" gradientUnits="userSpaceOnUse">
+          <stop offset="0%"   stop-color="#78909c"/>
+          <stop offset="50%"  stop-color="#546e7a"/>
+          <stop offset="100%" stop-color="#37474f"/>
+        </linearGradient>
+        <linearGradient id="bodyGrad" x1="25" y1="55" x2="95" y2="95" gradientUnits="userSpaceOnUse">
+          <stop offset="0%"   stop-color="#607d8b"/>
+          <stop offset="100%" stop-color="#37474f"/>
+        </linearGradient>
+        <!-- LED 屏幕 -->
+        <linearGradient id="screenGrad" x1="30" y1="35" x2="90" y2="65" gradientUnits="userSpaceOnUse">
+          <stop offset="0%"   stop-color="#001a20"/>
+          <stop offset="100%" stop-color="#002830"/>
+        </linearGradient>
+        <!-- 高光 -->
+        <linearGradient id="shineGrad" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+          <stop offset="0%"   stop-color="white" stop-opacity="0.18"/>
+          <stop offset="100%" stop-color="white" stop-opacity="0"/>
+        </linearGradient>
+        <!-- 履带渐变 -->
+        <linearGradient id="trackGrad" x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox">
+          <stop offset="0%"   stop-color="#37474f"/>
+          <stop offset="50%"  stop-color="#546e7a"/>
+          <stop offset="100%" stop-color="#37474f"/>
+        </linearGradient>
+        <!-- 阴影 -->
+        <filter id="dropShadow">
+          <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#000" flood-opacity="0.4"/>
+        </filter>
+        <filter id="glowFilter">
+          <feGaussianBlur stdDeviation="2.5" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="cyanGlow">
+          <feGaussianBlur stdDeviation="3" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <!-- 屏幕裁剪 -->
+        <clipPath id="screenClip">
+          <rect x="28" y="34" width="64" height="32" rx="4"/>
+        </clipPath>
+        <!-- 履带裁剪 -->
+        <clipPath id="trackLClip"><rect x="10" y="82" width="44" height="18" rx="9"/></clipPath>
+        <clipPath id="trackRClip"><rect x="66" y="82" width="44" height="18" rx="9"/></clipPath>
+      </defs>
+
+      <g class="body-group" filter="url(#dropShadow)">
+
+        <!-- 天线 -->
+        <line x1="60" y1="14" x2="60" y2="4" stroke="#78909c" stroke-width="2.5" stroke-linecap="round"/>
+        <circle class="antenna-dot" cx="60" cy="3" r="4" fill="#4dd0e1" filter="url(#cyanGlow)"/>
+        <circle cx="60" cy="3" r="2.5" fill="white"/>
+
+        <!-- 头部外壳 -->
+        <rect x="18" y="14" width="84" height="56" rx="8" fill="url(#shellGrad)"/>
+        <rect x="18" y="14" width="84" height="28" rx="8" fill="url(#shineGrad)"/>
+        <!-- 头部边框 -->
+        <rect x="18" y="14" width="84" height="56" rx="8" fill="none" stroke="rgba(77,208,225,0.3)" stroke-width="1.5"/>
+        <!-- 侧面阴影 -->
+        <rect x="18" y="14" width="7" height="56" rx="4" fill="rgba(0,0,0,0.12)"/>
+        <rect x="95" y="14" width="7" height="56" rx="4" fill="rgba(0,0,0,0.18)"/>
+
+        <!-- LED 屏幕面板 -->
+        <rect x="28" y="34" width="64" height="32" rx="4" fill="url(#screenGrad)"/>
+        <rect x="28" y="34" width="64" height="32" rx="4" fill="none" stroke="rgba(77,208,225,0.4)" stroke-width="1"/>
+        <!-- 扫描线 -->
+        <g clip-path="url(#screenClip)">
+          <rect class="scan" x="28" y="34" width="64" height="6" fill="rgba(77,208,225,0.08)"/>
+        </g>
+
+        <!-- 眼睛（LED 矩形） -->
+        <g class="eye-l led-eye">
+          <rect x="34" y="40" width="20" height="14" rx="3" fill="#4dd0e1" opacity="0.15"/>
+          <rect x="36" y="42" width="16" height="10" rx="2" fill="#4dd0e1" opacity="0.9" filter="url(#glowFilter)"/>
+          <rect x="38" y="44" width="12" height="6"  rx="1" fill="#b2ebf2"/>
+          <!-- 高光 -->
+          <rect x="38" y="44" width="5" height="2" rx="1" fill="white" opacity="0.6"/>
+        </g>
+        <g class="eye-r led-eye">
+          <rect x="66" y="40" width="20" height="14" rx="3" fill="#4dd0e1" opacity="0.15"/>
+          <rect x="68" y="42" width="16" height="10" rx="2" fill="#4dd0e1" opacity="0.9" filter="url(#glowFilter)"/>
+          <rect x="70" y="44" width="12" height="6"  rx="1" fill="#b2ebf2"/>
+          <rect x="70" y="44" width="5" height="2" rx="1" fill="white" opacity="0.6"/>
+        </g>
+
+        <!-- 嘴巴（LED 像素点） -->
+        <g id="mouthGroup">
+          <!-- 默认微笑：像素点排列 -->
+          <rect id="m1" x="40" y="58" width="3" height="3" rx="1" fill="#4dd0e1" opacity="0.7"/>
+          <rect id="m2" x="46" y="61" width="3" height="3" rx="1" fill="#4dd0e1" opacity="0.7"/>
+          <rect id="m3" x="52" y="62" width="3" height="3" rx="1" fill="#4dd0e1" opacity="0.7"/>
+          <rect id="m4" x="58" y="62" width="3" height="3" rx="1" fill="#4dd0e1" opacity="0.7"/>
+          <rect id="m5" x="64" y="61" width="3" height="3" rx="1" fill="#4dd0e1" opacity="0.7"/>
+          <rect id="m6" x="70" y="58" width="3" height="3" rx="1" fill="#4dd0e1" opacity="0.7"/>
+        </g>
+
+        <!-- 耳部散热格栅 -->
+        <rect x="10" y="28" width="9" height="28" rx="4" fill="#455a64"/>
+        <line x1="14" y1="32" x2="14" y2="52" stroke="rgba(77,208,225,0.3)" stroke-width="1" stroke-dasharray="2 3"/>
+        <rect x="101" y="28" width="9" height="28" rx="4" fill="#455a64"/>
+        <line x1="105" y1="32" x2="105" y2="52" stroke="rgba(77,208,225,0.3)" stroke-width="1" stroke-dasharray="2 3"/>
+
+        <!-- 颈部连接 -->
+        <rect x="48" y="68" width="24" height="8" rx="4" fill="#455a64"/>
+        <rect x="50" y="69" width="20" height="6" rx="3" fill="#37474f"/>
+
+        <!-- 身体 -->
+        <rect x="22" y="74" width="76" height="26" rx="6" fill="url(#bodyGrad)"/>
+        <rect x="22" y="74" width="76" height="12" rx="6" fill="url(#shineGrad)"/>
+        <rect x="22" y="74" width="76" height="26" rx="6" fill="none" stroke="rgba(77,208,225,0.2)" stroke-width="1"/>
+        <!-- 胸口指示灯 -->
+        <circle cx="60" cy="87" r="4" fill="#4dd0e1" opacity="0.8" filter="url(#glowFilter)"/>
+        <circle cx="60" cy="87" r="2.5" fill="#b2ebf2"/>
+        <!-- 侧面散热孔 -->
+        <rect x="26" y="78" width="4" height="14" rx="2" fill="rgba(0,0,0,0.2)"/>
+        <rect x="90" y="78" width="4" height="14" rx="2" fill="rgba(0,0,0,0.2)"/>
+
+        <!-- 履带左 -->
+        <rect x="10" y="82" width="44" height="18" rx="9" fill="#37474f"/>
+        <rect x="10" y="82" width="44" height="18" rx="9" fill="none" stroke="rgba(77,208,225,0.25)" stroke-width="1.5"/>
+        <g clip-path="url(#trackLClip)">
+          <line class="track-l" x1="10" y1="91" x2="54" y2="91" stroke="rgba(77,208,225,0.3)" stroke-width="18" stroke-dasharray="6 4"/>
+        </g>
+        <circle cx="19" cy="91" r="7" fill="#455a64" stroke="rgba(77,208,225,0.3)" stroke-width="1"/>
+        <circle cx="45" cy="91" r="7" fill="#455a64" stroke="rgba(77,208,225,0.3)" stroke-width="1"/>
+        <circle cx="19" cy="91" r="3" fill="#37474f"/>
+        <circle cx="45" cy="91" r="3" fill="#37474f"/>
+
+        <!-- 履带右 -->
+        <rect x="66" y="82" width="44" height="18" rx="9" fill="#37474f"/>
+        <rect x="66" y="82" width="44" height="18" rx="9" fill="none" stroke="rgba(77,208,225,0.25)" stroke-width="1.5"/>
+        <g clip-path="url(#trackRClip)">
+          <line class="track-r" x1="66" y1="91" x2="110" y2="91" stroke="rgba(77,208,225,0.3)" stroke-width="18" stroke-dasharray="6 4"/>
+        </g>
+        <circle cx="75"  cy="91" r="7" fill="#455a64" stroke="rgba(77,208,225,0.3)" stroke-width="1"/>
+        <circle cx="101" cy="91" r="7" fill="#455a64" stroke="rgba(77,208,225,0.3)" stroke-width="1"/>
+        <circle cx="75"  cy="91" r="3" fill="#37474f"/>
+        <circle cx="101" cy="91" r="3" fill="#37474f"/>
+
+      </g>
+
+      <!-- 地面阴影 -->
+      <ellipse cx="60" cy="104" rx="40" ry="4" fill="rgba(0,0,0,0.25)"/>
+    </svg>
+  </div>
+
+  <div class="mood-btns">
+    <button class="mood-btn active" onclick="setMood('idle',this)">[IDLE]</button>
+    <button class="mood-btn" onclick="setMood('happy',this)">[HAPPY]</button>
+    <button class="mood-btn" onclick="setMood('confused',this)">[CONFUSED]</button>
+    <button class="mood-btn" onclick="setMood('sleep',this)">[SLEEP]</button>
+    <button class="mood-btn" onclick="setMood('talking',this)">[TALKING]</button>
+    <button class="mood-btn" onclick="setMood('dizzy',this)">[DIZZY]</button>
+  </div>
+</div>
+
+<script>
+  const pet = document.getElementById('mainPet');
+
+  // LED 眼睛模板（矩形像素风）
+  function ledEye(x, y, w, h, mood, side) {
+    const glow = side === 'L' ? 'glowFilter' : 'glowFilter';
+    switch(mood) {
+      case 'happy':
+        // 弯月形 LED
+        return `
+          <rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3" fill="#4dd0e1" opacity="0.1"/>
+          <rect x="${x+2}" y="${y+6}" width="${w-4}" height="4" rx="2" fill="#4dd0e1" opacity="0.9" filter="url(#${glow})"/>
+          <rect x="${x+4}" y="${y+3}" width="4" height="4" rx="2" fill="#4dd0e1" opacity="0.7"/>
+          <rect x="${x+w-8}" y="${y+3}" width="4" height="4" rx="2" fill="#4dd0e1" opacity="0.7"/>`;
+      case 'confused':
+        if (side === 'L') return `
+          <rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3" fill="#4dd0e1" opacity="0.15"/>
+          <rect x="${x+2}" y="${y+2}" width="${w-4}" height="${h-4}" rx="2" fill="#4dd0e1" opacity="0.9" filter="url(#${glow})"/>
+          <rect x="${x+4}" y="${y+4}" width="${w-8}" height="${h-8}" rx="1" fill="#b2ebf2"/>
+          <rect x="${x+4}" y="${y+4}" width="5" height="2" rx="1" fill="white" opacity="0.6"/>`;
+        else return `
+          <rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3" fill="#4dd0e1" opacity="0.15"/>
+          <rect x="${x+2}" y="${y+4}" width="${w-4}" height="${h-8}" rx="2" fill="#4dd0e1" opacity="0.9" filter="url(#${glow})"/>
+          <rect x="${x+4}" y="${y+5}" width="${w-8}" height="${h-10}" rx="1" fill="#b2ebf2"/>
+          <path d="M ${x+2} ${y+2} L ${x+w-2} ${y+2}" stroke="#4dd0e1" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>`;
+      case 'sleep':
+        return `
+          <rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3" fill="#1a3a40" opacity="0.8"/>
+          <rect x="${x+2}" y="${y+h/2-1}" width="${w-4}" height="3" rx="1.5" fill="#4dd0e1" opacity="0.5"/>`;
+      case 'talking':
+        return `
+          <rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3" fill="#4dd0e1" opacity="0.2"/>
+          <rect x="${x+1}" y="${y+1}" width="${w-2}" height="${h-2}" rx="2" fill="#4dd0e1" opacity="0.95" filter="url(#${glow})"/>
+          <rect x="${x+3}" y="${y+3}" width="${w-6}" height="${h-6}" rx="1" fill="#b2ebf2"/>
+          <rect x="${x+3}" y="${y+3}" width="5" height="2" rx="1" fill="white" opacity="0.7"/>`;
+      case 'dizzy': {
+        const cls = side === 'L' ? 'dizzy-eye-l' : 'dizzy-eye-r';
+        const cx = x + w/2, cy = y + h/2;
+        return `
+          <rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3" fill="#001a20" opacity="0.9"/>
+          <g class="${cls}">
+            <circle cx="${cx}" cy="${cy}" r="${Math.min(w,h)/2-1}" fill="none" stroke="#4dd0e1" stroke-width="1" opacity="0.4"/>
+            <path d="M ${cx} ${cy} m 0 -${Math.min(w,h)/2-2} a ${Math.min(w,h)/2-2} ${Math.min(w,h)/2-2} 0 0 1 ${Math.min(w,h)/2-2} ${Math.min(w,h)/2-2} a ${Math.min(w,h)/2-3.5} ${Math.min(w,h)/2-3.5} 0 0 1 -${Math.min(w,h)/2-3.5} ${Math.min(w,h)/2-3.5}"
+              fill="none" stroke="#4dd0e1" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="${cx}" cy="${cy}" r="1.5" fill="#b2ebf2"/>
+          </g>`;
+      }
+      default: // idle
+        return `
+          <rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3" fill="#4dd0e1" opacity="0.15"/>
+          <rect x="${x+2}" y="${y+2}" width="${w-4}" height="${h-4}" rx="2" fill="#4dd0e1" opacity="0.9" filter="url(#${glow})"/>
+          <rect x="${x+4}" y="${y+4}" width="${w-8}" height="${h-8}" rx="1" fill="#b2ebf2"/>
+          <rect x="${x+4}" y="${y+4}" width="5" height="2" rx="1" fill="white" opacity="0.6"/>`;
+    }
+  }
+
+  // LED 嘴巴像素点
+  const mouthConfigs = {
+    idle:     [[40,58],[46,61],[52,62],[58,62],[64,61],[70,58]],
+    happy:    [[40,62],[44,59],[50,57],[56,57],[62,57],[68,59],[72,62]],
+    confused: [[40,59],[46,59],[52,60],[58,61],[64,62],[70,62]],
+    sleep:    [[46,60],[52,60],[58,60],[64,60],[70,60]],
+    talking:  [[44,60],[50,58],[56,60],[62,58],[68,60]],
+    dizzy:    [[40,61],[46,59],[52,62],[58,59],[64,62],[70,59]],
+  };
+
+  function setMouthPixels(mood) {
+    const group = pet.querySelector('#mouthGroup');
+    const pts = mouthConfigs[mood] || mouthConfigs.idle;
+    group.innerHTML = pts.map((p,i) =>
+      `<rect x="${p[0]}" y="${p[1]}" width="3" height="3" rx="1" fill="#4dd0e1" opacity="0.7"/>`
+    ).join('');
+  }
+
+  function setEyes(mood) {
+    const eyeL = pet.querySelector('.eye-l');
+    const eyeR = pet.querySelector('.eye-r');
+    eyeL.innerHTML = ledEye(34, 40, 20, 14, mood, 'L');
+    eyeR.innerHTML = ledEye(66, 40, 20, 14, mood, 'R');
+    const blinkMoods = ['idle'];
+    eyeL.style.animation = blinkMoods.includes(mood) ? '' : 'none';
+    eyeR.style.animation = blinkMoods.includes(mood) ? '' : 'none';
+    if (mood === 'talking') {
+      eyeL.style.animation = 'led-blink 0.3s ease-in-out infinite';
+      eyeR.style.animation = 'led-blink 0.3s ease-in-out infinite 0.08s';
+    }
+  }
+
+  function setMood(mood, btn) {
+    pet.className = 'pet-wrap';
+    if (mood !== 'idle') pet.classList.add('mood-' + mood);
+    setEyes(mood);
+    setMouthPixels(mood);
+    document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+</script>
+</body>
+</html>

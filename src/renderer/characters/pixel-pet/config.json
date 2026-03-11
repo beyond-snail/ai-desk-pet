@@ -1,0 +1,79 @@
+{
+  "id": "pixel-pet",
+  "name": "像素宠物",
+  "description": "8-bit 风格的复古像素宠物",
+  "dimensions": {
+    "width": 77,
+    "height": 77
+  },
+  "animations": {
+    "idle": {
+      "speed": 1,
+      "amplitude": 2,
+      "legRotation": 0,
+      "frequency": 0.03
+    },
+    "happy": {
+      "speed": 1.8,
+      "amplitude": 3,
+      "legRotation": 0,
+      "frequency": 0.05
+    },
+    "sleepy": {
+      "speed": 0.3,
+      "amplitude": 0.5,
+      "legRotation": 0,
+      "frequency": 0.015
+    },
+    "hungry": {
+      "speed": 0.8,
+      "amplitude": 1.5,
+      "legRotation": 0,
+      "frequency": 0.03
+    },
+    "excited": {
+      "speed": 2.5,
+      "amplitude": 4,
+      "legRotation": 0,
+      "frequency": 0.07
+    },
+    "sad": {
+      "speed": 0.5,
+      "amplitude": 0.8,
+      "legRotation": 0,
+      "frequency": 0.02
+    }
+  },
+  "moveParts": {
+    "bodySelector": ".pixel-body",
+    "limbSelector": ".pixel-foot",
+    "headSelector": ".pixel-body"
+  },
+  "growth": {
+    "stages": [
+      "egg",
+      "rookie",
+      "buddy",
+      "hero",
+      "legend"
+    ],
+    "stageLabels": [
+      "蛋壳",
+      "新手",
+      "伙伴",
+      "英雄",
+      "传说"
+    ]
+  },
+  "animationStrategy": "pixel-pet",
+  "movement": {
+    "maxSpeedMultiplier": 0.74,
+    "acceleration": 0.18,
+    "turnResponsiveness": 0.16,
+    "turnSlowdown": 0.18,
+    "decelerationDistance": 64,
+    "arrivalRadius": 8,
+    "minTravelDistance": 120,
+    "roamPadding": 60
+  }
+}

@@ -1,0 +1,7 @@
+node_modules/
+dist/
+certs/
+*.p12
+*.pfx
+*.mobileprovision
+.DS_Store

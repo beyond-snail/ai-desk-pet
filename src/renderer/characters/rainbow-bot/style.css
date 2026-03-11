@@ -1,0 +1,224 @@
+/* ===== Rainbow Bot ===== */
+.caterpillar[data-character='rainbow-bot'] {
+  width: 90px;
+  height: 120px;
+  isolation: isolate;
+}
+
+.caterpillar[data-character='rainbow-bot'] .rb-svg {
+  display: block;
+  overflow: visible;
+  will-change: transform;
+}
+
+/* 待机呼吸 */
+@keyframes rb-breathe {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+/* 高兴跳跳 */
+@keyframes rb-happy-jump {
+  0%, 100% { transform: translateY(0) scale(1); }
+  40% { transform: translateY(-12px) scale(1.05, 0.95); }
+  60% { transform: translateY(-14px) scale(0.95, 1.05); }
+}
+
+/* 困惑摇头 */
+@keyframes rb-confused-shake {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-6deg); }
+  75% { transform: rotate(6deg); }
+}
+
+/* 睡觉倾斜 */
+@keyframes rb-sleep-tilt {
+  0%, 100% { transform: rotate(-4deg) translateY(0); }
+  50% { transform: rotate(-4deg) translateY(-2px); }
+}
+
+/* 说话震动 */
+@keyframes rb-talking {
+  0%, 100% { transform: translateY(0); }
+  25% { transform: translateY(-2px) scaleX(1.02); }
+  75% { transform: translateY(1px) scaleX(0.98); }
+}
+
+/* 眩晕摇晃 */
+@keyframes rb-dizzy-sway {
+  0%, 100% { transform: rotate(-3deg) translateY(0); }
+  50% { transform: rotate(3deg) translateY(-2px); }
+}
+
+/* 天线弹动 */
+@keyframes rb-antenna-wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(8deg); }
+  75% { transform: rotate(-8deg); }
+}
+
+/* 眼睛眨眼 */
+@keyframes rb-blink {
+  0%, 76%, 100% { transform: scaleY(1); }
+  79% { transform: scaleY(0.15); }
+  82% { transform: scaleY(1); }
+  85% { transform: scaleY(0.22); }
+  88% { transform: scaleY(1); }
+}
+
+/* 眼睛发光脉冲 */
+@keyframes rb-glow-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* 彩虹条纹流动 */
+@keyframes rb-stripe-flow {
+  from { transform: translateX(0); }
+  to { transform: translateX(-20px); }
+}
+
+/* 腿部走路 */
+@keyframes rb-leg-l {
+  0% { transform: rotate(-18deg); }
+  100% { transform: rotate(18deg); }
+}
+
+@keyframes rb-leg-r {
+  0% { transform: rotate(18deg); }
+  100% { transform: rotate(-18deg); }
+}
+
+/* 手臂走路 — 与腿反向 */
+@keyframes rb-arm-l {
+  0% { transform: rotate(14deg); }
+  100% { transform: rotate(-14deg); }
+}
+
+@keyframes rb-arm-r {
+  0% { transform: rotate(-14deg); }
+  100% { transform: rotate(14deg); }
+}
+
+/* 眩晕螺旋旋转 */
+@keyframes rb-spiral-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 默认动画应用 */
+.caterpillar[data-character='rainbow-bot'] .rb-body-group {
+  animation: rb-breathe 3s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+.caterpillar[data-character='rainbow-bot'] .rb-stripe-pattern {
+  animation: rb-stripe-flow 2s linear infinite;
+}
+
+.caterpillar[data-character='rainbow-bot'] .rb-eye-l {
+  transform-origin: 43px 62px;
+  animation: rb-blink 2.4s ease-in-out infinite;
+}
+
+.caterpillar[data-character='rainbow-bot'] .rb-eye-r {
+  transform-origin: 77px 62px;
+  animation: rb-blink 2.7s ease-in-out infinite 0.11s;
+}
+
+.caterpillar[data-character='rainbow-bot'] .rb-antenna-l {
+  transform-origin: 44px 28px;
+}
+
+.caterpillar[data-character='rainbow-bot'] .rb-antenna-r {
+  transform-origin: 76px 28px;
+}
+
+.caterpillar[data-character='rainbow-bot'] .rb-leg-l-group {
+  transform-origin: 46px 128px;
+}
+
+.caterpillar[data-character='rainbow-bot'] .rb-arm-l-group {
+  transform-origin: 26px 100px;
+}
+
+.caterpillar[data-character='rainbow-bot'] .rb-arm-r-group {
+  transform-origin: 94px 100px;
+}
+
+.caterpillar[data-character='rainbow-bot'] .rb-leg-r-group {
+  transform-origin: 74px 128px;
+}
+
+/* 情绪状态 */
+.caterpillar[data-character='rainbow-bot'][data-mood='happy'] .rb-body-group {
+  animation: rb-happy-jump 0.6s ease-in-out infinite !important;
+}
+
+.caterpillar[data-character='rainbow-bot'][data-mood='excited'] .rb-body-group {
+  animation: rb-happy-jump 0.4s ease-in-out infinite !important;
+}
+
+.caterpillar[data-character='rainbow-bot'][data-mood='confused'] .rb-body-group {
+  animation: rb-confused-shake 0.5s ease-in-out infinite !important;
+}
+
+.caterpillar[data-character='rainbow-bot'][data-mood='sleepy'] .rb-body-group {
+  animation: rb-sleep-tilt 2.5s ease-in-out infinite !important;
+}
+
+.caterpillar[data-character='rainbow-bot'][data-mood='talking'] .rb-body-group {
+  animation: rb-talking 0.3s ease-in-out infinite !important;
+}
+
+.caterpillar[data-character='rainbow-bot'][data-mood='dizzy'] .rb-body-group {
+  animation: rb-dizzy-sway 0.6s ease-in-out infinite !important;
+  transform-origin: 60px 80px;
+}
+
+/* 走路时天线和腿部动画（通过 data-animation="walk" 触发） */
+.caterpillar[data-character='rainbow-bot'][data-animation='walk'] .rb-antenna-l {
+  animation: rb-antenna-wiggle 0.4s ease-in-out infinite;
+}
+
+.caterpillar[data-character='rainbow-bot'][data-animation='walk'] .rb-antenna-r {
+  animation: rb-antenna-wiggle 0.4s ease-in-out infinite 0.1s;
+}
+
+.caterpillar[data-character='rainbow-bot'][data-animation='walk'] .rb-leg-l-group {
+  animation: rb-leg-l 0.5s ease-in-out infinite alternate;
+}
+
+.caterpillar[data-character='rainbow-bot'][data-animation='walk'] .rb-leg-r-group {
+  animation: rb-leg-r 0.5s ease-in-out infinite alternate;
+}
+
+.caterpillar[data-character='rainbow-bot'][data-animation='walk'] .rb-arm-l-group {
+  animation: rb-arm-l 0.45s ease-in-out infinite alternate;
+}
+
+.caterpillar[data-character='rainbow-bot'][data-animation='walk'] .rb-arm-r-group {
+  animation: rb-arm-r 0.45s ease-in-out infinite alternate;
+}
+
+/* 眩晕螺旋眼 */
+.caterpillar[data-character='rainbow-bot'] .rb-dizzy-eye-l {
+  transform-origin: 43px 62px;
+  animation: rb-spiral-spin 1.2s linear infinite;
+}
+
+.caterpillar[data-character='rainbow-bot'] .rb-dizzy-eye-r {
+  transform-origin: 77px 62px;
+  animation: rb-spiral-spin 1.2s linear infinite reverse;
+}
+
+/* 说话时眼睛脉冲 */
+.caterpillar[data-character='rainbow-bot'][data-mood='talking'] .rb-eye-l,
+.caterpillar[data-character='rainbow-bot'][data-mood='talking'] .rb-eye-r {
+  animation: rb-glow-pulse 0.4s ease-in-out infinite !important;
+}
+
+/* 方向翻转 */
+.caterpillar[data-character='rainbow-bot'][data-direction='left'] .rb-svg {
+  transform: scaleX(-1);
+}

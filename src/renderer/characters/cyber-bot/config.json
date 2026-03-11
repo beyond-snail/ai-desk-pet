@@ -1,0 +1,79 @@
+{
+  "id": "cyber-bot",
+  "name": "赛博小机器人",
+  "description": "方形金属身体，蓝色 LED 眼睛与履带底盘",
+  "dimensions": {
+    "width": 103,
+    "height": 70
+  },
+  "animations": {
+    "idle": {
+      "speed": 1.8,
+      "amplitude": 1.2,
+      "legRotation": 0,
+      "frequency": 0.035
+    },
+    "happy": {
+      "speed": 2.2,
+      "amplitude": 1.8,
+      "legRotation": 0,
+      "frequency": 0.05
+    },
+    "sleepy": {
+      "speed": 0.4,
+      "amplitude": 0.4,
+      "legRotation": 0,
+      "frequency": 0.015
+    },
+    "hungry": {
+      "speed": 1.1,
+      "amplitude": 1,
+      "legRotation": 0,
+      "frequency": 0.03
+    },
+    "excited": {
+      "speed": 2.8,
+      "amplitude": 2.2,
+      "legRotation": 0,
+      "frequency": 0.07
+    },
+    "sad": {
+      "speed": 0.7,
+      "amplitude": 0.8,
+      "legRotation": 0,
+      "frequency": 0.02
+    }
+  },
+  "moveParts": {
+    "bodySelector": ".bot-shell",
+    "limbSelector": ".bot-track",
+    "headSelector": ".bot-shell"
+  },
+  "growth": {
+    "stages": [
+      "blueprint",
+      "prototype",
+      "v1",
+      "v2",
+      "final"
+    ],
+    "stageLabels": [
+      "蓝图",
+      "原型机",
+      "1.0版",
+      "2.0版",
+      "终极形态"
+    ]
+  },
+  "animationStrategy": "cyber-bot",
+  "movement": {
+    "maxSpeedMultiplier": 0.82,
+    "acceleration": 0.1,
+    "turnResponsiveness": 0.08,
+    "turnSlowdown": 0.36,
+    "decelerationDistance": 98,
+    "arrivalRadius": 10,
+    "minTravelDistance": 170,
+    "roamPadding": 88
+  }
+}

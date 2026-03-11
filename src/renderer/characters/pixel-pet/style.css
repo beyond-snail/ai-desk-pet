@@ -1,0 +1,438 @@
+/* ===== Pixel Pet v2.0 ===== */
+.caterpillar[data-character='pixel-pet'] {
+  width: 77px;
+  height: 77px;
+  isolation: isolate;
+  image-rendering: pixelated;
+  --pixel-body: #ffcc66;
+  --pixel-outline: #996633;
+  --pixel-eye: #333333;
+}
+
+.caterpillar[data-character='pixel-pet'] * {
+  image-rendering: pixelated;
+  border-radius: 0;
+  box-sizing: border-box;
+}
+
+.caterpillar[data-character='pixel-pet'] .pixel-body,
+.caterpillar[data-character='pixel-pet'] .pixel-ear,
+.caterpillar[data-character='pixel-pet'] .pixel-eye,
+.caterpillar[data-character='pixel-pet'] .pixel-cheek,
+.caterpillar[data-character='pixel-pet'] .pixel-mouth,
+.caterpillar[data-character='pixel-pet'] .pixel-foot {
+  position: absolute;
+  will-change: transform, opacity;
+}
+
+.caterpillar[data-character='pixel-pet'] .pixel-body {
+  top: 16px;
+  left: 18px;
+  width: 40px;
+  height: 34px;
+  background: var(--pixel-body);
+  border: 2px solid var(--pixel-outline);
+  box-shadow: inset -6px 0 0 rgba(0, 0, 0, 0.12);
+  animation: pixel-bounce 0.7s steps(2) infinite;
+}
+
+.caterpillar[data-character='pixel-pet'] .pixel-ear {
+  top: -10px;
+  width: 10px;
+  height: 10px;
+  background: var(--pixel-body);
+  border: 2px solid var(--pixel-outline);
+}
+
+.caterpillar[data-character='pixel-pet'] .pixel-ear.left { left: 4px; }
+.caterpillar[data-character='pixel-pet'] .pixel-ear.right { right: 4px; }
+
+.caterpillar[data-character='pixel-pet'] .pixel-face {
+  position: absolute;
+  inset: 0;
+}
+
+.caterpillar[data-character='pixel-pet'] .pixel-eye {
+  top: 10px;
+  width: 6px;
+  height: 8px;
+  background: #ffffff;
+  border: 2px solid var(--pixel-outline);
+}
+
+.caterpillar[data-character='pixel-pet'] .pixel-eye::before,
+.caterpillar[data-character='pixel-pet'] .pixel-eye::after {
+  content: '';
+  position: absolute;
+}
+
+.caterpillar[data-character='pixel-pet'] .pixel-eye::before {
+  top: 2px;
+  left: 2px;
+  width: 2px;
+  height: 2px;
+  background: var(--pixel-eye);
+  box-shadow: 0 2px 0 var(--pixel-eye), 2px 2px 0 var(--pixel-eye);
+}
+
+.caterpillar[data-character='pixel-pet'] .pixel-eye::after {
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.caterpillar[data-character='pixel-pet'] .pixel-eye.left { left: 8px; }
+.caterpillar[data-character='pixel-pet'] .pixel-eye.right { right: 8px; }
+
+.caterpillar[data-character='pixel-pet'] .pixel-cheek {
+  top: 21px;
+  width: 4px;
+  height: 4px;
+  background: #ff9999;
+  opacity: 0;
+}
+
+.caterpillar[data-character='pixel-pet'] .pixel-cheek.left { left: 5px; }
+.caterpillar[data-character='pixel-pet'] .pixel-cheek.right { right: 5px; }
+
+.caterpillar[data-character='pixel-pet'] .pixel-mouth {
+  top: 22px;
+  left: 50%;
+  width: 8px;
+  height: 4px;
+  border-bottom: 2px solid #333333;
+  transform: translateX(-50%);
+}
+
+.caterpillar[data-character='pixel-pet'] .pixel-feet {
+  position: absolute;
+  left: 20px;
+  bottom: 14px;
+  width: 36px;
+  height: 10px;
+}
+
+.caterpillar[data-character='pixel-pet'] .pixel-foot {
+  bottom: 0;
+  width: 10px;
+  height: 4px;
+  background: var(--pixel-body);
+  border: 2px solid var(--pixel-outline);
+  animation: pixel-walk 0.45s steps(2) infinite;
+}
+
+.caterpillar[data-character='pixel-pet'] .pixel-foot.left { left: 2px; }
+.caterpillar[data-character='pixel-pet'] .pixel-foot.right { right: 2px; }
+
+.caterpillar[data-character='pixel-pet'][data-mood='happy'] .pixel-eye {
+  height: 2px;
+  top: 14px;
+  background: #333333;
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='happy'] .pixel-eye::before,
+.caterpillar[data-character='pixel-pet'][data-mood='happy'] .pixel-eye::after {
+  opacity: 0;
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='happy'] .pixel-cheek {
+  opacity: 1;
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='happy'] .pixel-mouth {
+  width: 10px;
+  height: 6px;
+  border-bottom-width: 2px;
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='happy'] .pixel-ear {
+  animation: pixel-ear-wiggle 0.5s steps(2) infinite;
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='happy']::after {
+  content: '♥';
+  position: absolute;
+  top: 4px;
+  right: 12px;
+  font-size: 8px;
+  color: #ff9999;
+  opacity: 0;
+  animation: pixel-heart-float 1.5s steps(4) infinite;
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='sleepy'] .pixel-eye {
+  height: 2px;
+  top: 14px;
+  background: #333333;
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='sleepy'] .pixel-eye::before,
+.caterpillar[data-character='pixel-pet'][data-mood='sleepy'] .pixel-eye::after {
+  opacity: 0;
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='sleepy'] .pixel-mouth {
+  width: 4px;
+  opacity: 0.55;
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='sleepy'] .pixel-body {
+  filter: brightness(0.82);
+  animation: none;
+  transform: rotate(3deg);
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='sleepy'] .pixel-foot {
+  animation: none;
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='sleepy']::after {
+  content: 'Z';
+  position: absolute;
+  top: 0;
+  left: 8px;
+  font: 700 10px/1 monospace;
+  color: #7986cb;
+  opacity: 0;
+  animation: pixel-zzz 2s steps(4) infinite;
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='hungry'] .pixel-eye {
+  width: 8px;
+  height: 10px;
+  top: 8px;
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='hungry'] .pixel-eye::before {
+  top: 3px;
+  left: 3px;
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='hungry'] .pixel-mouth {
+  width: 6px;
+  height: 6px;
+  border: 2px solid #333333;
+  background: #333333;
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='hungry'] .pixel-body {
+  animation: pixel-shake 0.3s steps(4) infinite;
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='hungry']::after {
+  content: '';
+  position: absolute;
+  top: 18px;
+  right: 14px;
+  width: 4px;
+  height: 6px;
+  background: #90caf9;
+  opacity: 0;
+  animation: pixel-sweat 1s steps(3) infinite;
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='excited'] .pixel-eye {
+  width: 8px;
+  height: 8px;
+  top: 9px;
+  background: transparent;
+  border-color: transparent;
+  box-shadow: 2px 0 0 #333333, -2px 0 0 #333333, 0 2px 0 #333333, 0 -2px 0 #333333;
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='excited'] .pixel-eye::before,
+.caterpillar[data-character='pixel-pet'][data-mood='excited'] .pixel-eye::after {
+  opacity: 0;
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='excited'] .pixel-cheek {
+  opacity: 1;
+  background: #ff6b6b;
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='excited'] .pixel-mouth {
+  width: 10px;
+  height: 6px;
+  border-bottom: 2px solid #333333;
+  border-left: 2px solid #333333;
+  border-right: 2px solid #333333;
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='excited'] .pixel-body {
+  filter: brightness(1.15);
+  animation: pixel-bounce 0.3s steps(2) infinite;
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='excited'] .pixel-ear {
+  animation: pixel-ear-wiggle 0.3s steps(2) infinite;
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='excited']::after {
+  content: '✦';
+  position: absolute;
+  top: 0;
+  right: 8px;
+  font-size: 10px;
+  color: #ff6b6b;
+  opacity: 0;
+  animation: pixel-confetti 0.8s steps(4) infinite;
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='sad'] .pixel-eye {
+  top: 13px;
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='sad'] .pixel-mouth {
+  width: 8px;
+  height: 4px;
+  border-bottom: 0;
+  border-top: 2px solid #333333;
+  border-left: 2px solid #333333;
+  border-right: 2px solid #333333;
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='sad'] .pixel-body {
+  filter: saturate(0.55) brightness(0.85);
+  animation: none;
+  transform: translateY(2px);
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='sad'] .pixel-ear {
+  transform: translateY(2px);
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='sad'] .pixel-foot {
+  animation-duration: 1s;
+}
+
+.caterpillar[data-character='pixel-pet'][data-mood='sad']::after {
+  content: '';
+  position: absolute;
+  top: 31px;
+  left: 33px;
+  width: 2px;
+  height: 4px;
+  background: #90caf9;
+  opacity: 0;
+  animation: pixel-tear 1.5s steps(3) infinite;
+}
+
+.caterpillar[data-character='pixel-pet'][data-dirty='true'] .pixel-body,
+.caterpillar[data-character='pixel-pet'][data-dirty='true'] .pixel-foot {
+  filter: brightness(0.72) sepia(0.2);
+}
+
+.caterpillar[data-character='pixel-pet'][data-dirty='true'] .pixel-body::after {
+  content: '';
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  width: 8px;
+  height: 4px;
+  background: rgba(120, 120, 120, 0.42);
+}
+
+.caterpillar[data-character='pixel-pet'][data-growth-stage='1'] {
+  --pixel-body: #ffd579;
+}
+
+.caterpillar[data-character='pixel-pet'][data-growth-stage='2'] {
+  --pixel-body: #ffc456;
+}
+
+.caterpillar[data-character='pixel-pet'][data-growth-stage='3'] .pixel-body {
+  border-color: #7d4e1f;
+  box-shadow: inset -6px 0 0 rgba(0, 0, 0, 0.12), 0 0 0 2px rgba(255, 255, 255, 0.35);
+}
+
+.caterpillar[data-character='pixel-pet'][data-growth-stage='4'] {
+  --pixel-body: #ffd94a;
+}
+
+.caterpillar[data-character='pixel-pet'][data-weather='night'] .pixel-eye {
+  border-color: #6f89b0;
+}
+
+.caterpillar[data-character='pixel-pet'][data-weather='sunny'] .pixel-body {
+  box-shadow: inset -6px 0 0 rgba(0, 0, 0, 0.08), 0 0 0 2px rgba(255, 255, 255, 0.18);
+}
+
+@keyframes pixel-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+@keyframes pixel-walk {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(2px); }
+}
+
+@keyframes pixel-heart-float {
+  0% { opacity: 0; transform: translateY(0); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-12px); }
+}
+
+@keyframes pixel-ear-wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-8deg); }
+}
+
+@keyframes pixel-zzz {
+  0% { opacity: 0; transform: translate(0, 0); }
+  50% { opacity: 0.85; transform: translate(4px, -6px); }
+  100% { opacity: 0; transform: translate(8px, -12px); }
+}
+
+@keyframes pixel-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}
+
+@keyframes pixel-sweat {
+  0% { opacity: 0; transform: translateY(0); }
+  50% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(6px); }
+}
+
+@keyframes pixel-confetti {
+  0%, 100% { opacity: 0; transform: translateY(0) scale(0.5); }
+  50% { opacity: 1; transform: translateY(-8px) scale(1.2); }
+}
+
+@keyframes pixel-tear {
+  0% { opacity: 0; transform: translateY(0); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(8px); }
+}
+
+.caterpillar[data-character='pixel-pet'][data-animation='listening'] .pixel-ear.left {
+  transform: rotate(-16deg);
+}
+
+.caterpillar[data-character='pixel-pet'][data-animation='listening'] .pixel-ear.right {
+  transform: rotate(16deg);
+}
+
+.caterpillar[data-character='pixel-pet'][data-animation='listening'] .pixel-eye {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.22);
+}
+
+.caterpillar[data-character='pixel-pet'][data-animation='celebrate'] .pixel-cheek {
+  opacity: 1;
+  background: #ff6b8d;
+}
+
+.caterpillar[data-character='pixel-pet'][data-animation='drop'] .pixel-mouth {
+  width: 10px;
+}
+
+.caterpillar[data-character='pixel-pet'][data-animation='yawn'] .pixel-mouth {
+  width: 6px;
+  height: 6px;
+  border: 2px solid #333333;
+  background: #333333;
+}

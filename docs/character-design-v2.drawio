@@ -1,0 +1,216 @@
+<mxGraphModel>
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="2" value="AI Desk Pet — Character Visual Design v2.0" style="text;fontSize=22;fontStyle=1;fontColor=#1a1a2e;align=center;" vertex="1" parent="1">
+      <mxGeometry x="60" y="15" width="680" height="30" as="geometry"/>
+    </mxCell>
+    <mxCell id="10" value="CATERPILLAR" style="text;fontSize=15;fontStyle=1;fontColor=#2d6a4f;align=left;" vertex="1" parent="1">
+      <mxGeometry x="40" y="55" width="200" height="22" as="geometry"/>
+    </mxCell>
+    <mxCell id="11" value="" style="rounded=1;fillColor=#e8f5e9;strokeColor=#4CAF50;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="40" y="82" width="150" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="12" value="IDLE" style="text;fontSize=10;fontStyle=1;fontColor=#2d6a4f;align=center;" vertex="1" parent="1">
+      <mxGeometry x="40" y="84" width="150" height="16" as="geometry"/>
+    </mxCell>
+    <mxCell id="13" value="5 segments #66BB6A-#43A047&#xa;White highlight arcs&#xa;Head 24px with eye whites&#xa;6px pupils + blush spots&#xa;Curved antennae + ball tips&#xa;10 legs wave animation&#xa;Gentle body sway" style="text;fontSize=8;fontColor=#333;align=left;spacingLeft=6;spacingTop=2;" vertex="1" parent="1">
+      <mxGeometry x="42" y="102" width="146" height="96" as="geometry"/>
+    </mxCell>
+    <mxCell id="14" value="" style="rounded=1;fillColor=#fff9c4;strokeColor=#fdd835;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="200" y="82" width="150" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="15" value="HAPPY" style="text;fontSize=10;fontStyle=1;fontColor=#f57f17;align=center;" vertex="1" parent="1">
+      <mxGeometry x="200" y="84" width="150" height="16" as="geometry"/>
+    </mxCell>
+    <mxCell id="16" value="Gold glow #FFD54F&#xa;Eyes become arcs&#xa;Blush opacity: 1&#xa;Smile mouth curve&#xa;Antennae speed x2&#xa;Body bounce anim&#xa;Star particles float up" style="text;fontSize=8;fontColor=#333;align=left;spacingLeft=6;spacingTop=2;" vertex="1" parent="1">
+      <mxGeometry x="202" y="102" width="146" height="96" as="geometry"/>
+    </mxCell>
+    <mxCell id="17" value="" style="rounded=1;fillColor=#e8eaf6;strokeColor=#7986cb;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="360" y="82" width="150" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="18" value="SLEEPY" style="text;fontSize=10;fontStyle=1;fontColor=#3949ab;align=center;" vertex="1" parent="1">
+      <mxGeometry x="360" y="84" width="150" height="16" as="geometry"/>
+    </mxCell>
+    <mxCell id="19" value="Brightness 85%&#xa;Eyes half-closed lines&#xa;Antennae droop 50deg&#xa;Body curls tighter&#xa;Breathing scale anim&#xa;Zzz bubble floats up&#xa;Legs stop moving" style="text;fontSize=8;fontColor=#333;align=left;spacingLeft=6;spacingTop=2;" vertex="1" parent="1">
+      <mxGeometry x="362" y="102" width="146" height="96" as="geometry"/>
+    </mxCell>
+    <mxCell id="20" value="" style="rounded=1;fillColor=#fff3e0;strokeColor=#ff9800;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="520" y="82" width="150" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="21" value="HUNGRY" style="text;fontSize=10;fontStyle=1;fontColor=#e65100;align=center;" vertex="1" parent="1">
+      <mxGeometry x="520" y="84" width="150" height="16" as="geometry"/>
+    </mxCell>
+    <mxCell id="22" value="Saturate 0.7&#xa;Big watery eyes&#xa;O-shaped mouth&#xa;Body trembles&#xa;Belly shadow indent&#xa;... bubble appears&#xa;Slower movement" style="text;fontSize=8;fontColor=#333;align=left;spacingLeft=6;spacingTop=2;" vertex="1" parent="1">
+      <mxGeometry x="522" y="102" width="146" height="96" as="geometry"/>
+    </mxCell>
+    <mxCell id="23" value="" style="rounded=1;fillColor=#e8f5e9;strokeColor=#00c853;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="40" y="212" width="150" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="24" value="EXCITED" style="text;fontSize=10;fontStyle=1;fontColor=#00c853;align=center;" vertex="1" parent="1">
+      <mxGeometry x="40" y="214" width="150" height="16" as="geometry"/>
+    </mxCell>
+    <mxCell id="25" value="Green glow #69F0AE&#xa;Star eyes blink&#xa;Antennae spin fast&#xa;Big bounce anim&#xa;Legs rapid alternate&#xa;Rainbow particles&#xa;Scale pulse 1.0-1.05" style="text;fontSize=8;fontColor=#333;align=left;spacingLeft=6;spacingTop=2;" vertex="1" parent="1">
+      <mxGeometry x="42" y="232" width="146" height="96" as="geometry"/>
+    </mxCell>
+    <mxCell id="26" value="" style="rounded=1;fillColor=#eceff1;strokeColor=#90a4ae;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="200" y="212" width="150" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="27" value="SAD" style="text;fontSize=10;fontStyle=1;fontColor=#546e7a;align=center;" vertex="1" parent="1">
+      <mxGeometry x="200" y="214" width="150" height="16" as="geometry"/>
+    </mxCell>
+    <mxCell id="28" value="Grayscale 0.25&#xa;Brightness 0.78&#xa;Droopy eyes + teardrop&#xa;Frown mouth curve&#xa;Antennae fully down&#xa;Body sinks +3px&#xa;Very slow, pauses" style="text;fontSize=8;fontColor=#333;align=left;spacingLeft=6;spacingTop=2;" vertex="1" parent="1">
+      <mxGeometry x="202" y="232" width="146" height="96" as="geometry"/>
+    </mxCell>
+    <mxCell id="29" value="" style="rounded=1;fillColor=#efebe9;strokeColor=#8d6e63;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="360" y="212" width="150" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="30" value="DIRTY" style="text;fontSize=10;fontStyle=1;fontColor=#5d4037;align=center;" vertex="1" parent="1">
+      <mxGeometry x="360" y="214" width="150" height="16" as="geometry"/>
+    </mxCell>
+    <mxCell id="31" value="Brightness 0.7 sat 0.6&#xa;Brown dirt spots&#xa;Fly orbits head&#xa;Stink lines float up&#xa;Antennae droop&#xa;Squint eyes&#xa;Yellow-green tint" style="text;fontSize=8;fontColor=#333;align=left;spacingLeft=6;spacingTop=2;" vertex="1" parent="1">
+      <mxGeometry x="362" y="232" width="146" height="96" as="geometry"/>
+    </mxCell>
+    <mxCell id="32" value="" style="rounded=1;fillColor=#f5f5f5;strokeColor=#bdbdbd;strokeWidth=1;" vertex="1" parent="1">
+      <mxGeometry x="520" y="212" width="150" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="33" value="PALETTE" style="text;fontSize=10;fontStyle=1;fontColor=#333;align=center;" vertex="1" parent="1">
+      <mxGeometry x="520" y="214" width="150" height="16" as="geometry"/>
+    </mxCell>
+    <mxCell id="34" value="Body: #66BB6A-#43A047&#xa;Highlight: white 35%&#xa;Shadow: black 20%&#xa;Eye white: #FFF&#xa;Pupil: #1a1a1a&#xa;Blush: #FFAB91 30%&#xa;Antenna: #81C784&#xa;Legs: #388E3C&#xa;Happy: #FFD54F&#xa;Excited: #69F0AE" style="text;fontSize=8;fontColor=#555;align=left;spacingLeft=6;spacingTop=2;" vertex="1" parent="1">
+      <mxGeometry x="522" y="232" width="146" height="96" as="geometry"/>
+    </mxCell>
+    <mxCell id="40" value="CYBER-BOT" style="text;fontSize=15;fontStyle=1;fontColor=#0d47a1;align=left;" vertex="1" parent="1">
+      <mxGeometry x="40" y="350" width="200" height="22" as="geometry"/>
+    </mxCell>
+    <mxCell id="41" value="" style="rounded=1;fillColor=#e3f2fd;strokeColor=#1976d2;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="40" y="377" width="150" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="42" value="IDLE" style="text;fontSize=10;fontStyle=1;fontColor=#0d47a1;align=center;" vertex="1" parent="1">
+      <mxGeometry x="40" y="379" width="150" height="16" as="geometry"/>
+    </mxCell>
+    <mxCell id="43" value="Shell #546E7A-#90A4AE&#xa;Cyan border glow #00BCD4&#xa;LED eyes 12px + breathe&#xa;Antenna bar + pulse ball&#xa;Chest screen shows :)&#xa;Track treads animate&#xa;Subtle hover float" style="text;fontSize=8;fontColor=#333;align=left;spacingLeft=6;spacingTop=2;" vertex="1" parent="1">
+      <mxGeometry x="42" y="397" width="146" height="96" as="geometry"/>
+    </mxCell>
+    <mxCell id="44" value="" style="rounded=1;fillColor=#e8f5e9;strokeColor=#4caf50;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="200" y="377" width="150" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="45" value="HAPPY" style="text;fontSize=10;fontStyle=1;fontColor=#2e7d32;align=center;" vertex="1" parent="1">
+      <mxGeometry x="200" y="379" width="150" height="16" as="geometry"/>
+    </mxCell>
+    <mxCell id="46" value="Eyes turn green #69F0AE&#xa;Screen shows heart&#xa;Antenna ball blinks fast&#xa;Shell green glow&#xa;Tracks speed up&#xa;Gear particles pop&#xa;Gentle bob animation" style="text;fontSize=8;fontColor=#333;align=left;spacingLeft=6;spacingTop=2;" vertex="1" parent="1">
+      <mxGeometry x="202" y="397" width="146" height="96" as="geometry"/>
+    </mxCell>
+    <mxCell id="47" value="" style="rounded=1;fillColor=#e8eaf6;strokeColor=#5c6bc0;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="360" y="377" width="150" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="48" value="SLEEPY" style="text;fontSize=10;fontStyle=1;fontColor=#3949ab;align=center;" vertex="1" parent="1">
+      <mxGeometry x="360" y="379" width="150" height="16" as="geometry"/>
+    </mxCell>
+    <mxCell id="49" value="Eyes dim flat lines&#xa;Antenna ball off (no glow)&#xa;Shell glow -50%&#xa;Screen shows Zzz&#xa;Tracks stop&#xa;Brightness 0.7&#xa;Slow breathing float" style="text;fontSize=8;fontColor=#333;align=left;spacingLeft=6;spacingTop=2;" vertex="1" parent="1">
+      <mxGeometry x="362" y="397" width="146" height="96" as="geometry"/>
+    </mxCell>
+    <mxCell id="50" value="" style="rounded=1;fillColor=#fff3e0;strokeColor=#ff9800;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="520" y="377" width="150" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="51" value="HUNGRY" style="text;fontSize=10;fontStyle=1;fontColor=#e65100;align=center;" vertex="1" parent="1">
+      <mxGeometry x="520" y="379" width="150" height="16" as="geometry"/>
+    </mxCell>
+    <mxCell id="52" value="Eyes blink red warning&#xa;Screen: LOW BATTERY&#xa;Antenna ball orange&#xa;Shell border flickers&#xa;Tracks stutter/stall&#xa;Battery bar on shell&#xa;Spark particles" style="text;fontSize=8;fontColor=#333;align=left;spacingLeft=6;spacingTop=2;" vertex="1" parent="1">
+      <mxGeometry x="522" y="397" width="146" height="96" as="geometry"/>
+    </mxCell>
+    <mxCell id="53" value="" style="rounded=1;fillColor=#e3f2fd;strokeColor=#00bcd4;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="40" y="507" width="150" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="54" value="EXCITED" style="text;fontSize=10;fontStyle=1;fontColor=#00bcd4;align=center;" vertex="1" parent="1">
+      <mxGeometry x="40" y="509" width="150" height="16" as="geometry"/>
+    </mxCell>
+    <mxCell id="55" value="Full neon rainbow glow&#xa;Star-shaped eyes&#xa;Antenna spins wildly&#xa;Rainbow border cycle&#xa;Tracks + fire trail&#xa;Screen: !!! blinks&#xa;Data stream 010101" style="text;fontSize=8;fontColor=#333;align=left;spacingLeft=6;spacingTop=2;" vertex="1" parent="1">
+      <mxGeometry x="42" y="527" width="146" height="96" as="geometry"/>
+    </mxCell>
+    <mxCell id="56" value="" style="rounded=1;fillColor=#eceff1;strokeColor=#78909c;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="200" y="507" width="150" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="57" value="SAD" style="text;fontSize=10;fontStyle=1;fontColor=#546e7a;align=center;" vertex="1" parent="1">
+      <mxGeometry x="200" y="509" width="150" height="16" as="geometry"/>
+    </mxCell>
+    <mxCell id="58" value="Eyes gray #90A4AE no glow&#xa;Antenna droops 45deg&#xa;All glow effects off&#xa;Screen shows :(&#xa;Tracks very slow&#xa;Grayscale 0.3&#xa;Occasional ? bubble" style="text;fontSize=8;fontColor=#333;align=left;spacingLeft=6;spacingTop=2;" vertex="1" parent="1">
+      <mxGeometry x="202" y="527" width="146" height="96" as="geometry"/>
+    </mxCell>
+    <mxCell id="59" value="" style="rounded=1;fillColor=#f5f5f5;strokeColor=#bdbdbd;strokeWidth=1;" vertex="1" parent="1">
+      <mxGeometry x="360" y="507" width="150" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="60" value="PALETTE" style="text;fontSize=10;fontStyle=1;fontColor=#333;align=center;" vertex="1" parent="1">
+      <mxGeometry x="360" y="509" width="150" height="16" as="geometry"/>
+    </mxCell>
+    <mxCell id="61" value="Shell: #546E7A-#90A4AE&#xa;Border: #00BCD4 40%&#xa;LED eyes: #4DD0E1&#xa;Antenna: #84FFFF&#xa;Tracks: #263238+#455A64&#xa;Screen bg: #1B2631&#xa;Happy: #69F0AE&#xa;Excited: rainbow cycle&#xa;Warning: #FF6D00&#xa;Sad: #90A4AE flat" style="text;fontSize=8;fontColor=#555;align=left;spacingLeft=6;spacingTop=2;" vertex="1" parent="1">
+      <mxGeometry x="362" y="527" width="146" height="96" as="geometry"/>
+    </mxCell>
+    <mxCell id="70" value="PIXEL-PET" style="text;fontSize=15;fontStyle=1;fontColor=#e65100;align=left;" vertex="1" parent="1">
+      <mxGeometry x="40" y="645" width="200" height="22" as="geometry"/>
+    </mxCell>
+    <mxCell id="71" value="" style="rounded=0;fillColor=#fff8e1;strokeColor=#ff8f00;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="40" y="672" width="150" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="72" value="IDLE" style="text;fontSize=10;fontStyle=1;fontColor=#e65100;align=center;" vertex="1" parent="1">
+      <mxGeometry x="40" y="674" width="150" height="16" as="geometry"/>
+    </mxCell>
+    <mxCell id="73" value="Body 36x32 #FFCC66&#xa;Brown border #996633&#xa;Pixel ears 10x10&#xa;Eyes 6x6 black squares&#xa;Pink cheeks hidden&#xa;Mouth 8x2 line&#xa;Feet step animation&#xa;All edges sharp (no radius)" style="text;fontSize=8;fontColor=#333;align=left;spacingLeft=6;spacingTop=2;" vertex="1" parent="1">
+      <mxGeometry x="42" y="692" width="146" height="96" as="geometry"/>
+    </mxCell>
+    <mxCell id="74" value="" style="rounded=0;fillColor=#fff9c4;strokeColor=#fdd835;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="200" y="672" width="150" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="75" value="HAPPY" style="text;fontSize=10;fontStyle=1;fontColor=#f57f17;align=center;" vertex="1" parent="1">
+      <mxGeometry x="200" y="674" width="150" height="16" as="geometry"/>
+    </mxCell>
+    <mxCell id="76" value="Eyes squint 3px tall&#xa;Cheeks show pink&#xa;Mouth becomes U shape&#xa;Faster bounce steps(3)&#xa;Pixel hearts float up&#xa;Body brightens +10%&#xa;Ears wiggle animation" style="text;fontSize=8;fontColor=#333;align=left;spacingLeft=6;spacingTop=2;" vertex="1" parent="1">
+      <mxGeometry x="202" y="692" width="146" height="96" as="geometry"/>
+    </mxCell>
+    <mxCell id="77" value="" style="rounded=0;fillColor=#e8eaf6;strokeColor=#7986cb;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="360" y="672" width="150" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="78" value="SLEEPY" style="text;fontSize=10;fontStyle=1;fontColor=#3949ab;align=center;" vertex="1" parent="1">
+      <mxGeometry x="360" y="674" width="150" height="16" as="geometry"/>
+    </mxCell>
+    <mxCell id="79" value="Eyes 1px slit lines&#xa;Mouth disappears&#xa;Body dims brightness 0.8&#xa;No bounce, static&#xa;Pixel Z floats up&#xa;Feet stop walking&#xa;Slight tilt 3deg" style="text;fontSize=8;fontColor=#333;align=left;spacingLeft=6;spacingTop=2;" vertex="1" parent="1">
+      <mxGeometry x="362" y="692" width="146" height="96" as="geometry"/>
+    </mxCell>
+    <mxCell id="80" value="" style="rounded=0;fillColor=#fff3e0;strokeColor=#ff9800;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="520" y="672" width="150" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="81" value="HUNGRY" style="text;fontSize=10;fontStyle=1;fontColor=#e65100;align=center;" vertex="1" parent="1">
+      <mxGeometry x="520" y="674" width="150" height="16" as="geometry"/>
+    </mxCell>
+    <mxCell id="82" value="Eyes become big 8x8&#xa;Mouth open O 6x4&#xa;Body shakes steps(4)&#xa;Pixel sweat drop&#xa;Belly indent shadow&#xa;Slower walk cycle&#xa;... pixel bubble" style="text;fontSize=8;fontColor=#333;align=left;spacingLeft=6;spacingTop=2;" vertex="1" parent="1">
+      <mxGeometry x="522" y="692" width="146" height="96" as="geometry"/>
+    </mxCell>
+    <mxCell id="83" value="" style="rounded=0;fillColor=#e8f5e9;strokeColor=#00c853;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="40" y="802" width="150" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="84" value="EXCITED" style="text;fontSize=10;fontStyle=1;fontColor=#00c853;align=center;" vertex="1" parent="1">
+      <mxGeometry x="40" y="804" width="150" height="16" as="geometry"/>
+    </mxCell>
+    <mxCell id="85" value="Star eyes 8x8 pixel&#xa;Cheeks bright pink&#xa;Big U mouth&#xa;Max bounce height&#xa;Pixel confetti burst&#xa;Body flash brighter&#xa;Ears rapid wiggle" style="text;fontSize=8;fontColor=#333;align=left;spacingLeft=6;spacingTop=2;" vertex="1" parent="1">
+      <mxGeometry x="42" y="822" width="146" height="96" as="geometry"/>
+    </mxCell>
+    <mxCell id="86" value="" style="rounded=0;fillColor=#eceff1;strokeColor=#90a4ae;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="200" y="802" width="150" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="87" value="SAD" style="text;fontSize=10;fontStyle=1;fontColor=#546e7a;align=center;" vertex="1" parent="1">
+      <mxGeometry x="200" y="804" width="150" height="16" as="geometry"/>
+    </mxCell>
+    <mxCell id="88" value="Eyes shift down 2px&#xa;Mouth inverted U&#xa;Body sinks lower&#xa;Pixel teardrop falls&#xa;Desaturated colors&#xa;No bounce, slow walk&#xa;Ears droop down" style="text;fontSize=8;fontColor=#333;align=left;spacingLeft=6;spacingTop=2;" vertex="1" parent="1">
+      <mxGeometry x="202" y="822" width="146" height="96" as="geometry"/>
+    </mxCell>
+    <mxCell id="89" value="" style="rounded=0;fillColor=#f5f5f5;strokeColor=#bdbdbd;strokeWidth=1;" vertex="1" parent="1">
+      <mxGeometry x="360" y="802" width="150" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="90" value="PALETTE" style="text;fontSize=10;fontStyle=1;fontColor=#333;align=center;" vertex="1" parent="1">
+      <mxGeometry x="360" y="804" width="150" height="16" as="geometry"/>
+    </mxCell>
+    <mxCell id="91" value="Body: #FFCC66&#xa;Border: #996633&#xa;Eyes: #333333&#xa;Cheeks: #FF9999&#xa;Mouth: #333333&#xa;Feet: #FFCC66+#996633&#xa;Happy: brightness 1.1&#xa;Sad: saturate 0.5&#xa;Pixel art: no anti-alias&#xa;All sizes: 2px multiples" style="text;fontSize=8;fontColor=#555;align=left;spacingLeft=6;spacingTop=2;" vertex="1" parent="1">
+      <mxGeometry x="362" y="822" width="146" height="96" as="geometry"/>
+    </mxCell>
+  </root>
+</mxGraphModel>

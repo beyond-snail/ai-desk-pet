@@ -1,0 +1,79 @@
+{
+  "id": "caterpillar",
+  "name": "毛毛虫",
+  "description": "可爱的绿色小毛毛虫",
+  "dimensions": {
+    "width": 96,
+    "height": 48
+  },
+  "animations": {
+    "idle": {
+      "speed": 2,
+      "amplitude": 2,
+      "legRotation": 15,
+      "frequency": 0.05
+    },
+    "happy": {
+      "speed": 2.6,
+      "amplitude": 2.8,
+      "legRotation": 18,
+      "frequency": 0.07
+    },
+    "sleepy": {
+      "speed": 0.5,
+      "amplitude": 0.5,
+      "legRotation": 0,
+      "frequency": 0.02
+    },
+    "hungry": {
+      "speed": 1.2,
+      "amplitude": 1.1,
+      "legRotation": 10,
+      "frequency": 0.04
+    },
+    "excited": {
+      "speed": 3.2,
+      "amplitude": 4,
+      "legRotation": 22,
+      "frequency": 0.09
+    },
+    "sad": {
+      "speed": 0.8,
+      "amplitude": 0.8,
+      "legRotation": 6,
+      "frequency": 0.03
+    }
+  },
+  "moveParts": {
+    "bodySelector": ".segment",
+    "limbSelector": ".leg",
+    "headSelector": ".head"
+  },
+  "growth": {
+    "stages": [
+      "sprout",
+      "crawler",
+      "lush",
+      "cocoon",
+      "butterfly"
+    ],
+    "stageLabels": [
+      "初生",
+      "爬行",
+      "茁壮",
+      "结茧",
+      "蝶舞"
+    ]
+  },
+  "animationStrategy": "caterpillar",
+  "movement": {
+    "maxSpeedMultiplier": 0.92,
+    "acceleration": 0.14,
+    "turnResponsiveness": 0.11,
+    "turnSlowdown": 0.28,
+    "decelerationDistance": 86,
+    "arrivalRadius": 9,
+    "minTravelDistance": 150,
+    "roamPadding": 72
+  }
+}

@@ -1,0 +1,487 @@
+/* ===== Caterpillar v2.0 ===== */
+.caterpillar[data-character='caterpillar'] {
+  width: 96px;
+  height: 48px;
+  isolation: isolate;
+  --pet-shadow: rgba(68, 143, 47, 0.24);
+  --pet-head: linear-gradient(135deg, #9ad955, #6fa63b);
+  --pet-body: linear-gradient(135deg, #8bc34a, #689f38);
+}
+
+.caterpillar[data-character='caterpillar'] .body {
+  position: absolute;
+  inset: 0 0 0 14px;
+  display: flex;
+  align-items: center;
+  height: 48px;
+  z-index: 1;
+}
+
+.caterpillar[data-character='caterpillar'] .segment {
+  position: relative;
+  width: 16px;
+  height: 48px;
+  margin-left: -1px;
+  border-radius: 999px;
+  background: var(--pet-body);
+  box-shadow: inset -2px -2px 5px rgba(0, 0, 0, 0.14);
+}
+
+.caterpillar[data-character='caterpillar'] .segment::before,
+.caterpillar[data-character='caterpillar'] .segment::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+}
+
+.caterpillar[data-character='caterpillar'] .segment::before {
+  top: 12px;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  background: #ffd54f;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 18px 0 #ffd54f;
+}
+
+.caterpillar[data-character='caterpillar'] .segment::after {
+  top: 7px;
+  left: 3px;
+  width: 8px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.24);
+  transform: rotate(-20deg);
+}
+
+.caterpillar[data-character='caterpillar'] .head {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 32px;
+  height: 40px;
+  border-radius: 20px 20px 16px 16px;
+  background: var(--pet-head);
+  transform: translateY(-50%);
+  z-index: 3;
+  box-shadow: inset -2px -2px 5px rgba(0, 0, 0, 0.12), 0 10px 18px var(--pet-shadow);
+}
+
+.caterpillar[data-character='caterpillar'] .eye,
+.caterpillar[data-character='caterpillar'] .mouth,
+.caterpillar[data-character='caterpillar'] .blush,
+.caterpillar[data-character='caterpillar'] .antenna,
+.caterpillar[data-character='caterpillar'] .leg {
+  position: absolute;
+  will-change: transform, opacity;
+}
+
+.caterpillar[data-character='caterpillar'] .eye {
+  top: 10px;
+  width: 8px;
+  height: 11px;
+  background: #fffef8;
+  border: 1px solid rgba(65, 98, 24, 0.4);
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.caterpillar[data-character='caterpillar'] .eye::before,
+.caterpillar[data-character='caterpillar'] .eye::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+}
+
+.caterpillar[data-character='caterpillar'] .eye::before {
+  inset: 3px 2px 2px 2px;
+  background: #1d2a11;
+}
+
+.caterpillar[data-character='caterpillar'] .eye::after {
+  top: 2px;
+  left: 2px;
+  width: 2px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.caterpillar[data-character='caterpillar'] .eye.left { left: 6px; }
+.caterpillar[data-character='caterpillar'] .eye.right { right: 6px; }
+
+.caterpillar[data-character='caterpillar'] .mouth {
+  left: 50%;
+  bottom: 7px;
+  width: 10px;
+  height: 5px;
+  border-bottom: 2px solid #2e7d32;
+  border-radius: 0 0 999px 999px;
+  transform: translateX(-50%);
+}
+
+.caterpillar[data-character='caterpillar'] .blush {
+  top: 22px;
+  width: 8px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 171, 145, 0.62);
+  opacity: 0.55;
+}
+
+.caterpillar[data-character='caterpillar'] .blush.left { left: 2px; }
+.caterpillar[data-character='caterpillar'] .blush.right { right: 2px; }
+
+.caterpillar[data-character='caterpillar'] .antenna {
+  top: -9px;
+  width: 3px;
+  height: 13px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #f0625d, #d93131);
+  transform-origin: bottom center;
+  animation: caterpillar-antenna-wave 1.8s ease-in-out infinite;
+}
+
+.caterpillar[data-character='caterpillar'] .antenna::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #e53935;
+  transform: translateX(-50%);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+.caterpillar[data-character='caterpillar'] .antenna.left {
+  left: 7px;
+  transform: rotate(-28deg);
+}
+
+.caterpillar[data-character='caterpillar'] .antenna.right {
+  right: 7px;
+  transform: rotate(28deg);
+  animation-delay: 0.9s;
+}
+
+.caterpillar[data-character='caterpillar'] .legs {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.caterpillar[data-character='caterpillar'] .leg {
+  width: 6px;
+  height: 14px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #f0625d, #d93131);
+  top: 34px;
+  transform-origin: top center;
+}
+
+.caterpillar[data-character='caterpillar'] .leg.left { left: 20px; }
+.caterpillar[data-character='caterpillar'] .leg.right { right: 8px; }
+.caterpillar[data-character='caterpillar'] .leg:nth-child(1),
+.caterpillar[data-character='caterpillar'] .leg:nth-child(2) { left: 20px; right: auto; top: 33px; }
+.caterpillar[data-character='caterpillar'] .leg:nth-child(2) { left: auto; right: 56px; }
+.caterpillar[data-character='caterpillar'] .leg:nth-child(3) { left: 34px; top: 34px; }
+.caterpillar[data-character='caterpillar'] .leg:nth-child(4) { right: 42px; top: 34px; }
+.caterpillar[data-character='caterpillar'] .leg:nth-child(5) { left: 48px; top: 35px; }
+.caterpillar[data-character='caterpillar'] .leg:nth-child(6) { right: 28px; top: 35px; }
+.caterpillar[data-character='caterpillar'] .leg:nth-child(7) { left: 62px; top: 34px; }
+.caterpillar[data-character='caterpillar'] .leg:nth-child(8) { right: 14px; top: 34px; }
+.caterpillar[data-character='caterpillar'] .leg:nth-child(9) { left: 76px; top: 33px; }
+.caterpillar[data-character='caterpillar'] .leg:nth-child(10) { right: 0; top: 33px; }
+
+.caterpillar[data-character='caterpillar'][data-mood='happy'] {
+  filter: drop-shadow(0 0 12px rgba(255, 213, 79, 0.7));
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='happy'] .eye {
+  height: 5px;
+  border-radius: 999px 999px 0 0;
+  background: #2e7d32;
+  border: 0;
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='happy'] .eye::before,
+.caterpillar[data-character='caterpillar'][data-mood='happy'] .eye::after {
+  opacity: 0;
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='happy'] .blush {
+  opacity: 1;
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='happy'] .mouth {
+  width: 12px;
+  height: 6px;
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='happy']::after {
+  content: '✦';
+  position: absolute;
+  top: -4px;
+  right: 10px;
+  color: #ffd54f;
+  font-size: 10px;
+  opacity: 0;
+  animation: pet-particle-float 1.4s ease-out infinite;
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='sleepy'] {
+  opacity: 0.9;
+  filter: saturate(0.7) brightness(0.88);
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='sleepy'] .eye {
+  top: 13px;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(60, 86, 26, 0.85);
+  border: 0;
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='sleepy'] .eye::before,
+.caterpillar[data-character='caterpillar'][data-mood='sleepy'] .eye::after {
+  opacity: 0;
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='sleepy'] .mouth {
+  width: 6px;
+  opacity: 0.55;
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='sleepy']::after {
+  content: 'z';
+  position: absolute;
+  top: -8px;
+  left: 10px;
+  font-size: 11px;
+  color: rgba(160, 173, 213, 0.9);
+  opacity: 0;
+  animation: pet-particle-float 1.8s ease-out infinite;
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='hungry'] {
+  filter: saturate(0.84) brightness(0.94);
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='hungry'] .eye {
+  width: 9px;
+  height: 13px;
+  top: 9px;
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='hungry'] .eye::before {
+  inset: 2px 1px 1px 1px;
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='hungry'] .mouth {
+  width: 7px;
+  height: 7px;
+  border: 2px solid #2e7d32;
+  border-radius: 50%;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='hungry']::after {
+  content: '';
+  position: absolute;
+  top: 11px;
+  right: 4px;
+  width: 7px;
+  height: 10px;
+  background: linear-gradient(180deg, rgba(171, 220, 255, 0.95), rgba(120, 168, 255, 0.2));
+  border-radius: 50% 50% 60% 60%;
+  opacity: 0;
+  transform-origin: top center;
+  animation: pet-droplet 1.2s ease-in infinite;
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='excited'] {
+  filter: drop-shadow(0 0 16px rgba(255, 202, 40, 0.78));
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='excited'] .eye {
+  background: transparent;
+  border: 0;
+  overflow: visible;
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='excited'] .eye::before {
+  inset: auto;
+  top: 1px;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  background: #ffd54f;
+  clip-path: polygon(50% 0%, 62% 35%, 100% 35%, 70% 56%, 82% 100%, 50% 74%, 18% 100%, 30% 56%, 0% 35%, 38% 35%);
+  transform: translateX(-50%);
+  box-shadow: 0 0 6px rgba(255, 213, 79, 0.7);
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='excited'] .eye::after {
+  opacity: 0;
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='excited'] .blush {
+  opacity: 1;
+  background: rgba(255, 138, 101, 0.8);
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='excited'] .mouth {
+  width: 12px;
+  height: 7px;
+  border-bottom-width: 3px;
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='excited']::after {
+  content: '✦';
+  position: absolute;
+  top: -5px;
+  right: 7px;
+  color: #ffca28;
+  font-size: 12px;
+  opacity: 0;
+  animation: pet-particle-burst 0.85s ease-out infinite;
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='sad'] {
+  opacity: 0.86;
+  filter: grayscale(0.16) brightness(0.82);
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='sad'] .eye {
+  top: 12px;
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='sad'] .eye::before {
+  inset: 4px 2px 1px 2px;
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='sad'] .mouth {
+  bottom: 8px;
+  width: 10px;
+  height: 4px;
+  border-bottom: 0;
+  border-top: 2px solid #2e7d32;
+  border-radius: 999px 999px 0 0;
+}
+
+.caterpillar[data-character='caterpillar'][data-mood='sad']::after {
+  content: '';
+  position: absolute;
+  top: 16px;
+  left: 14px;
+  width: 5px;
+  height: 9px;
+  border-radius: 50% 50% 60% 60%;
+  background: linear-gradient(180deg, rgba(158, 209, 255, 0.9), rgba(95, 145, 255, 0.2));
+  opacity: 0;
+  animation: pet-droplet 1.6s ease-in infinite;
+}
+
+.caterpillar[data-character='caterpillar'][data-dirty='true'] .segment,
+.caterpillar[data-character='caterpillar'][data-dirty='true'] .head,
+.caterpillar[data-character='caterpillar'][data-dirty='true'] .leg,
+.caterpillar[data-character='caterpillar'][data-dirty='true'] .antenna {
+  filter: brightness(0.76) saturate(0.72);
+}
+
+.caterpillar[data-character='caterpillar'][data-dirty='true'] .head::after {
+  content: '';
+  position: absolute;
+  right: 2px;
+  bottom: 3px;
+  width: 8px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(107, 71, 35, 0.25);
+}
+
+.caterpillar[data-character='caterpillar'][data-growth-stage='1'] {
+  --pet-body: linear-gradient(135deg, #93cb53, #70a63d);
+  --pet-head: linear-gradient(135deg, #a4dc63, #78b043);
+}
+
+.caterpillar[data-character='caterpillar'][data-growth-stage='2'] {
+  --pet-body: linear-gradient(135deg, #7fc84a, #568e33);
+  --pet-head: linear-gradient(135deg, #95d85e, #5e9c36);
+}
+
+.caterpillar[data-character='caterpillar'][data-growth-stage='3'] {
+  filter: drop-shadow(0 0 14px rgba(240, 233, 141, 0.42));
+}
+
+.caterpillar[data-character='caterpillar'][data-growth-stage='4'] {
+  --pet-body: linear-gradient(135deg, #85d56d, #49a784);
+  --pet-head: linear-gradient(135deg, #a3e586, #56bc98);
+}
+
+.caterpillar[data-character='caterpillar'][data-weather='rain'] .antenna,
+.caterpillar[data-character='caterpillar'][data-weather='night'] .eye {
+  filter: drop-shadow(0 0 8px rgba(166, 208, 255, 0.78));
+}
+
+.caterpillar[data-character='caterpillar'][data-weather='sunny'] .segment::after {
+  background: rgba(255, 255, 255, 0.34);
+}
+
+.caterpillar[data-character='caterpillar'][data-weather='fog'] {
+  opacity: 0.94;
+}
+
+@keyframes caterpillar-antenna-wave {
+  0%, 100% { transform: rotate(-28deg); }
+  50% { transform: rotate(-12deg); }
+}
+
+@keyframes pet-particle-float {
+  0% { opacity: 0; transform: translateY(4px) scale(0.7); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-10px) scale(1.05); }
+}
+
+@keyframes pet-particle-burst {
+  0% { opacity: 0; transform: translateY(4px) scale(0.6) rotate(0deg); }
+  35% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-12px) scale(1.2) rotate(22deg); }
+}
+
+@keyframes pet-droplet {
+  0% { opacity: 0; transform: translateY(0) scaleY(0.8); }
+  35% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(9px) scaleY(1.1); }
+}
+
+.caterpillar[data-character='caterpillar'][data-animation='listening'] .antenna.left {
+  transform: rotate(-6deg) translateY(-2px);
+}
+
+.caterpillar[data-character='caterpillar'][data-animation='listening'] .antenna.right {
+  transform: rotate(6deg) translateY(-2px);
+}
+
+.caterpillar[data-character='caterpillar'][data-animation='listening'] .eye {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.55);
+}
+
+.caterpillar[data-character='caterpillar'][data-animation='celebrate'] .blush {
+  opacity: 1;
+}
+
+.caterpillar[data-character='caterpillar'][data-animation='drop'] .mouth {
+  width: 10px;
+  border-radius: 999px;
+}
+
+.caterpillar[data-character='caterpillar'][data-animation='yawn'] .mouth {
+  width: 12px;
+  height: 8px;
+  border-radius: 999px;
+}

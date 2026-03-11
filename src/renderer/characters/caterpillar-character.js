@@ -1,0 +1,40 @@
+class CaterpillarCharacter extends BaseCharacter {
+  constructor() {
+    super({
+      id: 'caterpillar',
+      name: '毛毛虫'
+    });
+  }
+
+  getTemplate() {
+    return `
+      <div id="caterpillar" class="caterpillar" data-character="caterpillar">
+        <div class="body">
+          <div class="segment"></div>
+          <div class="segment"></div>
+          <div class="segment"></div>
+          <div class="segment"></div>
+          <div class="segment"></div>
+        </div>
+        <div class="head">
+          <div class="eye left"></div>
+          <div class="eye right"></div>
+          <div class="antenna left"></div>
+          <div class="antenna right"></div>
+        </div>
+        <div class="legs">
+          <div class="leg left"></div>
+          <div class="leg right"></div>
+          <div class="leg left"></div>
+          <div class="leg right"></div>
+          <div class="leg left"></div>
+          <div class="leg right"></div>
+          <div class="leg left"></div>
+          <div class="leg right"></div>
+          <div class="leg left"></div>
+          <div class="leg right"></div>
+        </div>
+      </div>
+    `;
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "id": "rainbow-bot",
+  "name": "彩虹机器人",
+  "description": "大眼睛会随情绪变化的可爱机器人，身上有彩虹条纹",
+  "dimensions": {
+    "width": 90,
+    "height": 120
+  },
+  "animations": {
+    "idle": { "speed": 1.8, "amplitude": 1.5, "legRotation": 0, "frequency": 0.03 },
+    "happy": { "speed": 2.5, "amplitude": 2.5, "legRotation": 0, "frequency": 0.06 },
+    "sleepy": { "speed": 0.5, "amplitude": 0.5, "legRotation": 0, "frequency": 0.015 },
+    "hungry": { "speed": 1.2, "amplitude": 1.0, "legRotation": 0, "frequency": 0.03 },
+    "excited": { "speed": 3.0, "amplitude": 3.0, "legRotation": 0, "frequency": 0.08 },
+    "sad": { "speed": 0.7, "amplitude": 0.8, "legRotation": 0, "frequency": 0.02 }
+  },
+  "moveParts": {
+    "bodySelector": ".rb-body-group",
+    "limbSelector": ".rb-leg-l-group, .rb-leg-r-group",
+    "headSelector": ".rb-body-group"
+  },
+  "growth": {
+    "stages": ["blueprint", "prototype", "v1", "v2", "final"],
+    "stageLabels": ["蓝图", "原型机", "1.0版", "2.0版", "终极形态"]
+  },
+  "animationStrategy": "rainbow-bot",
+  "movement": {
+    "maxSpeedMultiplier": 0.85,
+    "acceleration": 0.12,
+    "turnResponsiveness": 0.09,
+    "turnSlowdown": 0.35,
+    "decelerationDistance": 90,
+    "arrivalRadius": 10,
+    "minTravelDistance": 160,
+    "roamPadding": 80
+  }
+}

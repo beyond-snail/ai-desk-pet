@@ -1,0 +1,365 @@
+/* ===== Cyber Bot v2.0 ===== */
+.caterpillar[data-character='cyber-bot'] {
+  width: 103px;
+  height: 70px;
+  isolation: isolate;
+  --shell-glow: rgba(77, 208, 225, 0.35);
+  --shell-border: rgba(0, 188, 212, 0.42);
+  --eye-color: #4dd0e1;
+  --screen-color: #4dd0e1;
+  --screen-content: ':)';
+}
+
+.caterpillar[data-character='cyber-bot'] .bot-antenna,
+.caterpillar[data-character='cyber-bot'] .bot-shell,
+.caterpillar[data-character='cyber-bot'] .bot-track,
+.caterpillar[data-character='cyber-bot'] .bot-eye,
+.caterpillar[data-character='cyber-bot'] .bot-screen {
+  position: absolute;
+  will-change: transform, opacity;
+}
+
+.caterpillar[data-character='cyber-bot'] .bot-antenna {
+  top: 0;
+  left: 50%;
+  width: 4px;
+  height: 18px;
+  background: linear-gradient(180deg, #9ff7ff, #617382);
+  transform: translateX(-50%);
+}
+
+.caterpillar[data-character='cyber-bot'] .bot-antenna::after {
+  content: '';
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #84ffff;
+  transform: translateX(-50%);
+  box-shadow: 0 0 14px rgba(132, 255, 255, 0.86);
+  animation: cyber-antenna-pulse 1.4s ease-in-out infinite;
+}
+
+.caterpillar[data-character='cyber-bot'] .bot-shell {
+  inset: 12px 12px 16px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #546e7a, #90a4ae 50%, #546e7a);
+  border: 2px solid var(--shell-border);
+  box-shadow: 0 0 20px var(--shell-glow), inset 0 -4px 8px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.caterpillar[data-character='cyber-bot'] .bot-shell::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 17px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(11, 18, 22, 0.18));
+}
+
+.caterpillar[data-character='cyber-bot'] .bot-panel {
+  position: absolute;
+  inset: 8px 14px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.18));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.caterpillar[data-character='cyber-bot'] .bot-eyes {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  display: flex;
+  gap: 19px;
+  transform: translateX(-50%);
+}
+
+.caterpillar[data-character='cyber-bot'] .bot-eye {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--eye-color);
+  box-shadow: 0 0 12px var(--eye-color), 0 0 4px var(--eye-color);
+  animation: cyber-eye-breathe 2.5s ease-in-out infinite;
+}
+
+.caterpillar[data-character='cyber-bot'] .bot-screen {
+  bottom: 7px;
+  left: 50%;
+  width: 26px;
+  height: 12px;
+  border-radius: 4px;
+  background: #17232b;
+  border: 1px solid rgba(0, 188, 212, 0.32);
+  transform: translateX(-50%);
+  overflow: hidden;
+}
+
+.caterpillar[data-character='cyber-bot'] .bot-screen::before,
+.caterpillar[data-character='cyber-bot'] .bot-screen::after {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.caterpillar[data-character='cyber-bot'] .bot-screen::before {
+  content: '';
+  inset: 1px;
+  background: linear-gradient(180deg, rgba(77, 208, 225, 0.12), rgba(18, 26, 31, 0));
+}
+
+.caterpillar[data-character='cyber-bot'] .bot-screen::after {
+  content: var(--screen-content);
+  top: 50%;
+  color: var(--screen-color);
+  font: 700 7px/1 monospace;
+  transform: translate(-50%, -50%);
+}
+
+.caterpillar[data-character='cyber-bot'] .bot-track {
+  bottom: 0;
+  width: 32px;
+  height: 16px;
+  border-radius: 10px;
+  background: repeating-linear-gradient(90deg, #263238, #263238 4px, #455a64 4px, #455a64 8px);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.08);
+}
+
+.caterpillar[data-character='cyber-bot'] .bot-track::after {
+  content: '';
+  position: absolute;
+  inset: 3px 4px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  opacity: 0.7;
+  animation: cyber-track 0.6s linear infinite;
+}
+
+.caterpillar[data-character='cyber-bot'] .bot-track.left { left: 10px; }
+.caterpillar[data-character='cyber-bot'] .bot-track.right { right: 10px; }
+
+.caterpillar[data-character='cyber-bot'][data-mood='happy'] {
+  --eye-color: #69f0ae;
+  --screen-color: #69f0ae;
+  --screen-content: '♥';
+  --shell-glow: rgba(105, 240, 174, 0.42);
+  --shell-border: rgba(105, 240, 174, 0.5);
+}
+
+.caterpillar[data-character='cyber-bot'][data-mood='happy'] .bot-antenna::after {
+  animation-duration: 0.6s;
+}
+
+.caterpillar[data-character='cyber-bot'][data-mood='happy']::after {
+  content: '⚙';
+  position: absolute;
+  top: -7px;
+  right: 6px;
+  font-size: 9px;
+  color: #69f0ae;
+  opacity: 0;
+  animation: cyber-particle-float 1.5s ease-out infinite;
+}
+
+.caterpillar[data-character='cyber-bot'][data-mood='sleepy'] {
+  filter: brightness(0.74);
+  --screen-color: #6f8390;
+  --screen-content: 'Zzz';
+}
+
+.caterpillar[data-character='cyber-bot'][data-mood='sleepy'] .bot-eye {
+  height: 4px;
+  margin-top: 4px;
+  border-radius: 999px;
+  box-shadow: none;
+  background: #546e7a;
+}
+
+.caterpillar[data-character='cyber-bot'][data-mood='sleepy'] .bot-antenna::after {
+  background: #546e7a;
+  box-shadow: none;
+}
+
+.caterpillar[data-character='cyber-bot'][data-mood='sleepy']::after {
+  content: 'z';
+  position: absolute;
+  top: -6px;
+  right: 14px;
+  font-size: 10px;
+  color: #8aa2c2;
+  opacity: 0;
+  animation: cyber-particle-float 1.8s ease-out infinite;
+}
+
+.caterpillar[data-character='cyber-bot'][data-mood='hungry'] {
+  --eye-color: #ffc857;
+  --screen-color: #ffc857;
+  --screen-content: '...';
+}
+
+.caterpillar[data-character='cyber-bot'][data-mood='hungry'] .bot-shell {
+  animation: cyber-shiver 0.28s ease-in-out infinite;
+}
+
+.caterpillar[data-character='cyber-bot'][data-mood='hungry']::after {
+  content: '!';
+  position: absolute;
+  top: -10px;
+  left: 18px;
+  font-size: 10px;
+  color: #ffc857;
+  opacity: 0;
+  animation: cyber-particle-burst 0.9s ease-out infinite;
+}
+
+.caterpillar[data-character='cyber-bot'][data-mood='excited'] {
+  --eye-color: #ffe66d;
+  --screen-color: #ffe66d;
+  --screen-content: '++';
+  --shell-glow: rgba(255, 214, 10, 0.44);
+  --shell-border: rgba(255, 214, 10, 0.55);
+}
+
+.caterpillar[data-character='cyber-bot'][data-mood='excited'] .bot-shell {
+  filter: saturate(1.2) brightness(1.05);
+}
+
+.caterpillar[data-character='cyber-bot'][data-mood='excited'] .bot-track::after {
+  animation-duration: 0.28s;
+}
+
+.caterpillar[data-character='cyber-bot'][data-mood='excited']::after {
+  content: '✦';
+  position: absolute;
+  top: -7px;
+  right: 5px;
+  font-size: 10px;
+  color: #ffe66d;
+  opacity: 0;
+  animation: cyber-particle-burst 0.7s ease-out infinite;
+}
+
+.caterpillar[data-character='cyber-bot'][data-mood='sad'] {
+  --eye-color: #8a9aa5;
+  --screen-color: #8a9aa5;
+  --screen-content: ':('; 
+}
+
+.caterpillar[data-character='cyber-bot'][data-mood='sad'] .bot-shell {
+  filter: grayscale(0.24) brightness(0.84);
+}
+
+.caterpillar[data-character='cyber-bot'][data-mood='sad']::after {
+  content: '';
+  position: absolute;
+  top: 22px;
+  left: 24px;
+  width: 5px;
+  height: 9px;
+  border-radius: 50% 50% 60% 60%;
+  background: linear-gradient(180deg, rgba(166, 208, 255, 0.9), rgba(95, 145, 255, 0.18));
+  opacity: 0;
+  animation: cyber-drop 1.6s ease-in infinite;
+}
+
+.caterpillar[data-character='cyber-bot'][data-dirty='true'] .bot-shell,
+.caterpillar[data-character='cyber-bot'][data-dirty='true'] .bot-track {
+  filter: brightness(0.74) saturate(0.66);
+}
+
+.caterpillar[data-character='cyber-bot'][data-dirty='true'] .bot-shell::after {
+  content: '';
+  position: absolute;
+  right: 8px;
+  bottom: 10px;
+  width: 14px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(72, 56, 35, 0.24);
+}
+
+.caterpillar[data-character='cyber-bot'][data-growth-stage='1'] {
+  --shell-border: rgba(187, 244, 255, 0.55);
+}
+
+.caterpillar[data-character='cyber-bot'][data-growth-stage='2'] {
+  --shell-glow: rgba(73, 228, 255, 0.4);
+}
+
+.caterpillar[data-character='cyber-bot'][data-growth-stage='3'] {
+  --eye-color: #7fffca;
+}
+
+.caterpillar[data-character='cyber-bot'][data-growth-stage='4'] .bot-shell {
+  background: linear-gradient(135deg, #7e94ac, #eff7ff 55%, #54606f);
+}
+
+.caterpillar[data-character='cyber-bot'][data-weather='night'] .bot-eye,
+.caterpillar[data-character='cyber-bot'][data-weather='rain'] .bot-antenna::after {
+  box-shadow: 0 0 16px rgba(153, 214, 255, 0.88);
+}
+
+.caterpillar[data-character='cyber-bot'][data-weather='sunny'] .bot-shell::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(11, 18, 22, 0.1));
+}
+
+@keyframes cyber-eye-breathe {
+  0%, 100% { opacity: 0.82; transform: scale(0.92); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes cyber-antenna-pulse {
+  0%, 100% { transform: translateX(-50%) scale(0.95); opacity: 0.8; }
+  50% { transform: translateX(-50%) scale(1.08); opacity: 1; }
+}
+
+@keyframes cyber-track {
+  from { transform: translateX(-10px); }
+  to { transform: translateX(10px); }
+}
+
+@keyframes cyber-shiver {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-1px); }
+  75% { transform: translateX(1px); }
+}
+
+@keyframes cyber-particle-float {
+  0% { opacity: 0; transform: translateY(4px) scale(0.7); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-10px) scale(1.08); }
+}
+
+@keyframes cyber-particle-burst {
+  0% { opacity: 0; transform: translateY(4px) scale(0.6) rotate(0deg); }
+  35% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-12px) scale(1.2) rotate(18deg); }
+}
+
+@keyframes cyber-drop {
+  0% { opacity: 0; transform: translateY(0); }
+  35% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(9px); }
+}
+
+.caterpillar[data-character='cyber-bot'][data-animation='listening'] .bot-antenna {
+  filter: drop-shadow(0 0 8px rgba(114, 223, 255, 0.7));
+}
+
+.caterpillar[data-character='cyber-bot'][data-animation='listening'] .bot-eye {
+  box-shadow: 0 0 14px rgba(99, 216, 255, 0.8);
+}
+
+.caterpillar[data-character='cyber-bot'][data-animation='celebrate'] .bot-screen {
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.18), 0 0 22px rgba(99, 216, 255, 0.45);
+}
+
+.caterpillar[data-character='cyber-bot'][data-animation='drop'] .bot-shell {
+  filter: brightness(1.08) saturate(1.06);
+}
+
+.caterpillar[data-character='cyber-bot'][data-animation='yawn'] .bot-eye {
+  transform: scaleY(0.45);
+}

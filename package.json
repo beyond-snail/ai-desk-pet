@@ -1,0 +1,131 @@
+{
+  "name": "ai-desk-pet",
+  "version": "1.0.0",
+  "description": "AI 桌面宠物 - 你的智能桌面伙伴",
+  "main": "src/main/index.js",
+  "scripts": {
+    "start": "node scripts/start-electron.mjs",
+    "dev": "node scripts/start-electron.mjs",
+    "check": "npm run check:syntax && npm run check:characters",
+    "check:syntax": "node scripts/check-syntax.mjs",
+    "check:characters": "node scripts/verify-character-configs.mjs",
+    "build": "electron-builder",
+    "build:mac": "electron-builder --mac",
+    "build:mac:local": "node scripts/build-mac-local.mjs",
+    "build:win": "electron-builder --win",
+    "build:linux": "electron-builder --linux",
+    "build:all": "electron-builder --mac --win --linux",
+    "build:dist": "npm run check && npm run build:mac:local",
+    "signing:prepare:mac": "./scripts/generate-macos-signing-materials.sh",
+    "release:check:mac": "node scripts/check-macos-release-env.mjs",
+    "build:mac:release": "npm run release:check:mac && npm run build:mac:local",
+    "release:check": "npm run check && npm run release:check:mac"
+  },
+  "keywords": [
+    "electron",
+    "ai",
+    "desktop-pet"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "electron-store": "^10.1.0",
+    "electron-updater": "^6.6.2"
+  },
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.ai-desk-pet.app",
+    "productName": "AI桌面宠物",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "scripts/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.entertainment",
+      "icon": "assets/icon.icns",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "darkModeSupport": true,
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.inherit.plist"
+    },
+    "dmg": {
+      "title": "AI桌面宠物",
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "win": {
+      "icon": "assets/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico",
+      "installerHeaderIcon": "assets/icon.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "AI桌面宠物"
+    },
+    "linux": {
+      "icon": "assets/icon.png",
+      "target": [
+        "AppImage"
+      ],
+      "category": "Game"
+    },
+    "artifactName": "${productName}-${version}-${arch}.${ext}",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "beyond-snail",
+        "repo": "ai-desk-pet",
+        "releaseType": "draft"
+      }
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/beyond-snail/ai-desk-pet.git"
+  },
+  "bugs": {
+    "url": "https://github.com/beyond-snail/ai-desk-pet/issues"
+  },
+  "homepage": "https://github.com/beyond-snail/ai-desk-pet#readme"
+}
