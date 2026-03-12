@@ -9,7 +9,7 @@
   display: block;
   overflow: visible;
   will-change: transform;
-  filter: drop-shadow(0 0 8px rgba(126, 200, 232, 0.2));
+  filter: drop-shadow(0 0 12px rgba(126, 200, 232, 0.4)) drop-shadow(0 0 20px rgba(126, 200, 232, 0.2));
 }
 
 /* 待机呼吸 */

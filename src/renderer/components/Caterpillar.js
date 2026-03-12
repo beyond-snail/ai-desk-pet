@@ -509,6 +509,8 @@ class Caterpillar {
     let target = this.position;
 
     while (attempts < 6) {
+      // 增加随机性，有时选择近处目标，有时选择远处目标
+      const distanceFactor = Math.random() > 0.3 ? 1 : 0.5;
       target = {
         x: padding + Math.random() * Math.max(40, this.screenSize.width - (this.element ? this.element.offsetWidth : 80) - padding * 2),
         y: padding + Math.random() * Math.max(40, this.screenSize.height - (this.element ? this.element.offsetHeight : 40) - padding * 2)
@@ -516,7 +518,7 @@ class Caterpillar {
 
       const dx = target.x - this.position.x;
       const dy = target.y - this.position.y;
-      if (Math.sqrt(dx ** 2 + dy ** 2) >= minTravelDistance) {
+      if (Math.sqrt(dx ** 2 + dy ** 2) >= minTravelDistance * distanceFactor) {
         break;
       }
       attempts += 1;
@@ -673,14 +675,14 @@ class Caterpillar {
 
     this.moodInterval = setInterval(() => {
       const careMood = this.getCareDrivenMood();
-      if (careMood) {
+      if (careMood && careMood !== 'sad') {
         this.setMood(careMood);
         return;
       }
 
       const now = Date.now();
       if (now - this.lastInteractionAt > 2 * 60 * 1000) {
-        this.setMood('sleepy');
+        this.setMood('idle');
         return;
       }
 

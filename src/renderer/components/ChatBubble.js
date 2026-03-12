@@ -44,6 +44,41 @@ class ChatBubble {
       this.lastPetDetail = eventDetail;
     }
 
+    // 优先显示在菜单正上方
+    const menuElement = document.getElementById('quick-actions');
+    if (menuElement && !menuElement.classList.contains('hidden')) {
+      const menuRect = menuElement.getBoundingClientRect();
+      const bubbleWidth = this.element.offsetWidth || 220;
+      const bubbleHeight = this.element.offsetHeight || 54;
+      const margin = 12;
+      const pointerMargin = 16;
+
+      const menuCenterX = menuRect.left + menuRect.width / 2;
+      const aboveY = menuRect.top - bubbleHeight - pointerMargin;
+
+      const unclampedLeft = menuCenterX - bubbleWidth / 2;
+      const clampedLeft = this.clamp(unclampedLeft, margin, window.innerWidth - bubbleWidth - margin);
+      const top = Math.max(margin, aboveY);
+
+      const nextX = this.clamp(clampedLeft, margin, window.innerWidth - bubbleWidth - margin);
+      const nextY = this.clamp(top, margin, window.innerHeight - bubbleHeight - margin);
+      this.targetPosition = { x: nextX, y: nextY };
+
+      const tailX = this.clamp(menuCenterX - nextX, 18, bubbleWidth - 18);
+      this.element.style.setProperty('--tail-x', `${tailX.toFixed(1)}px`);
+      this.element.dataset.tail = 'down';
+
+      if (force || this.currentPosition.x === null || this.currentPosition.y === null) {
+        this.currentPosition = { ...this.targetPosition };
+        this.applyPosition(this.currentPosition.x, this.currentPosition.y);
+        return;
+      }
+
+      this.startFollowLoop();
+      return;
+    }
+
+    //  fallback: 显示在桌宠旁边
     const petElement = this.getPetElement();
     if (!petElement) {
       return;

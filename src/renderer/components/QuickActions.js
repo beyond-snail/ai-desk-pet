@@ -152,28 +152,21 @@ class QuickActions {
   }
 
   positionNearPet() {
-    const petElement = this.petController && this.petController.getElement ? this.petController.getElement() : null;
-    if (!petElement || !this.element) {
+    if (!this.element) {
       return false;
     }
 
-    const rect = petElement.getBoundingClientRect();
-    const menuWidth = 80;
-    const menuHeight = 160;
-    const petGap = 8;
-    const edgePadding = 6;
+    // 固定在屏幕中央底部
+    const menuWidth = 280;
+    const menuHeight = 60;
+    const edgePadding = 20;
 
-    const preferRight = rect.right + petGap;
-    const preferLeft = rect.left - menuWidth - petGap;
-    const fitsRight = preferRight + menuWidth <= window.innerWidth - edgePadding;
-    const x = fitsRight ? preferRight : preferLeft;
-
-    const centerY = rect.top + rect.height * 0.5;
-    const y = this.clamp(centerY - menuHeight / 2, edgePadding, window.innerHeight - menuHeight - edgePadding);
+    const x = window.innerWidth / 2 - menuWidth / 2;
+    const y = window.innerHeight - menuHeight - edgePadding;
 
     this.element.style.left = `${x.toFixed(1)}px`;
     this.element.style.top = `${y.toFixed(1)}px`;
-    this.element.dataset.side = fitsRight ? 'right' : 'left';
+    this.element.dataset.side = 'bottom';
     return true;
   }
 
@@ -205,12 +198,10 @@ class QuickActions {
 
     this.ensureInteractiveWindow();
     this.onAction(action);
-    this.hide(true);
   }
 
   showForPet() {
     this.showMenu('tap');
-    this.scheduleHide(5000);
   }
 
   hide(immediate = true) {

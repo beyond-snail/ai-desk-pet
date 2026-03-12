@@ -5,11 +5,18 @@ class IdleBehavior {
     this.careSystem = null;
     this.checkInterval = null;
     this.lastTriggeredAt = 0;
+    this.reminderCount = 0;
+    this.maxReminders = 3;
     this.thoughtPool = [
       '要不要一起做点小事？',
       '我在看着你呢。',
       '桌面今天很安静。',
       '我刚刚在想晚点要不要伸个懒腰。'
+    ];
+    this.reminderMessages = [
+      '嘿，你在忙什么呢？',
+      '我有点无聊了，来和我聊聊天吧！',
+      '你已经很久没理我了，我要去休息了。'
     ];
   }
 
@@ -42,15 +49,50 @@ class IdleBehavior {
 
     const idleMs = now - (this.petController.lastInteractionAt || now);
 
-    if (idleMs >= 5 * 60 * 1000) {
-      this.lastTriggeredAt = now;
-      this.petController.setMood('sleepy', { silent: true });
-      this.petController.playTemporaryAnimation('doze', 2200);
-      this.petController.moveToTarget(this.getEdgeRestTarget());
-      this.chatBubble.show('我先去边边坐一下，等你叫我。', 4200);
+    // 重置提醒计数如果有交互
+    if (idleMs < 60000) {
+      this.reminderCount = 0;
       return;
     }
 
+    // 5分钟无交互：第一次提醒
+    if (idleMs >= 5 * 60 * 1000 && this.reminderCount === 0) {
+      this.lastTriggeredAt = now;
+      this.reminderCount = 1;
+      this.petController.setMood('normal', { silent: true });
+      this.petController.playTemporaryAnimation('idle-look', 1200);
+      this.chatBubble.show(this.reminderMessages[0], 4000);
+      return;
+    }
+
+    // 10分钟无交互：第二次提醒
+    if (idleMs >= 10 * 60 * 1000 && this.reminderCount === 1) {
+      this.lastTriggeredAt = now;
+      this.reminderCount = 2;
+      this.petController.setMood('sad', { silent: true });
+      this.petController.playTemporaryAnimation('sad', 1600);
+      this.chatBubble.show(this.reminderMessages[1], 4500);
+      return;
+    }
+
+    // 15分钟无交互：第三次提醒并自动隐藏
+    if (idleMs >= 15 * 60 * 1000 && this.reminderCount === 2) {
+      this.lastTriggeredAt = now;
+      this.reminderCount = 3;
+      this.petController.setMood('sad', { silent: true });
+      this.petController.playTemporaryAnimation('sad', 2000);
+      this.chatBubble.show(this.reminderMessages[2], 5000);
+      
+      // 5秒后自动隐藏
+      setTimeout(() => {
+        if (this.petController && this.petController.hide) {
+          this.petController.hide();
+        }
+      }, 5000);
+      return;
+    }
+
+    // 2分钟无交互：轻度提醒
     if (idleMs >= 2 * 60 * 1000) {
       this.lastTriggeredAt = now;
       this.petController.setMood('sleepy', { silent: true });
@@ -66,6 +108,7 @@ class IdleBehavior {
       return;
     }
 
+    // 30秒无交互：随机思考
     if (idleMs >= 30000) {
       this.lastTriggeredAt = now;
       this.petController.playTemporaryAnimation('idle-look', 1200);
