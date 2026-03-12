@@ -105,6 +105,13 @@ function buildContextMenu() {
   template.push(
     { type: 'separator' },
     {
+      label: '成长日记',
+      click: () => sendContextAction('growth-diary')
+    },
+    {
+      type: 'separator'
+    },
+    {
       label: '设置',
       click: () => sendContextAction('settings')
     }

@@ -2,16 +2,17 @@ class ChatManager {
   constructor() {
     this.messages = [];
     this.context = [];
-    this.maxContextLength = 10;
+    this.maxContextLength = 20;
     this.careSystem = null;
     this.growthSystem = null;
     this.memoryManager = null;
+    this.longTermContext = '';
     this.streamCounter = 0;
     this.streamListenerBound = false;
     this.pendingStreams = new Map();
   }
 
-  init(careSystem, growthSystem = null, memoryManager = null) {
+  async init(careSystem, growthSystem = null, memoryManager = null) {
     this.careSystem = careSystem;
     this.growthSystem = growthSystem;
     this.memoryManager = memoryManager;
@@ -42,41 +43,60 @@ class ChatManager {
         }
       });
     }
+
+    await this.loadPersistedHistory();
+    await this.refreshLongTermContext();
   }
 
   buildSystemPrompt() {
+    const petName = localStorage.getItem('petName') || '';
     const longerChat = this.growthSystem && this.growthSystem.hasAbility('longer_chat');
-    let prompt = `你是一只可爱的桌面宠物。回复要简短、温暖、可爱，不超过${longerChat ? '90' : '50'}个字。`;
+    const maxWords = longerChat ? 100 : 60;
+    const personalityMap = {
+      warm: '你性格温暖体贴，说话轻柔，善于共情，让人感到被关心。',
+      lively: '你性格活泼开朗，说话带劲，喜欢用感叹号，充满正能量。',
+      cool: '你性格冷静克制，说话简洁，不废话，但关键时刻很靠谱。',
+      witty: '你性格毒舌幽默，说话带点调侃，但不伤人，让人忍不住笑。'
+    };
+    const personality = localStorage.getItem('petPersonality') || 'warm';
+    const personalityDesc = personalityMap[personality] || personalityMap.warm;
+    const nameDesc = petName ? `你的名字叫"${petName}"，这是用户给你起的名字，你很喜欢这个名字。` : '';
+    let prompt = `你是一只可爱的桌面宠物，陪伴在用户的电脑桌面上。${nameDesc}${personalityDesc}回复要简短，不超过${maxWords}个字。不要用"主人"称呼用户，用"你"就好。`;
 
-    if (!this.careSystem) {
-      return prompt;
-    }
+    if (this.careSystem) {
+      const state = this.careSystem.getState();
 
-    const state = this.careSystem.getState();
+      if (state.hunger <= 0) {
+        prompt += '你现在很饿，会委婉表达想吃东西。';
+      } else if (state.hunger > 80) {
+        prompt += '你刚吃饱，心情很好。';
+      }
 
-    if (state.hunger <= 0) {
-      prompt += '你现在很饿，会委婉表达想吃东西。';
-    } else if (state.hunger > 80) {
-      prompt += '你刚吃饱，心情很好。';
-    }
+      if (state.affection >= 60) {
+        prompt += '你和用户很亲密，说话会自然撒娇一点。';
+      } else if (state.affection < 20) {
+        prompt += '你和用户还不太熟，说话比较礼貌克制。';
+      }
 
-    if (state.affection >= 60) {
-      prompt += '你和主人很亲密，说话会撒娇一点。';
-    } else if (state.affection < 20) {
-      prompt += '你和主人还不太熟，说话比较礼貌。';
-    }
-
-    if (state.cleanliness < 30) {
-      prompt += '你有点脏，偶尔会提到想洗澡。';
+      if (state.cleanliness < 30) {
+        prompt += '你有点脏，偶尔会提到想洗澡。';
+      }
     }
 
     if (this.growthSystem) {
       const growthState = this.growthSystem.getState();
-      prompt += `你当前等级 ${growthState.level}，成长阶段是“${growthState.stageLabel}”。`;
+      prompt += `你当前等级 ${growthState.level}，成长阶段是"${growthState.stageLabel}"。`;
     }
 
     if (this.memoryManager && typeof this.memoryManager.getPromptContext === 'function') {
-      prompt += this.memoryManager.getPromptContext();
+      const memoryContext = this.memoryManager.getPromptContext();
+      if (memoryContext) {
+        prompt += memoryContext;
+      }
+    }
+
+    if (this.longTermContext) {
+      prompt += this.longTermContext;
     }
 
     return prompt;
@@ -92,6 +112,8 @@ class ChatManager {
     if (this.growthSystem) {
       this.growthSystem.addInteraction('chat');
     }
+
+    this.extractAndSaveMemory(input, response);
 
     return response;
   }
@@ -140,6 +162,7 @@ class ChatManager {
       if (this.growthSystem) {
         this.growthSystem.addInteraction('chat');
       }
+      this.extractAndSaveMemory(input, content);
       onDone(content);
       return content;
     } catch (error) {
@@ -158,6 +181,7 @@ class ChatManager {
       if (this.growthSystem) {
         this.growthSystem.addInteraction('chat');
       }
+      this.extractAndSaveMemory(input, fallback);
       onDone(fallback);
       return fallback;
     }
@@ -167,6 +191,69 @@ class ChatManager {
     this.messages.push({ role, content });
     if (this.messages.length > this.maxContextLength) {
       this.messages.shift();
+    }
+    this.persistHistory();
+  }
+
+  persistHistory() {
+    const snapshot = this.messages.slice(-20);
+    if (window.electronAPI && window.electronAPI.storeSet) {
+      window.electronAPI.storeSet('chatHistory', snapshot);
+      return;
+    }
+
+    localStorage.setItem('chatHistory', JSON.stringify(snapshot));
+  }
+
+  async loadPersistedHistory() {
+    try {
+      let history = null;
+      if (window.electronAPI && window.electronAPI.storeGet) {
+        history = await window.electronAPI.storeGet('chatHistory');
+      } else {
+        const raw = localStorage.getItem('chatHistory');
+        history = raw ? JSON.parse(raw) : null;
+      }
+
+      if (Array.isArray(history) && history.length > 0) {
+        this.messages = history.slice(-20);
+      }
+    } catch (_error) {
+      // 加载失败静默处理，不影响正常使用
+    }
+  }
+
+  async refreshLongTermContext() {
+    if (this.memoryManager && typeof this.memoryManager.getLongTermContext === 'function') {
+      this.longTermContext = await this.memoryManager.getLongTermContext();
+    }
+  }
+
+  async extractAndSaveMemory(userInput, assistantReply) {
+    if (!this.memoryManager || !window.electronAPI || !window.electronAPI.llmChat) {
+      return;
+    }
+
+    try {
+      const extractPrompt = `从以下对话中提取用户透露的关键个人信息（如姓名、职业、所在城市、当前状态、习惯偏好等），用一句话概括，不超过25字。如果没有值得记录的新信息，返回空字符串。
+
+用户说：${userInput}
+宠物回复：${assistantReply}
+
+只返回提取结果，不要解释。`;
+
+      const result = await window.electronAPI.llmChat(
+        [{ role: 'user', content: extractPrompt }],
+        { systemPrompt: '你是一个信息提取助手，只提取关键事实，不做任何解释。' }
+      );
+
+      const fact = result && !result.error ? (result.content || '').trim() : '';
+      if (fact && fact.length > 2 && fact.length < 60) {
+        await this.memoryManager.appendLongTermMemory(fact);
+        await this.refreshLongTermContext();
+      }
+    } catch (_error) {
+      // 提取失败静默处理
     }
   }
 
@@ -227,6 +314,7 @@ class ChatManager {
   clearContext() {
     this.messages = [];
     this.context = [];
+    this.persistHistory();
   }
 
   getChatHistory() {
@@ -234,7 +322,7 @@ class ChatManager {
   }
 
   saveChatHistory() {
-    localStorage.setItem('chatHistory', JSON.stringify(this.messages));
+    this.persistHistory();
   }
 
   loadChatHistory() {

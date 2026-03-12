@@ -166,6 +166,11 @@ class PomodoroTimer {
         focusResult = this.focusMode.completeWorkSession(workedSeconds, true);
       }
       this.recordMemory('focus:complete', { durationSeconds: workedSeconds });
+      window.dispatchEvent(new CustomEvent('focus:complete', {
+        detail: {
+          durationSeconds: workedSeconds
+        }
+      }));
 
       if (window.growthSystem) {
         window.growthSystem.addInteraction('pomodoro');

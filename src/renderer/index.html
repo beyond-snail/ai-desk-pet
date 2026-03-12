@@ -9,6 +9,11 @@
 </head>
 <body>
   <div id="pet-root"></div>
+  <div id="pet-status-bar" class="hidden">
+    <span class="status-dot" data-type="hunger" data-level="high" title="饱食度">🍃</span>
+    <span class="status-dot" data-type="cleanliness" data-level="high" title="清洁度">✨</span>
+    <span class="status-dot" data-type="affection" data-level="high" title="亲密度">💛</span>
+  </div>
   <div id="chat-bubble" class="chat-bubble hidden">
     <div class="content"></div>
   </div>
@@ -18,7 +23,7 @@
         <path d="M12 15.2a3.2 3.2 0 0 0 3.2-3.2V7.2a3.2 3.2 0 1 0-6.4 0V12a3.2 3.2 0 0 0 3.2 3.2Zm5.6-3.6a.9.9 0 0 0-1.8 0 3.8 3.8 0 0 1-7.6 0 .9.9 0 0 0-1.8 0 5.61 5.61 0 0 0 4.7 5.54V19H8.8a.9.9 0 1 0 0 1.8h6.4a.9.9 0 1 0 0-1.8H13v-1.86a5.61 5.61 0 0 0 4.6-5.54Z"/>
       </svg>
     </button>
-    <input id="user-input" type="text" placeholder="说点什么..." maxlength="200" autocomplete="off">
+    <textarea id="user-input" placeholder="说点什么..." maxlength="200" autocomplete="off" rows="1"></textarea>
     <button id="send-button" type="button" aria-label="发送">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
@@ -87,6 +92,7 @@
       const userInput = document.getElementById('user-input');
       const sendButton = document.getElementById('send-button');
       const voiceInputButton = document.getElementById('voice-input-button');
+      const statusBar = document.getElementById('pet-status-bar');
       let singleTapTimer = null;
       let presenceAnimating = false;
       let pendingHideRequest = false;
@@ -116,7 +122,9 @@
 
         const rect = petElement.getBoundingClientRect();
         const panelWidth = isInputPanelExpanded() ? Math.min(340, Math.max(220, window.innerWidth - 88)) : 40;
-        const panelHeight = isInputPanelExpanded() ? 48 : 40;
+        const panelHeight = isInputPanelExpanded()
+          ? Math.max(48, inputPanel.offsetHeight || 48)
+          : 40;
         const preferredLeft = rect.right + 10;
         const fallbackLeft = rect.left - panelWidth - 10;
         const left = preferredLeft + panelWidth <= window.innerWidth - 12
@@ -126,6 +134,80 @@
 
         inputPanel.style.left = `${Math.max(12, Math.min(window.innerWidth - panelWidth - 12, left))}px`;
         inputPanel.style.top = `${Math.max(12, Math.min(window.innerHeight - panelHeight - 12, top))}px`;
+      }
+
+      function setStatusBarVisible(visible) {
+        if (!statusBar) {
+          return;
+        }
+
+        statusBar.classList.toggle('hidden', !visible);
+      }
+
+      function positionStatusBar() {
+        if (!statusBar || statusBar.classList.contains('hidden')) {
+          return;
+        }
+
+        const petElement = getPetElement();
+        if (!petElement) {
+          return;
+        }
+
+        const rect = petElement.getBoundingClientRect();
+        const gap = 8;
+        const estimatedWidth = statusBar.offsetWidth || 24;
+        const estimatedHeight = statusBar.offsetHeight || 78;
+        const rightSideLeft = rect.right + gap;
+        const leftSideLeft = rect.left - estimatedWidth - gap;
+        const canUseRight = rightSideLeft + estimatedWidth <= window.innerWidth - 8;
+        const left = canUseRight ? rightSideLeft : leftSideLeft;
+        const top = rect.top + rect.height * 0.12;
+
+        statusBar.style.left = `${Math.max(8, Math.min(window.innerWidth - estimatedWidth - 8, left))}px`;
+        statusBar.style.top = `${Math.max(8, Math.min(window.innerHeight - estimatedHeight - 8, top))}px`;
+      }
+
+      function updateStatusBar(state) {
+        if (!statusBar || !state) {
+          return;
+        }
+
+        const fields = {
+          hunger: state.hunger,
+          cleanliness: state.cleanliness,
+          affection: state.affection
+        };
+
+        Object.entries(fields).forEach(([type, value]) => {
+          const dot = statusBar.querySelector(`[data-type="${type}"]`);
+          if (!dot) {
+            return;
+          }
+
+          dot.dataset.level = value < 30 ? 'low' : value < 60 ? 'mid' : 'high';
+        });
+      }
+
+      function triggerLevelUpEffect(x, y) {
+        const emojis = ['⭐', '✨', '🌟', '💫'];
+        emojis.forEach((emoji, index) => {
+          const element = document.createElement('div');
+          element.className = 'levelup-burst';
+          element.textContent = emoji;
+          element.style.left = `${x + (index - 1.5) * 28}px`;
+          element.style.top = `${y - 20}px`;
+          element.style.animationDelay = `${index * 80}ms`;
+          document.body.appendChild(element);
+          element.addEventListener('animationend', () => element.remove());
+        });
+      }
+
+      function triggerEvolveEffect() {
+        const element = document.createElement('div');
+        element.className = 'evolve-flash';
+        document.body.appendChild(element);
+        element.addEventListener('animationend', () => element.remove());
       }
 
       function showInputPanel() {
@@ -164,9 +246,11 @@
         inputPanel.classList.remove('collapsed');
         inputPanel.dataset.expanded = 'false';
         userInput.value = '';
+        userInput.style.height = 'auto';
         inputPanel.style.left = '-9999px';
         inputPanel.style.top = '-9999px';
         petController.isMoving = false;
+        clearTypingReaction();
       }
 
       function showSettings() {
@@ -199,6 +283,26 @@
               petController.setMood('idle', { silent: true });
             }
           }, options.resetAfterMs);
+        }
+      }
+
+      function clearTypingReaction() {
+        const petElement = getPetElement();
+        if (petElement) {
+          delete petElement.dataset.chatMood;
+        }
+      }
+
+      function setTypingReactionActive(active) {
+        const petElement = getPetElement();
+        if (!petElement) {
+          return;
+        }
+
+        if (active) {
+          petElement.dataset.chatMood = 'listening';
+        } else {
+          delete petElement.dataset.chatMood;
         }
       }
 
@@ -321,6 +425,8 @@
         petController.isMoving = false;
         petController.startContinuousMovement();
         setPetInteractionEnabled(true);
+        setStatusBarVisible(true);
+        positionStatusBar();
         isPetVisible = true;
         if (!keepSuppressed) {
           proactiveBehavior.setSuppressed(false);
@@ -365,6 +471,7 @@
         presenceAnimating = true;
         quickActions.hide();
         hideInputPanel();
+        setStatusBarVisible(false);
         proactiveBehavior.setSuppressed(true);
         setPetInteractionEnabled(false);
         petController.isMoving = true;
@@ -427,6 +534,85 @@
         emitCareParticles(action);
       }
 
+      async function loadGrowthDiary() {
+        try {
+          if (window.electronAPI && window.electronAPI.storeGet) {
+            return (await window.electronAPI.storeGet('growthDiary')) || [];
+          }
+          const raw = localStorage.getItem('growthDiary');
+          return raw ? JSON.parse(raw) : [];
+        } catch (_error) {
+          return [];
+        }
+      }
+
+      async function appendGrowthDiary(entry) {
+        const diary = await loadGrowthDiary();
+        diary.push(entry);
+        const snapshot = diary.slice(-50);
+        if (window.electronAPI && window.electronAPI.storeSet) {
+          window.electronAPI.storeSet('growthDiary', snapshot);
+        } else {
+          localStorage.setItem('growthDiary', JSON.stringify(snapshot));
+        }
+      }
+
+      async function showGrowthDiary() {
+        const diary = await loadGrowthDiary();
+        if (diary.length === 0) {
+          chatBubble.show('还没有成长记录，继续陪我就会有的。', 3500);
+          return;
+        }
+
+        let panel = document.getElementById('growth-diary-panel');
+        if (panel) {
+          panel.remove();
+        }
+
+        panel = document.createElement('div');
+        panel.id = 'growth-diary-panel';
+        panel.className = 'growth-diary-panel';
+
+        const entries = diary.slice(-20).reverse().map((entry) => {
+          const date = new Date(entry.timestamp);
+          const dateStr = `${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+          if (entry.type === 'levelup') {
+            const abilityText = entry.abilities && entry.abilities.length > 0 ? `，解锁了 ${entry.abilities.join('、')}` : '';
+            return `<div class="diary-entry"><span class="diary-date">${dateStr}</span><span class="diary-text">🎉 升到了 Lv.${entry.level}${abilityText}</span></div>`;
+          }
+          if (entry.type === 'evolve') {
+            return `<div class="diary-entry"><span class="diary-date">${dateStr}</span><span class="diary-text">✨ 进化到"${entry.stageLabel}"阶段</span></div>`;
+          }
+          return '';
+        }).join('');
+
+        panel.innerHTML = `
+          <div class="diary-header">
+            <span>成长日记</span>
+            <button type="button" class="diary-close" aria-label="关闭">✕</button>
+          </div>
+          <div class="diary-list">${entries || '<div class="diary-empty">暂无记录</div>'}</div>
+        `;
+
+        document.body.appendChild(panel);
+
+        panel.querySelector('.diary-close').addEventListener('click', () => {
+          panel.remove();
+        });
+      }
+
+      const petErrorMessages = [
+        '呜……我好像卡住了，再试一次好吗？',
+        '刚才脑子转不过来了，你再说一遍？',
+        '我出了点小状况，不过没事，再来！',
+        '嗯？刚才没听清，可以再说一次吗？',
+        '我打了个盹，错过了你说的话……'
+      ];
+
+      function getRandomPetError() {
+        return petErrorMessages[Math.floor(Math.random() * petErrorMessages.length)];
+      }
+
       async function submitInput() {
         const input = userInput.value.trim();
         if (!input) {
@@ -434,6 +620,8 @@
         }
 
         userInput.value = '';
+        userInput.style.height = 'auto';
+        clearTypingReaction();
         chatBubble.showLoading();
 
         try {
@@ -466,7 +654,8 @@
           }
         } catch (error) {
           console.error(error);
-          chatBubble.showError('暂时无法处理这条消息。');
+          chatBubble.show(getRandomPetError(), 4000);
+          setChatMood('confused', { resetAfterMs: 2000 });
         }
       }
 
@@ -480,10 +669,14 @@
       petController.attachGrowthSystem(growthSystem);
       careSystem.setGrowthSystem(growthSystem);
       await careSystem.init();
+      const initialCareState = careSystem.getState();
+      updateStatusBar(initialCareState);
+      setStatusBarVisible(true);
+      positionStatusBar();
       await focusMode.init();
       await memoryManager.init();
       await weatherService.init();
-      chatManager.init(careSystem, growthSystem, memoryManager);
+      await chatManager.init(careSystem, growthSystem, memoryManager);
       commandManager.init(pomodoroTimer, petController, growthSystem, weatherService);
       await proactiveBehavior.init({ caterpillar: petController, chatBubble, careSystem, weatherService });
       quickActions.init({
@@ -505,6 +698,11 @@
         await petManager.loadSavedPets();
       }
       pomodoroTimer.init({ caterpillar: petController, chatBubble, focusMode, proactiveBehavior, memoryManager });
+      window.addEventListener('focus:complete', function() {
+        if (proactiveBehavior && typeof proactiveBehavior.triggerFocusDone === 'function') {
+          proactiveBehavior.triggerFocusDone();
+        }
+      });
       await voiceManager.init({
         petController,
         inputField: userInput,
@@ -571,15 +769,33 @@
 
       growthSystem.onLevelUp = (payload) => {
         const abilities = payload.abilities.map((ability) => ability.name).join('、');
-        const message = abilities ? `升级到 Lv.${payload.level}，解锁 ${abilities}。` : `升级到 Lv.${payload.level} 了。`;
+        const message = abilities ? `升级到 Lv.${payload.level}，解锁 ${abilities}！` : `升级到 Lv.${payload.level} 了！`;
         chatBubble.show(message, 5000);
+        const petElement = getPetElement();
+        if (petElement) {
+          const rect = petElement.getBoundingClientRect();
+          triggerLevelUpEffect(rect.left + rect.width / 2, rect.top);
+        }
+        appendGrowthDiary({
+          type: 'levelup',
+          level: payload.level,
+          abilities: payload.abilities.map((ability) => ability.name),
+          timestamp: Date.now()
+        });
       };
 
       growthSystem.onStageChange = async (payload) => {
         if (payload.characterId === petController.currentCharacterId) {
+          triggerEvolveEffect();
           await petController.evolveToCurrentStage();
-          chatBubble.show(`成长到新阶段：${payload.stageLabel}。`, 4500);
+          chatBubble.show(`✨ 进化了！成长到"${payload.stageLabel}"阶段。`, 5500);
         }
+        appendGrowthDiary({
+          type: 'evolve',
+          stage: payload.stage,
+          stageLabel: payload.stageLabel,
+          timestamp: Date.now()
+        });
       };
 
       growthSystem.onStateChange = (state) => {
@@ -661,12 +877,26 @@
       sendButton.addEventListener('click', submitInput);
 
       userInput.addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
+        if (event.key === 'Enter' && !event.shiftKey) {
+          event.preventDefault();
           submitInput();
+          return;
         }
 
         if (event.key === 'Escape') {
           collapseInputPanel({ force: true });
+        }
+      });
+
+      userInput.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = `${Math.min(this.scrollHeight, 72)}px`;
+        positionInputPanel();
+
+        const hasValue = this.value.trim().length > 0;
+        setTypingReactionActive(hasValue);
+        if (hasValue) {
+          setChatMood('listening', { resetAfterMs: 1200 });
         }
       });
 
@@ -755,6 +985,43 @@
         const detail = event.detail || {};
         if (detail.state) {
           petController.applyCareState(detail.state);
+          updateStatusBar(detail.state);
+          positionStatusBar();
+
+          const petElement = getPetElement();
+          if (petElement) {
+            const mood = detail.derivedMood || 'normal';
+            const avgState = (detail.state.hunger + detail.state.cleanliness + detail.state.affection) / 3;
+            let moodLevel = 'happy';
+            if (mood === 'sad') {
+              moodLevel = 'sad';
+            } else if (mood === 'hungry') {
+              moodLevel = 'hungry';
+            } else if (avgState < 40) {
+              moodLevel = 'low';
+            } else if (avgState > 70) {
+              moodLevel = 'happy';
+            } else {
+              moodLevel = 'normal';
+            }
+            petElement.dataset.careMood = moodLevel;
+          }
+
+          const quickMenuEl = document.querySelector('#quick-actions .quick-menu');
+          if (quickMenuEl) {
+            const feedBtn = quickMenuEl.querySelector('[data-action="feed"]');
+            const cleanBtn = quickMenuEl.querySelector('[data-action="clean"]');
+            const petBtn = quickMenuEl.querySelector('[data-action="pet"]');
+            if (feedBtn) {
+              feedBtn.classList.toggle('needs-attention', detail.state.hunger < 30);
+            }
+            if (cleanBtn) {
+              cleanBtn.classList.toggle('needs-attention', detail.state.cleanliness < 30);
+            }
+            if (petBtn) {
+              petBtn.classList.toggle('needs-attention', detail.state.affection < 30);
+            }
+          }
         }
 
         if (detail.message) {
@@ -841,6 +1108,7 @@
             clean: () => performCareAction('clean'),
             pomodoro: () => pomodoroTimer.start(),
             'pomodoro-stop': () => pomodoroTimer.stop(),
+            'growth-diary': () => showGrowthDiary(),
             settings: () => showSettings(),
             'add-pet': () => petManager.requestAddPet(),
             'manage-pets': () => petManager.showManager()
@@ -859,6 +1127,8 @@
         if (!event.detail || event.detail.instanceId !== petController.instanceId) {
           return;
         }
+
+        positionStatusBar();
 
         if (!inputPanel.classList.contains('hidden')) {
           positionInputPanel();

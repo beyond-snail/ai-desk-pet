@@ -3,6 +3,8 @@ class Settings {
     this.panel = null;
     this.providerField = null;
     this.characterField = null;
+    this.personalityField = null;
+    this.petNameField = null;
     this.characterBrowseButton = null;
     this.apiKeyField = null;
     this.modelField = null;
@@ -50,6 +52,19 @@ class Settings {
                 <select id="settings-character"></select>
                 <button id="settings-character-picker" type="button">角色库</button>
               </div>
+            </label>
+            <label>
+              <span>性格风格</span>
+              <select id="settings-personality">
+                <option value="warm">温暖体贴（默认）</option>
+                <option value="lively">活泼开朗</option>
+                <option value="cool">冷静克制</option>
+                <option value="witty">毒舌幽默</option>
+              </select>
+            </label>
+            <label>
+              <span>宠物名字</span>
+              <input id="settings-pet-name" type="text" placeholder="给宠物起个名字" maxlength="12">
             </label>
           </div>
           <div class="settings-section">
@@ -120,6 +135,8 @@ class Settings {
 
     this.providerField = this.panel.querySelector('#settings-provider');
     this.characterField = this.panel.querySelector('#settings-character');
+    this.personalityField = this.panel.querySelector('#settings-personality');
+    this.petNameField = this.panel.querySelector('#settings-pet-name');
     this.characterBrowseButton = this.panel.querySelector('#settings-character-picker');
     this.apiKeyField = this.panel.querySelector('#settings-api-key');
     this.modelField = this.panel.querySelector('#settings-model');
@@ -179,6 +196,8 @@ class Settings {
   async loadSettings() {
     const characterId = await this.getValue('characterId', 'caterpillar');
     const provider = await this.getValue('llmProvider', 'deepseek');
+    const personality = await this.getValue('petPersonality', 'warm');
+    const petName = await this.getValue('petName', '');
     const apiKey = await this.getValue('llmApiKey', '');
     const model = await this.getValue('llmModel', 'deepseek-chat');
     const baseUrl = await this.getValue('llmBaseUrl', 'https://api.deepseek.com/v1');
@@ -189,6 +208,8 @@ class Settings {
 
     this.renderCharacterOptions();
     this.characterField.value = characterId;
+    this.personalityField.value = personality;
+    this.petNameField.value = String(petName || '');
     this.providerField.value = provider;
     this.apiKeyField.value = apiKey;
     this.modelField.value = model;
@@ -199,6 +220,8 @@ class Settings {
     this.voiceReplyField.checked = Boolean(voiceReplyEnabled);
     this.applyProviderDefaults(provider, true);
     this.updateBaseUrlVisibility();
+    localStorage.setItem('petPersonality', this.personalityField.value);
+    localStorage.setItem('petName', this.petNameField.value.trim());
   }
 
   async saveSettings() {
@@ -213,6 +236,10 @@ class Settings {
 
     await this.setValue('llmProvider', this.providerField.value);
     await this.setValue('characterId', nextCharacterId);
+    localStorage.setItem('petPersonality', this.personalityField.value);
+    localStorage.setItem('petName', this.petNameField.value.trim());
+    await this.setValue('petPersonality', this.personalityField.value);
+    await this.setValue('petName', this.petNameField.value.trim());
     await this.setValue('llmApiKey', this.apiKeyField.value.trim());
     await this.setValue('llmModel', this.modelField.value.trim());
     await this.setValue('llmBaseUrl', this.baseUrlField.value.trim());
@@ -230,6 +257,7 @@ class Settings {
     window.dispatchEvent(new CustomEvent('settings:saved', {
       detail: {
         provider: this.providerField.value,
+        personality: this.personalityField.value,
         characterId: nextCharacterId,
         characterChanged,
         weatherChanged: true,

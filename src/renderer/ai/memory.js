@@ -81,33 +81,91 @@ class InteractionMemory {
   }
 
   getPromptContext() {
-    const recent = this.getRecent(10);
-    if (recent.length === 0) {
-      return '最近还没有互动记忆。';
+    const now = Date.now();
+    const parts = [];
+
+    const firstEvent = this.events[0];
+    if (firstEvent) {
+      const daysSinceFirst = Math.floor((now - firstEvent.at) / (24 * 60 * 60 * 1000));
+      if (daysSinceFirst === 0) {
+        parts.push('今天是你们第一次见面。');
+      } else {
+        parts.push(`你们已经相处了 ${daysSinceFirst} 天。`);
+      }
+    }
+
+    const recentChats = this.events
+      .filter((event) => event.type === 'chat:user' && event.payload && event.payload.text)
+      .slice(-3)
+      .map((event) => event.payload.text);
+    if (recentChats.length > 0) {
+      parts.push(`用户最近说过："${recentChats.join('"、"')}"`);
     }
 
     const counters = this.countByType();
-    const summaryParts = [];
+    const behaviorParts = [];
     if (counters['care:feed']) {
-      summaryParts.push(`最近24小时喂食 ${counters['care:feed']} 次`);
+      behaviorParts.push(`喂食${counters['care:feed']}次`);
     }
     if (counters['care:pet']) {
-      summaryParts.push(`抚摸 ${counters['care:pet']} 次`);
-    }
-    if (counters['care:clean']) {
-      summaryParts.push(`清洁 ${counters['care:clean']} 次`);
+      behaviorParts.push(`抚摸${counters['care:pet']}次`);
     }
     if (counters['focus:complete']) {
-      summaryParts.push(`完成专注 ${counters['focus:complete']} 次`);
+      behaviorParts.push(`完成专注${counters['focus:complete']}次`);
+    }
+    if (behaviorParts.length > 0) {
+      parts.push(`今天互动：${behaviorParts.join('、')}。`);
     }
 
-    const latestText = recent
-      .map((event) => {
-        const time = new Date(event.at).toLocaleString();
-        return `${time} ${event.type}`;
-      })
-      .join('；');
+    return parts.length > 0 ? parts.join('') : '';
+  }
 
-    return `互动摘要：${summaryParts.join('，') || '互动较少'}。最近10条：${latestText}`;
+  async loadLongTermMemory() {
+    try {
+      if (window.electronAPI && window.electronAPI.storeGet) {
+        return (await window.electronAPI.storeGet('longTermMemory')) || [];
+      }
+
+      const raw = localStorage.getItem('longTermMemory');
+      return raw ? JSON.parse(raw) : [];
+    } catch (_error) {
+      return [];
+    }
+  }
+
+  async saveLongTermMemory(memories) {
+    const snapshot = Array.isArray(memories) ? memories.slice(-30) : [];
+    if (window.electronAPI && window.electronAPI.storeSet) {
+      window.electronAPI.storeSet('longTermMemory', snapshot);
+      return;
+    }
+
+    localStorage.setItem('longTermMemory', JSON.stringify(snapshot));
+  }
+
+  async appendLongTermMemory(fact) {
+    if (!fact || fact.trim().length < 3) {
+      return;
+    }
+
+    const normalized = fact.trim();
+    const memories = await this.loadLongTermMemory();
+    const latest = memories[memories.length - 1];
+    if (latest && latest.text === normalized) {
+      return;
+    }
+
+    memories.push({ text: normalized, at: Date.now() });
+    await this.saveLongTermMemory(memories);
+  }
+
+  async getLongTermContext() {
+    const memories = await this.loadLongTermMemory();
+    if (memories.length === 0) {
+      return '';
+    }
+
+    const facts = memories.slice(-15).map((memory) => memory.text).join('；');
+    return `关于用户你知道：${facts}。`;
   }
 }

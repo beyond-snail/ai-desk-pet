@@ -12,6 +12,7 @@ class ProactiveBehavior {
     this.lastWorkReminderAt = 0;
     this.lastThoughtAt = 0;
     this.lastMousePosition = null;
+    this.lastMouseActiveAt = Date.now();
     this.weatherPayload = null;
     this.suppressed = false;
     this.lowStateReminderAt = {
@@ -23,12 +24,52 @@ class ProactiveBehavior {
     this.mouseMoveHandler = null;
     this.beforeUnloadHandler = null;
     this.weatherUpdateHandler = null;
-    this.thoughtPool = [
-      '你专注的时候，我也会安静陪着。',
-      '今天桌面节奏不错。',
-      '如果累了，记得喝口水。',
-      '我刚刚在想，要不要陪你做个小目标。'
-    ];
+    this.thoughtPools = {
+      idle: [
+        '你专注的时候，我也会安静陪着。',
+        '今天桌面节奏不错。',
+        '如果累了，记得喝口水。',
+        '我刚刚在想，要不要陪你做个小目标。',
+        '有时候我会盯着屏幕发呆，你呢？',
+        '你今天看起来很忙的样子。',
+        '我在这里，随时可以聊。',
+        '窗口开了好多，你在忙什么？',
+        '偶尔休息一下眼睛，看看远处。',
+        '我觉得你今天做得不错。'
+      ],
+      morning: [
+        '早上好，今天也要好好的。',
+        '新的一天，从这里开始。',
+        '早安，昨晚睡得好吗？',
+        '今天想先完成哪件事？'
+      ],
+      afternoon: [
+        '下午了，要不要喝杯水？',
+        '午后容易犯困，要不要活动一下？',
+        '今天下午的进展怎么样？',
+        '如果卡住了，先深呼吸一下。'
+      ],
+      evening: [
+        '辛苦了一天，晚上放松一下吧。',
+        '今天完成了什么，可以告诉我。',
+        '晚上了，不用太拼，明天继续。',
+        '要不要先把最重要的一件事收个尾？'
+      ],
+      idle_long: [
+        '你好像很久没理我了，还在吗？',
+        '我在这里等你，不着急。',
+        '有什么想聊的吗？',
+        '我一直在，回来时叫我一声就好。'
+      ],
+      focus_done: [
+        '专注结束了，休息一下吧。',
+        '你刚才很专注，我都不敢打扰你。',
+        '完成了！要继续还是休息一会儿？',
+        '这个节奏很棒，继续保持。'
+      ]
+    };
+    // 兼容旧调用
+    this.thoughtPool = this.thoughtPools.idle;
   }
 
   async init(dependencies) {
@@ -112,6 +153,7 @@ class ProactiveBehavior {
       const now = Date.now();
       this.mouseMovements.push(now);
       this.mouseMovements = this.mouseMovements.filter((timestamp) => now - timestamp < 5000);
+      this.lastMouseActiveAt = now;
       this.lastMousePosition = { x: event.clientX, y: event.clientY };
     };
 
@@ -127,6 +169,35 @@ class ProactiveBehavior {
   }
 
   checkGreeting() {
+    if (this.lastShutdownAt) {
+      const awayMs = Date.now() - this.lastShutdownAt;
+      const awayHours = awayMs / (1000 * 60 * 60);
+      const returnKey = `returnGreeting_${new Date().toDateString()}`;
+
+      if (awayHours >= 4 && !this.timeGreetingMarks[returnKey]) {
+        this.timeGreetingMarks[returnKey] = true;
+        this.persistGreetingMarks();
+
+        let message;
+        if (awayHours >= 24) {
+          const days = Math.floor(awayHours / 24);
+          message = days >= 2
+            ? `你去哪了，${days}天没见到你了。`
+            : '昨天你走了之后，我一直在等你回来。';
+        } else {
+          const hours = Math.floor(awayHours);
+          message = `你离开了${hours}个小时，我有点想你。`;
+        }
+
+        window.setTimeout(() => {
+          if (this.chatBubble && !this.suppressed) {
+            this.chatBubble.show(message, 5000);
+          }
+        }, 1500);
+        return;
+      }
+    }
+
     window.setTimeout(() => {
       this.checkTimeGreeting(true);
     }, 1200);
@@ -350,8 +421,34 @@ class ProactiveBehavior {
     this.recordTrigger(now);
     this.lastThoughtAt = now;
     this.caterpillar.playTemporaryAnimation('idle-look', 1100);
-    this.chatBubble.show(this.thoughtPool[Math.floor(Math.random() * this.thoughtPool.length)], 4200);
+
+    const hour = new Date().getHours();
+    let pool;
+    if (hour >= 5 && hour < 11) {
+      pool = this.thoughtPools.morning;
+    } else if (hour >= 11 && hour < 17) {
+      pool = this.thoughtPools.afternoon;
+    } else if (hour >= 17 && hour < 23) {
+      pool = this.thoughtPools.evening;
+    } else {
+      pool = this.thoughtPools.idle;
+    }
+
+    const inactiveLong = now - this.lastMouseActiveAt >= 20 * 60 * 1000;
+    const combined = inactiveLong
+      ? [...this.thoughtPools.idle_long, ...pool, ...this.thoughtPools.idle]
+      : [...pool, ...this.thoughtPools.idle];
+    this.chatBubble.show(combined[Math.floor(Math.random() * combined.length)], 4200);
     return true;
+  }
+
+  triggerFocusDone() {
+    if (this.suppressed || !this.chatBubble) {
+      return;
+    }
+
+    const pool = this.thoughtPools.focus_done;
+    this.chatBubble.show(pool[Math.floor(Math.random() * pool.length)], 4500);
   }
 
   recordTrigger(timestamp) {

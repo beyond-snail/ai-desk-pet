@@ -11,9 +11,9 @@ class QuickActions {
     this.hoverTimer = null;
     this.hideTimer = null;
 
-    this.hoverShowDelayMs = 420;
-    this.hideDelayMs = 420;
-    this.expandLockMs = 1800;
+    this.hoverShowDelayMs = 300;
+    this.hideDelayMs = 380;
+    this.expandLockMs = 2200;
     this.lockUntil = 0;
 
     this.boundMoveHandler = null;
@@ -158,21 +158,22 @@ class QuickActions {
     }
 
     const rect = petElement.getBoundingClientRect();
-    const radius = 94;
-    const edgePadding = 10;
-    const petGap = 16;
+    const menuWidth = 80;
+    const menuHeight = 160;
+    const petGap = 8;
+    const edgePadding = 6;
 
-    const preferRightCenterX = rect.right + radius + petGap;
-    const preferLeftCenterX = rect.left - radius - petGap;
-    const fitsRight = preferRightCenterX + radius <= window.innerWidth - edgePadding;
-    const rawCenterX = fitsRight ? preferRightCenterX : preferLeftCenterX;
+    const preferRight = rect.right + petGap;
+    const preferLeft = rect.left - menuWidth - petGap;
+    const fitsRight = preferRight + menuWidth <= window.innerWidth - edgePadding;
+    const x = fitsRight ? preferRight : preferLeft;
 
-    const centerX = this.clamp(rawCenterX, radius + edgePadding, window.innerWidth - radius - edgePadding);
     const centerY = rect.top + rect.height * 0.5;
-    const y = this.clamp(centerY, radius + edgePadding, window.innerHeight - radius - edgePadding);
+    const y = this.clamp(centerY - menuHeight / 2, edgePadding, window.innerHeight - menuHeight - edgePadding);
 
-    this.element.style.left = `${(centerX - radius).toFixed(1)}px`;
-    this.element.style.top = `${(y - radius).toFixed(1)}px`;
+    this.element.style.left = `${x.toFixed(1)}px`;
+    this.element.style.top = `${y.toFixed(1)}px`;
+    this.element.dataset.side = fitsRight ? 'right' : 'left';
     return true;
   }
 
@@ -192,9 +193,9 @@ class QuickActions {
     this.visible = true;
     this.state = 'expanded';
     this.lockUntil = Date.now() + this.expandLockMs;
-    this.element.classList.remove('hidden');
-    this.element.dataset.visible = 'true';
     this.element.dataset.state = 'expanded';
+    this.element.dataset.visible = 'true';
+    this.element.classList.remove('hidden');
   }
 
   runAction(action) {
@@ -209,7 +210,7 @@ class QuickActions {
 
   showForPet() {
     this.showMenu('tap');
-    this.scheduleHide(3200);
+    this.scheduleHide(5000);
   }
 
   hide(immediate = true) {
@@ -228,9 +229,9 @@ class QuickActions {
     this.lockUntil = 0;
     this.visible = false;
     this.state = 'hidden';
-    this.element.classList.add('hidden');
-    this.element.dataset.visible = 'false';
     this.element.dataset.state = 'hidden';
+    this.element.dataset.visible = 'false';
+    this.element.classList.add('hidden');
   }
 
   scheduleHide(delay = 220) {
