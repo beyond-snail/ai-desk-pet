@@ -27,6 +27,9 @@
 
 如果需要让 Claude / 其他代理读取仓库内全部文档，请先看 [docs/document-authority.md](docs/document-authority.md)。
 产品角色接管与执行节奏请看 [docs/product-role-handover.md](docs/product-role-handover.md)。
+3D 技术换轨主方案请看 [docs/3d-runtime-migration-spec.md](docs/3d-runtime-migration-spec.md)。
+3D 换轨开发任务书（给 Codex）请看 [docs/3d-runtime-migration-tasks-for-codex.md](docs/3d-runtime-migration-tasks-for-codex.md)。
+外部提案输入（仅参考，不作为执行基线）请看 [docs/新技术方案.md](docs/新技术方案.md)。
 
 历史规划与历史阶段指令已归档到 `docs/archive/`，根路径仅保留入口说明，避免误读。
 

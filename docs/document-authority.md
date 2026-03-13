@@ -47,6 +47,26 @@
 
 若涉及具体代码行为或实现细节，以 `technical-documentation.md` 为准。
 
+### `docs/3d-runtime-migration-spec.md`
+用途：3D 技术换轨主方案（Qt6+Godot）。
+
+只应在以下场景使用：
+- 技术换轨目标、约束、架构与模块边界
+- IPC 契约与迁移门槛
+- 包体/性能指标与回滚策略
+
+若涉及“当前代码已实现事实”，仍以 `technical-documentation.md` 为准。
+
+### `docs/3d-runtime-migration-tasks-for-codex.md`
+用途：3D 换轨执行任务书（Codex 实施用）。
+
+只应在以下场景使用：
+- 阶段任务拆解（A-G）与依赖关系
+- 验收标准、测试清单、提交规范
+- 切换后回填优先级
+
+若与主方案冲突，以 `docs/3d-runtime-migration-spec.md` 为准。
+
 ### `docs/desktop-release-v1.md`
 用途：桌面端 v1.0 的打包与发布补充说明。
 
@@ -102,6 +122,14 @@
 - 只适合用于理解角色外观方向
 - 不是当前交互、性能和实现细节的权威来源
 
+### `docs/新技术方案.md`
+性质：外部提案输入文档（方案参考）。
+
+问题：
+- 可用于吸收思路与做方案对比
+- 不应直接作为当前仓库执行基线
+- 真正执行以 `docs/3d-runtime-migration-spec.md` 与任务书为准
+
 ## 4. Claude / 代理读取建议
 
 如果代理会读取所有文档，请按以下顺序建立认知：
@@ -114,6 +142,17 @@
 6. `docs/macos-signing-setup.md`
 7. 其他历史 / 参考文档仅作补充，不作实现依据
 
+### 3D 技术换轨场景读取顺序（专项）
+
+在“准备执行 3D 换轨”场景下，请按以下顺序建立认知：
+
+1. `docs/product-roadmap-2026.md`
+2. `docs/3d-runtime-migration-spec.md`
+3. `docs/3d-runtime-migration-tasks-for-codex.md`
+4. `technical-documentation.md`
+5. `README.md`
+6. `docs/product-role-handover.md`
+
 ## 5. 冲突处理规则
 
 如果两份文档冲突，按以下优先级解决：
@@ -121,7 +160,8 @@
 1. `technical-documentation.md`
 2. `README.md`
 3. 当前有效专项文档（按读取建议顺序）
-4. 历史 / 参考文档
+4. 外部提案输入文档（如 `docs/新技术方案.md`）
+5. 历史 / 参考文档
 
 
 ## 6. 归档约定
