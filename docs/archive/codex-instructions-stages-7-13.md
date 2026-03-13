@@ -1937,7 +1937,7 @@ npm install --save-dev electron-builder
   },
   "build": {
     "appId": "com.ai-desk-pet.app",
-    "productName": "AI桌面宠物",
+    "productName": "AI桌宠",
     "directories": {
       "output": "dist"
     },
@@ -1961,7 +1961,7 @@ npm install --save-dev electron-builder
       "gatekeeperAssess": false
     },
     "dmg": {
-      "title": "AI桌面宠物",
+      "title": "AI桌宠",
       "contents": [
         { "x": 130, "y": 220 },
         { "x": 410, "y": 220, "type": "link", "path": "/Applications" }
@@ -1984,7 +1984,7 @@ npm install --save-dev electron-builder
       "installerHeaderIcon": "assets/icon.ico",
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "AI桌面宠物"
+      "shortcutName": "AI桌宠"
     },
     "linux": {
       "icon": "assets/icon.png",
@@ -2104,7 +2104,7 @@ function createTray() {
     }
   ]);
 
-  tray.setToolTip('AI桌面宠物');
+  tray.setToolTip('AI桌宠');
   tray.setContextMenu(contextMenu);
 
   tray.on('click', () => {

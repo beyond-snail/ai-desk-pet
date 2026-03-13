@@ -63,3 +63,19 @@
   6. `git push origin main` 推送失败（HTTP2 framing）。
   7. `git config http.version HTTP/1.1 && git push origin main` 推送成功。
   8. `git status -sb` 确认 `main...origin/main` 无 `ahead`。
+
+### 2026-03-13（一次性提交当前遗留改动）
+- 提交哈希：`见本次提交输出`
+- 提交信息：`一次性提交当前产品文档与应用配置改动`
+- 主要内容：
+  - 统一更新产品命名与打包产物文案（AI桌宠）。
+  - 同步 README、技术文档、发布说明与 QA 记录。
+  - 更新应用入口配置与图标资源。
+- 执行步骤：
+  1. `git status --short` 确认改动范围。
+  2. `git diff --stat` 核对改动摘要。
+  3. `npm run check` 执行最低校验。
+  4. `git add` 一次性暂存本次全部文件。
+  5. `git commit -m "一次性提交当前产品文档与应用配置改动"`。
+  6. `git push origin main` 推送远端。
+  7. `git status -sb` 确认无 `ahead`。

@@ -221,7 +221,7 @@ function createTray() {
     }
   ]);
 
-  tray.setToolTip('AI桌面宠物');
+  tray.setToolTip('AI桌宠');
   tray.setContextMenu(trayMenu);
   tray.on('click', () => {
     if (!mainWindow || mainWindow.isDestroyed()) {
