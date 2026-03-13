@@ -4,7 +4,7 @@
 
 ## 当前状态
 
-- 主线：`Runtime3D`（A 阶段 + B/C/D 基础链路已落地）
+- 主线：`Runtime3D`（A 阶段 + B/C/D/E 基础链路已落地）
 - 研发策略：视觉与性能优先，先切换再回填玩法
 - 执行方式：按 `A-G` 阶段任务书推进
 - 当前默认入口：`npm start` / `npm run dev` -> Runtime3D bootstrap
@@ -23,6 +23,7 @@
 - 3D 阶段报告（B 阶段）：[docs/runtime3d-stage-b-report-2026-03-13.md](docs/runtime3d-stage-b-report-2026-03-13.md)
 - 3D 阶段报告（C 运动基础）：[docs/runtime3d-stage-c-motion-foundation-2026-03-13.md](docs/runtime3d-stage-c-motion-foundation-2026-03-13.md)
 - 3D 阶段报告（D 交互基础）：[docs/runtime3d-stage-d-interaction-foundation-2026-03-13.md](docs/runtime3d-stage-d-interaction-foundation-2026-03-13.md)
+- 3D 阶段报告（E 迁移基础）：[docs/runtime3d-stage-e-migration-foundation-2026-03-13.md](docs/runtime3d-stage-e-migration-foundation-2026-03-13.md)
 - ADR 决策记录：`docs/adr/*`
 - 历史实现快照：[technical-documentation.md](technical-documentation.md)
 - 外部提案输入（仅参考）：[docs/新技术方案.md](docs/新技术方案.md)
@@ -42,6 +43,7 @@ npm run start:runtime3d
 npm run check:runtime3d
 npm run smoke:runtime3d:ipc
 npm run smoke:runtime3d:motion
+npm run smoke:runtime3d:migration
 npm run build
 ```
 
@@ -51,6 +53,7 @@ npm run build
 - `npm run check` 会执行 runtime3d IPC 冒烟（Godot/Qt 双进程握手）。
 - `npm run check` 还会执行默认机器人运动仿真冒烟（状态机 + 离屏回归）。
 - `npm run check` 还会覆盖 D 阶段最小交互链路（四动作 + 聊天流式 + 语音/TTS）。
+- `npm run check` 还会覆盖 E 阶段迁移冒烟（空/普通/重度样本 + 幂等性）。
 
 ## 项目结构（当前主线相关）
 

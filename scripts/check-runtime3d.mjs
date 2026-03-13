@@ -28,15 +28,18 @@ const requiredFiles = [
   'runtime/qt-sidecar/voice-service.mjs',
   'runtime/migration/README.md',
   'runtime/migration/keys-map.json',
+  'runtime/migration/migrator.mjs',
   'scripts/runtime3d-ipc-smoke.mjs',
   'scripts/runtime3d-robot-motion-smoke.mjs',
+  'scripts/runtime3d-migration-smoke.mjs',
   'docs/adr/0001-runtime3d-topology.md',
   'docs/adr/0002-ipc-versioning.md',
   'docs/adr/0003-data-migration-strategy.md',
   'docs/3d-runtime-baseline-2026-03-13.md',
   'docs/runtime3d-stage-b-report-2026-03-13.md',
   'docs/runtime3d-stage-c-motion-foundation-2026-03-13.md',
-  'docs/runtime3d-stage-d-interaction-foundation-2026-03-13.md'
+  'docs/runtime3d-stage-d-interaction-foundation-2026-03-13.md',
+  'docs/runtime3d-stage-e-migration-foundation-2026-03-13.md'
 ];
 
 const requiredEvents = [
@@ -120,8 +123,18 @@ if (!hasError) {
   }
 }
 
+if (!hasError) {
+  const migrationSmoke = spawnSync(process.execPath, ['scripts/runtime3d-migration-smoke.mjs'], {
+    stdio: 'inherit'
+  });
+  if (migrationSmoke.status !== 0) {
+    hasError = true;
+    console.error('runtime3d migration smoke failed');
+  }
+}
+
 if (hasError) {
   process.exit(1);
 }
 
-console.log('runtime3d scaffold + interaction ipc smoke + motion smoke ok');
+console.log('runtime3d scaffold + interaction ipc smoke + motion smoke + migration smoke ok');

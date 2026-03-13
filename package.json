@@ -11,6 +11,7 @@
     "start:runtime3d:godot": "node runtime/godot/main.mjs",
     "smoke:runtime3d:ipc": "node scripts/runtime3d-ipc-smoke.mjs",
     "smoke:runtime3d:motion": "node scripts/runtime3d-robot-motion-smoke.mjs",
+    "smoke:runtime3d:migration": "node scripts/runtime3d-migration-smoke.mjs",
     "check": "npm run check:syntax && npm run check:characters && npm run check:runtime3d",
     "check:syntax": "node scripts/check-syntax.mjs",
     "check:characters": "node scripts/verify-character-configs.mjs",

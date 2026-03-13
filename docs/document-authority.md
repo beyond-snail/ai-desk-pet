@@ -52,6 +52,9 @@
 ### `docs/runtime3d-stage-d-interaction-foundation-2026-03-13.md`
 用途：Runtime3D D 阶段（交互/聊天/语音最小闭环）实现与验收记录。
 
+### `docs/runtime3d-stage-e-migration-foundation-2026-03-13.md`
+用途：Runtime3D E 阶段（数据迁移基础）实现与验收记录。
+
 ### `docs/adr/*`
 用途：Runtime3D 架构决策记录（为什么这么做）。
 
@@ -92,8 +95,9 @@
 6. `docs/runtime3d-stage-b-report-2026-03-13.md`
 7. `docs/runtime3d-stage-c-motion-foundation-2026-03-13.md`
 8. `docs/runtime3d-stage-d-interaction-foundation-2026-03-13.md`
-9. `docs/adr/*`
-10. 其他历史/参考文档（按需）
+9. `docs/runtime3d-stage-e-migration-foundation-2026-03-13.md`
+10. `docs/adr/*`
+11. 其他历史/参考文档（按需）
 
 ### 3D 换轨实施场景（强制）
 1. `docs/product-roadmap-2026.md`
@@ -103,9 +107,10 @@
 5. `docs/runtime3d-stage-b-report-2026-03-13.md`
 6. `docs/runtime3d-stage-c-motion-foundation-2026-03-13.md`
 7. `docs/runtime3d-stage-d-interaction-foundation-2026-03-13.md`
-8. `docs/adr/*`
-9. `README.md`
-10. `technical-documentation.md`（仅历史语义比对）
+8. `docs/runtime3d-stage-e-migration-foundation-2026-03-13.md`
+9. `docs/adr/*`
+10. `README.md`
+11. `technical-documentation.md`（仅历史语义比对）
 
 ## 5. 冲突处理规则
 

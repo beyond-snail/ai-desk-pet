@@ -9,5 +9,5 @@ if (check.status !== 0) {
 }
 
 console.log('runtime3d bootstrap ready');
-console.log('runtime3d stage-b+c+d bootstrap ready (entrypoints + ipc + motion + interaction)');
+console.log('runtime3d stage-b+c+d+e bootstrap ready (entrypoints + ipc + motion + interaction + migration)');
 console.log('next steps: bind runtime logic to real Godot scene/resources and native Qt sidecar');
