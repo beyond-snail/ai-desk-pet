@@ -1,4 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 
 const requiredDirs = [
   'runtime/godot',
@@ -13,12 +14,20 @@ const requiredFiles = [
   'runtime/qt-sidecar/README.md',
   'runtime/shared-ipc/README.md',
   'runtime/shared-ipc/schema-v1.json',
+  'runtime/shared-ipc/protocol.mjs',
+  'runtime/shared-ipc/line-codec.mjs',
+  'runtime/godot/main.mjs',
+  'runtime/godot/window-controller.mjs',
+  'runtime/qt-sidecar/main.mjs',
+  'runtime/qt-sidecar/system-controller.mjs',
   'runtime/migration/README.md',
   'runtime/migration/keys-map.json',
+  'scripts/runtime3d-ipc-smoke.mjs',
   'docs/adr/0001-runtime3d-topology.md',
   'docs/adr/0002-ipc-versioning.md',
   'docs/adr/0003-data-migration-strategy.md',
-  'docs/3d-runtime-baseline-2026-03-13.md'
+  'docs/3d-runtime-baseline-2026-03-13.md',
+  'docs/runtime3d-stage-b-report-2026-03-13.md'
 ];
 
 const requiredEvents = [
@@ -40,6 +49,8 @@ const requiredEvents = [
   'system.metrics.push'
 ];
 
+const requiredMessageFields = ['request_id', 'schema_version', 'timestamp', 'source', 'target'];
+
 let hasError = false;
 
 for (const dir of requiredDirs) {
@@ -60,10 +71,17 @@ if (!hasError) {
   try {
     const schema = JSON.parse(readFileSync('runtime/shared-ipc/schema-v1.json', 'utf8'));
     const events = Array.isArray(schema.events) ? schema.events : [];
+    const requiredFields = Array.isArray(schema.required_fields) ? schema.required_fields : [];
     for (const event of requiredEvents) {
       if (!events.includes(event)) {
         hasError = true;
         console.error(`schema-v1 missing event: ${event}`);
+      }
+    }
+    for (const field of requiredMessageFields) {
+      if (!requiredFields.includes(field)) {
+        hasError = true;
+        console.error(`schema-v1 missing required field: ${field}`);
       }
     }
   } catch (error) {
@@ -73,8 +91,18 @@ if (!hasError) {
   }
 }
 
+if (!hasError) {
+  const smoke = spawnSync(process.execPath, ['scripts/runtime3d-ipc-smoke.mjs'], {
+    stdio: 'inherit'
+  });
+  if (smoke.status !== 0) {
+    hasError = true;
+    console.error('runtime3d ipc smoke failed');
+  }
+}
+
 if (hasError) {
   process.exit(1);
 }
 
-console.log('runtime3d scaffold ok');
+console.log('runtime3d scaffold + ipc smoke ok');

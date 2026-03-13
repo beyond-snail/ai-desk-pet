@@ -9,4 +9,5 @@ if (check.status !== 0) {
 }
 
 console.log('runtime3d bootstrap ready');
-console.log('next steps: implement runtime/godot and runtime/qt-sidecar executable entrypoints');
+console.log('runtime3d stage-b bootstrap ready (entrypoints + ipc handshake)');
+console.log('next steps: implement real Godot/Qt runtime features for stage C/D');

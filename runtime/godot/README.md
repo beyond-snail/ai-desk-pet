@@ -11,4 +11,15 @@ This directory is reserved for the new 3D runtime implementation.
 
 ## Current stage
 
-Bootstrap scaffold only. No production runtime code has been migrated yet.
+Stage B bootstrap implemented with executable Node entrypoint:
+
+- `main.mjs`: Godot runtime process stub
+- `window-controller.mjs`: window visibility + click-through region state model
+
+## Local run
+
+```bash
+node runtime/godot/main.mjs
+```
+
+This process expects Qt sidecar bootstrap server on `127.0.0.1:47831` by default.

@@ -19,6 +19,12 @@ writeFileSync(
       runtime: 'runtime3d-bootstrap',
       schema_version: 'v1',
       generated_at: new Date().toISOString(),
+      stage: 'B',
+      includes: [
+        'runtime/godot executable bootstrap',
+        'runtime/qt-sidecar executable bootstrap',
+        'ipc schema v1 smoke handshake'
+      ],
       notes: 'Bootstrap artifact placeholder. Replace with real Godot + Qt sidecar package in stage F2.'
     },
     null,
@@ -28,4 +34,4 @@ writeFileSync(
 
 console.log('runtime3d build bootstrap ready');
 console.log('artifact: dist/runtime3d-bootstrap/manifest.json');
-console.log('next steps: replace this bootstrap with real godot + qt-sidecar build pipeline');
+console.log('next steps: replace bootstrap artifact with installable runtime3d package in stage F2');

@@ -43,6 +43,9 @@
 ### `docs/3d-runtime-baseline-2026-03-13.md`
 用途：迁移前包体与运行指标基线。
 
+### `docs/runtime3d-stage-b-report-2026-03-13.md`
+用途：Runtime3D B 阶段实现与验收记录。
+
 ### `docs/adr/*`
 用途：Runtime3D 架构决策记录（为什么这么做）。
 
@@ -80,17 +83,19 @@
 3. `docs/3d-runtime-migration-tasks-for-codex.md`
 4. `docs/product-roadmap-2026.md`
 5. `docs/3d-runtime-baseline-2026-03-13.md`
-6. `docs/adr/*`
-7. 其他历史/参考文档（按需）
+6. `docs/runtime3d-stage-b-report-2026-03-13.md`
+7. `docs/adr/*`
+8. 其他历史/参考文档（按需）
 
 ### 3D 换轨实施场景（强制）
 1. `docs/product-roadmap-2026.md`
 2. `docs/3d-runtime-migration-spec.md`
 3. `docs/3d-runtime-migration-tasks-for-codex.md`
 4. `docs/3d-runtime-baseline-2026-03-13.md`
-5. `docs/adr/*`
-6. `README.md`
-7. `technical-documentation.md`（仅历史语义比对）
+5. `docs/runtime3d-stage-b-report-2026-03-13.md`
+6. `docs/adr/*`
+7. `README.md`
+8. `technical-documentation.md`（仅历史语义比对）
 
 ## 5. 冲突处理规则
 

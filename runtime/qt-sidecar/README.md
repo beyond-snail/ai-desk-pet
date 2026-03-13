@@ -12,4 +12,15 @@ This directory is reserved for the system integration sidecar process.
 
 ## Current stage
 
-Bootstrap scaffold only. No production sidecar code has been migrated yet.
+Stage B bootstrap implemented with executable Node entrypoint:
+
+- `main.mjs`: sidecar process stub + IPC server
+- `system-controller.mjs`: tray/hotkey/window state model
+
+## Local run
+
+```bash
+node runtime/qt-sidecar/main.mjs
+```
+
+This process listens on `127.0.0.1:47831` by default and accepts Godot bootstrap client.
