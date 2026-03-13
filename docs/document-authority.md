@@ -27,6 +27,26 @@
 
 ## 2. 当前有效的专项文档
 
+### `docs/product-roadmap-2026.md`
+用途：当前有效的中长期产品规划文档。
+
+只应在以下场景使用：
+- 版本路线图（v1.2/v1.3/v1.4/v2.0）
+- 北极星指标与阶段目标
+- 产品优先级和方向判断
+
+若涉及“当前是否已实现”，仍以 `technical-documentation.md` 为准。
+
+### `docs/product-role-handover.md`
+用途：产品角色接管与执行节奏文档。
+
+只应在以下场景使用：
+- Claude 离岗后的产品职责承接
+- 需求流转模板与发布门禁
+- 迭代节奏与执行约束
+
+若涉及具体代码行为或实现细节，以 `technical-documentation.md` 为准。
+
 ### `docs/desktop-release-v1.md`
 用途：桌面端 v1.0 的打包与发布补充说明。
 
@@ -88,9 +108,11 @@
 
 1. `technical-documentation.md`
 2. `README.md`
-3. `docs/desktop-release-v1.md`
-4. `docs/macos-signing-setup.md`
-5. 其他历史 / 参考文档仅作补充，不作实现依据
+3. `docs/product-roadmap-2026.md`
+4. `docs/product-role-handover.md`
+5. `docs/desktop-release-v1.md`
+6. `docs/macos-signing-setup.md`
+7. 其他历史 / 参考文档仅作补充，不作实现依据
 
 ## 5. 冲突处理规则
 
@@ -98,7 +120,7 @@
 
 1. `technical-documentation.md`
 2. `README.md`
-3. 当前有效专项文档
+3. 当前有效专项文档（按读取建议顺序）
 4. 历史 / 参考文档
 
 

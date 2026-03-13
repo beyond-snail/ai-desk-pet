@@ -1,11 +1,29 @@
-/* ===== Caterpillar v2.0 ===== */
+/* ===== Caterpillar v3.0 (3D) ===== */
 .caterpillar[data-character='caterpillar'] {
   width: 96px;
   height: 48px;
   isolation: isolate;
-  --pet-shadow: rgba(68, 143, 47, 0.24);
-  --pet-head: linear-gradient(135deg, #9ad955, #6fa63b);
-  --pet-body: linear-gradient(135deg, #8bc34a, #689f38);
+  perspective: 520px;
+  transform-style: preserve-3d;
+  --pet-shadow: rgba(42, 88, 34, 0.34);
+  --pet-shadow-soft: rgba(16, 40, 15, 0.2);
+  --pet-head: linear-gradient(145deg, #d4f7a2 0%, #96d95d 42%, #5e9a36 100%);
+  --pet-body: linear-gradient(150deg, #c8f092 0%, #80c649 45%, #4f842f 100%);
+  --pet-body-rim: rgba(248, 255, 232, 0.68);
+}
+
+.caterpillar[data-character='caterpillar']::before {
+  content: '';
+  position: absolute;
+  left: 16px;
+  right: 4px;
+  bottom: -4px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, var(--pet-shadow) 0%, var(--pet-shadow-soft) 48%, rgba(0, 0, 0, 0) 78%);
+  filter: blur(0.8px);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .caterpillar[data-character='caterpillar'] .body {
@@ -14,7 +32,7 @@
   display: flex;
   align-items: center;
   height: 48px;
-  z-index: 1;
+  z-index: 2;
 }
 
 .caterpillar[data-character='caterpillar'] .segment {
@@ -24,7 +42,23 @@
   margin-left: -1px;
   border-radius: 999px;
   background: var(--pet-body);
-  box-shadow: inset -2px -2px 5px rgba(0, 0, 0, 0.14);
+  border: 1px solid rgba(76, 121, 42, 0.42);
+  box-shadow:
+    inset 2px 3px 6px rgba(255, 255, 255, 0.22),
+    inset -4px -6px 8px rgba(29, 65, 21, 0.28),
+    0 5px 8px rgba(27, 66, 20, 0.16);
+}
+
+.caterpillar[data-character='caterpillar'] .segment:nth-child(odd) {
+  background: linear-gradient(150deg, #d0f3a0 0%, #85ca4d 42%, #4f842f 100%);
+}
+
+.caterpillar[data-character='caterpillar'] .segment:nth-child(1),
+.caterpillar[data-character='caterpillar'] .segment:nth-child(5) {
+  box-shadow:
+    inset 2px 3px 6px rgba(255, 255, 255, 0.26),
+    inset -4px -6px 9px rgba(29, 65, 21, 0.31),
+    0 5px 9px rgba(27, 66, 20, 0.22);
 }
 
 .caterpillar[data-character='caterpillar'] .segment::before,
@@ -35,24 +69,25 @@
 }
 
 .caterpillar[data-character='caterpillar'] .segment::before {
-  top: 12px;
+  top: 11px;
   left: 50%;
   width: 10px;
   height: 10px;
-  background: #ffd54f;
+  background: radial-gradient(circle at 32% 30%, #fff4b7 0%, #ffe170 34%, #f4be38 100%);
   border-radius: 50%;
   transform: translateX(-50%);
-  box-shadow: 0 18px 0 #ffd54f;
+  box-shadow:
+    0 18px 0 #ffd24d,
+    inset -1px -1px 1px rgba(127, 84, 8, 0.25);
 }
 
 .caterpillar[data-character='caterpillar'] .segment::after {
-  top: 7px;
-  left: 3px;
-  width: 8px;
-  height: 12px;
+  top: 6px;
+  left: 2px;
+  width: 10px;
+  height: 13px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.24);
-  transform: rotate(-20deg);
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.56), rgba(255, 255, 255, 0));
 }
 
 .caterpillar[data-character='caterpillar'] .head {
@@ -64,8 +99,24 @@
   border-radius: 20px 20px 16px 16px;
   background: var(--pet-head);
   transform: translateY(-50%);
-  z-index: 3;
-  box-shadow: inset -2px -2px 5px rgba(0, 0, 0, 0.12), 0 10px 18px var(--pet-shadow);
+  z-index: 4;
+  border: 1px solid rgba(75, 122, 40, 0.44);
+  box-shadow:
+    inset 2px 3px 7px rgba(255, 255, 255, 0.24),
+    inset -5px -7px 10px rgba(31, 67, 20, 0.28),
+    0 10px 18px var(--pet-shadow);
+}
+
+.caterpillar[data-character='caterpillar'] .head::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  width: 12px;
+  height: 15px;
+  border-radius: 60% 60% 56% 56%;
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0));
+  pointer-events: none;
 }
 
 .caterpillar[data-character='caterpillar'] .eye,
@@ -81,10 +132,11 @@
   top: 10px;
   width: 8px;
   height: 11px;
-  background: #fffef8;
-  border: 1px solid rgba(65, 98, 24, 0.4);
+  background: linear-gradient(180deg, #ffffff, #f4ffe8);
+  border: 1px solid rgba(55, 85, 26, 0.48);
   border-radius: 50%;
   overflow: hidden;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
 }
 
 .caterpillar[data-character='caterpillar'] .eye::before,
@@ -95,8 +147,8 @@
 }
 
 .caterpillar[data-character='caterpillar'] .eye::before {
-  inset: 3px 2px 2px 2px;
-  background: #1d2a11;
+  inset: 2px 1px 1px 1px;
+  background: radial-gradient(circle at 40% 35%, #2f471e 0%, #1e2d12 68%, #131b0c 100%);
 }
 
 .caterpillar[data-character='caterpillar'] .eye::after {
@@ -104,7 +156,7 @@
   left: 2px;
   width: 2px;
   height: 2px;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.96);
 }
 
 .caterpillar[data-character='caterpillar'] .eye.left { left: 6px; }
@@ -125,8 +177,8 @@
   width: 8px;
   height: 5px;
   border-radius: 999px;
-  background: rgba(255, 171, 145, 0.62);
-  opacity: 0.55;
+  background: radial-gradient(ellipse at center, rgba(255, 186, 163, 0.88), rgba(255, 126, 92, 0.42));
+  opacity: 0.58;
 }
 
 .caterpillar[data-character='caterpillar'] .blush.left { left: 2px; }
@@ -137,9 +189,10 @@
   width: 3px;
   height: 13px;
   border-radius: 999px;
-  background: linear-gradient(180deg, #f0625d, #d93131);
+  background: linear-gradient(180deg, #ff8d72, #d73833);
   transform-origin: bottom center;
   animation: caterpillar-antenna-wave 1.8s ease-in-out infinite;
+  box-shadow: inset 1px 0 0 rgba(255, 215, 205, 0.4);
 }
 
 .caterpillar[data-character='caterpillar'] .antenna::after {
@@ -150,9 +203,11 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #e53935;
+  background: radial-gradient(circle at 33% 28%, #ffb39e, #e53935 70%);
   transform: translateX(-50%);
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+  box-shadow:
+    inset -1px -1px 1px rgba(114, 22, 20, 0.45),
+    0 0 0 2px rgba(255, 255, 255, 0.1);
 }
 
 .caterpillar[data-character='caterpillar'] .antenna.left {
@@ -169,16 +224,17 @@
 .caterpillar[data-character='caterpillar'] .legs {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: 1;
 }
 
 .caterpillar[data-character='caterpillar'] .leg {
   width: 6px;
   height: 14px;
   border-radius: 999px;
-  background: linear-gradient(180deg, #f0625d, #d93131);
+  background: linear-gradient(180deg, #ff8e6f 0%, #d8332f 82%);
   top: 34px;
   transform-origin: top center;
+  box-shadow: inset 1px 0 0 rgba(255, 202, 189, 0.4);
 }
 
 .caterpillar[data-character='caterpillar'] .leg.left { left: 20px; }
