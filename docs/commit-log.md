@@ -41,3 +41,25 @@
 - 执行结果：
   - 本地提交后已执行 `git push origin main`。
   - 当前状态已同步远端（`main` 无 `ahead`）。
+
+### 2026-03-13（Rainbow Bot 四项修复）
+- 提交哈希：`75a30e0`
+- 提交信息：`修复AI桌宠Rainbow Bot天线缺失、闪烁与高占用问题`
+- 主要内容：
+  - 补回 Rainbow Bot 全帧天线素材，并增加轻微摆动姿态。
+  - 增加行走状态防抖/保持，修复高频闪动。
+  - 调整朝向逻辑：仅悬停交互时看向鼠标，巡游保持自主朝向。
+  - 将 Rainbow Bot 帧循环改为低频定时调度，降低长时 CPU 开销。
+  - 新增修复文档 `docs/rainbow-bot-fix-2026-03-13.md`。
+- 校验与打包：
+  - `npm run check` 通过。
+  - `npm run build:dist` 通过，生成 `dist/AI桌宠-1.0.0-x64.dmg`。
+- 执行步骤：
+  1. `git status --short` 确认改动范围。
+  2. `git diff --cached` 核对本次提交文件。
+  3. `npm run check` 最低校验。
+  4. `npm run build:dist` 本地打包验证。
+  5. `git commit -m "修复AI桌宠Rainbow Bot天线缺失、闪烁与高占用问题"`。
+  6. `git push origin main` 推送失败（HTTP2 framing）。
+  7. `git config http.version HTTP/1.1 && git push origin main` 推送成功。
+  8. `git status -sb` 确认 `main...origin/main` 无 `ahead`。
