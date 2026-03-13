@@ -15,24 +15,10 @@ jobs:
       matrix:
         include:
           - os: macos-latest
-            name: macos-release
-            build_command: npm run build:mac:release
+            name: runtime3d-bootstrap-release
+            build_command: npm run build
             asset_glob: |
-              dist/*.dmg
-              dist/*.blockmap
-          - os: windows-latest
-            name: windows-release
-            build_command: npm run build:win
-            asset_glob: |
-              dist/*.exe
-              dist/*.msi
-              dist/*.blockmap
-          - os: ubuntu-latest
-            name: linux-release
-            build_command: npm run build:linux
-            asset_glob: |
-              dist/*.AppImage
-              dist/*.blockmap
+              dist/runtime3d-bootstrap/**
 
     runs-on: ${{ matrix.os }}
 
@@ -64,7 +50,7 @@ jobs:
       - name: Validate source
         run: npm run check
 
-      - name: Build release assets
+      - name: Build release assets (bootstrap)
         run: ${{ matrix.build_command }}
 
       - name: Publish GitHub Release assets

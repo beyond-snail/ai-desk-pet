@@ -1,0 +1,28 @@
+{
+  "schema_version": "v1",
+  "required_fields": [
+    "request_id",
+    "schema_version",
+    "timestamp",
+    "source",
+    "target"
+  ],
+  "events": [
+    "app.show",
+    "app.hide",
+    "app.quit",
+    "pet.action",
+    "pet.voice_wakeup",
+    "pet.focus_mode",
+    "settings.get",
+    "settings.set",
+    "chat.request",
+    "chat.stream_chunk",
+    "chat.done",
+    "chat.error",
+    "speech.listen.start",
+    "speech.listen.stop",
+    "speech.tts.speak",
+    "system.metrics.push"
+  ]
+}

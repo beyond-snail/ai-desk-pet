@@ -15,27 +15,10 @@ jobs:
       matrix:
         include:
           - os: macos-latest
-            artifact_name: macos-dist
-            build_command: npm run build:mac:local
+            artifact_name: runtime3d-bootstrap-macos
+            build_command: npm run build
             artifact_glob: |
-              dist/*.dmg
-              dist/*.blockmap
-              dist/mac/**
-          - os: windows-latest
-            artifact_name: windows-dist
-            build_command: npm run build:win
-            artifact_glob: |
-              dist/*.exe
-              dist/*.msi
-              dist/*.blockmap
-              dist/win-*/**
-          - os: ubuntu-latest
-            artifact_name: linux-dist
-            build_command: npm run build:linux
-            artifact_glob: |
-              dist/*.AppImage
-              dist/*.blockmap
-              dist/linux-*/**
+              dist/runtime3d-bootstrap/**
 
     runs-on: ${{ matrix.os }}
 
@@ -55,7 +38,7 @@ jobs:
       - name: Validate source
         run: npm run check
 
-      - name: Build desktop package
+      - name: Build runtime3d bootstrap artifact
         run: ${{ matrix.build_command }}
 
       - name: Upload artifacts

@@ -1,0 +1,12 @@
+{
+  "legacy_to_runtime3d": {
+    "characterId": "runtime3d.character.id",
+    "selectedCharacter": "runtime3d.character.selected",
+    "chatHistory": "runtime3d.chat.history",
+    "interactionMemory": "runtime3d.memory.interaction",
+    "longTermMemory": "runtime3d.memory.long_term",
+    "dailyUsage": "runtime3d.ai.daily_usage",
+    "featureFlags": "runtime3d.feature.flags",
+    "autoLaunch": "runtime3d.system.auto_launch"
+  }
+}

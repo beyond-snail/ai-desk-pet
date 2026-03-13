@@ -1,171 +1,108 @@
-# 文档权威级别说明
+# 文档权威级别说明（Runtime3D 主线）
 
-本文档用于说明仓库内各 Markdown 文档的用途和权威级别，避免代理在全量读取时混用历史规划、商业分析和当前实现基线。
+本文档用于统一仓库文档读取顺序，避免代理混用历史 Electron 文档与当前 Runtime3D 执行文档。
 
-## 1. 最高优先级
-
-### `technical-documentation.md`
-用途：当前实现基线文档。
-
-应相信它用于：
-- 当前桌面端 v1.0 的真实实现状态
-- 当前交互模型
-- 当前性能结论
-- 当前架构、模块、约束和后续建议
-
-如果其他文档与它冲突，以它为准。
-
-### `README.md`
-用途：项目对外入口说明。
-
-应相信它用于：
-- 当前产品范围
-- 当前已实现能力概览
-- 本地开发与打包方式
-
-如果和 `technical-documentation.md` 冲突，以 `technical-documentation.md` 为准。
-
-## 2. 当前有效的专项文档
-
-### `docs/product-roadmap-2026.md`
-用途：当前有效的中长期产品规划文档。
-
-只应在以下场景使用：
-- 版本路线图（v1.2/v1.3/v1.4/v2.0）
-- 北极星指标与阶段目标
-- 产品优先级和方向判断
-
-若涉及“当前是否已实现”，仍以 `technical-documentation.md` 为准。
-
-### `docs/product-role-handover.md`
-用途：产品角色接管与执行节奏文档。
-
-只应在以下场景使用：
-- Claude 离岗后的产品职责承接
-- 需求流转模板与发布门禁
-- 迭代节奏与执行约束
-
-若涉及具体代码行为或实现细节，以 `technical-documentation.md` 为准。
+## 1. 最高优先级（当前执行基线）
 
 ### `docs/3d-runtime-migration-spec.md`
-用途：3D 技术换轨主方案（Qt6+Godot）。
+用途：Runtime3D（Qt6 + Godot）主方案。
 
-只应在以下场景使用：
-- 技术换轨目标、约束、架构与模块边界
-- IPC 契约与迁移门槛
-- 包体/性能指标与回滚策略
+应相信它用于：
+- 目标、约束、架构边界
+- IPC 契约
+- 性能和包体指标
+- 风险处理与阶段切换门槛
 
-若涉及“当前代码已实现事实”，仍以 `technical-documentation.md` 为准。
+若与其他文档冲突，以此为准。
 
 ### `docs/3d-runtime-migration-tasks-for-codex.md`
-用途：3D 换轨执行任务书（Codex 实施用）。
+用途：Codex 执行任务书（A-G 阶段拆解）。
 
-只应在以下场景使用：
-- 阶段任务拆解（A-G）与依赖关系
-- 验收标准、测试清单、提交规范
-- 切换后回填优先级
+应相信它用于：
+- 阶段任务、依赖关系
+- 验收标准、提交规范
+- 阶段推进节奏
 
 若与主方案冲突，以 `docs/3d-runtime-migration-spec.md` 为准。
 
-### `docs/desktop-release-v1.md`
-用途：桌面端 v1.0 的打包与发布补充说明。
+### `README.md`
+用途：项目入口与当前研发状态说明。
 
-只应在以下场景使用：
-- 安装形态
-- 桌面分发产物
-- CI / Release 工作流理解
+应相信它用于：
+- 当前主线状态
+- 本地开发/校验/构建命令入口
+- 关键文档导航
 
-若涉及交互、实现细节或当前行为，以 `technical-documentation.md` 为准。
+若与主方案冲突，以 `docs/3d-runtime-migration-spec.md` 为准。
 
-### `docs/macos-signing-setup.md`
-用途：macOS 签名与 notarization 准备说明。
+## 2. 当前有效专项文档
 
-只应在以下场景使用：
-- CSR / 私钥准备
-- Apple Developer 证书准备
-- GitHub Secrets 配置
-- notarization 环境变量准备
+### `docs/product-roadmap-2026.md`
+用途：版本目标与产品优先级。
 
-## 3. 历史 / 参考文档
+### `docs/3d-runtime-baseline-2026-03-13.md`
+用途：迁移前包体与运行指标基线。
 
-以下文档不应被当作当前实现依据。
-如无特殊需要，代理应忽略 `docs/archive/` 目录中的内容。
+### `docs/adr/*`
+用途：Runtime3D 架构决策记录（为什么这么做）。
 
+### `docs/product-role-handover.md`
+用途：产品职责承接与执行节奏。
 
-### `docs/archive/development-plan.md`
-性质：早期开发规划文档。
+## 3. 历史 / 参考文档（不作为当前实现依据）
 
-问题：
-- 包含早期阶段拆分
-- 含有过时的交互和实现假设
-- 不代表当前代码基线
+### `technical-documentation.md`
+性质：Electron 时代实现快照（历史参考）。
 
-### `docs/archive/codex-instructions-stages-7-13.md`
-性质：阶段性执行指令历史记录。
-
-问题：
-- 是当时的分阶段实现说明，不是当前状态总结
-- 只能作为“已做过哪些事情”的历史上下文
-- 不应覆盖当前交互或性能决策
-
-### `docs/archive/business-plan.md`
-性质：商业规划文档。
-
-问题：
-- 用于商业模式、用户画像和市场定位分析
-- 不应用于推导当前实现、技术架构或当前交互
-
-### `docs/character-design-spec.md`
-性质：角色视觉与风格参考文档。
-
-问题：
-- 只适合用于理解角色外观方向
-- 不是当前交互、性能和实现细节的权威来源
+限制：
+- 可用于追溯历史功能语义
+- 不可用于判断当前主线是否已实现
+- 不可覆盖 Runtime3D 主方案与任务书
 
 ### `docs/新技术方案.md`
-性质：外部提案输入文档（方案参考）。
+性质：外部提案输入文档。
 
-问题：
-- 可用于吸收思路与做方案对比
-- 不应直接作为当前仓库执行基线
-- 真正执行以 `docs/3d-runtime-migration-spec.md` 与任务书为准
+限制：
+- 仅用于方案对比和灵感吸收
+- 不作为仓库执行基线
 
-## 4. Claude / 代理读取建议
+### `docs/archive/*`
+性质：历史规划与历史执行记录。
 
-如果代理会读取所有文档，请按以下顺序建立认知：
+限制：
+- 只作背景补充，不参与当前冲突决策
 
-1. `technical-documentation.md`
-2. `README.md`
-3. `docs/product-roadmap-2026.md`
-4. `docs/product-role-handover.md`
-5. `docs/desktop-release-v1.md`
-6. `docs/macos-signing-setup.md`
-7. 其他历史 / 参考文档仅作补充，不作实现依据
+## 4. 代理读取建议
 
-### 3D 技术换轨场景读取顺序（专项）
+### 常规开发场景
+1. `README.md`
+2. `docs/3d-runtime-migration-spec.md`
+3. `docs/3d-runtime-migration-tasks-for-codex.md`
+4. `docs/product-roadmap-2026.md`
+5. `docs/3d-runtime-baseline-2026-03-13.md`
+6. `docs/adr/*`
+7. 其他历史/参考文档（按需）
 
-在“准备执行 3D 换轨”场景下，请按以下顺序建立认知：
-
+### 3D 换轨实施场景（强制）
 1. `docs/product-roadmap-2026.md`
 2. `docs/3d-runtime-migration-spec.md`
 3. `docs/3d-runtime-migration-tasks-for-codex.md`
-4. `technical-documentation.md`
-5. `README.md`
-6. `docs/product-role-handover.md`
+4. `docs/3d-runtime-baseline-2026-03-13.md`
+5. `docs/adr/*`
+6. `README.md`
+7. `technical-documentation.md`（仅历史语义比对）
 
 ## 5. 冲突处理规则
 
-如果两份文档冲突，按以下优先级解决：
+若文档冲突，按以下优先级处理：
 
-1. `technical-documentation.md`
-2. `README.md`
-3. 当前有效专项文档（按读取建议顺序）
-4. 外部提案输入文档（如 `docs/新技术方案.md`）
-5. 历史 / 参考文档
+1. `docs/3d-runtime-migration-spec.md`
+2. `docs/3d-runtime-migration-tasks-for-codex.md`
+3. `README.md`
+4. 其他当前有效专项文档
+5. 历史/参考文档
 
+## 6. 维护约定
 
-## 6. 归档约定
-
-- `docs/archive/` 保存历史规划和历史执行文档
-- 根路径同名文件现在只保留归档入口，避免旧内容继续污染全局读取
-- 新的当前实现说明只应继续写入 `technical-documentation.md`
+- 当前主线实施说明应更新在 Runtime3D 文档体系（主方案、任务书、ADR、阶段报告）。
+- `technical-documentation.md` 保持历史快照属性，除“历史定位声明”外不再增量维护为主基线。
