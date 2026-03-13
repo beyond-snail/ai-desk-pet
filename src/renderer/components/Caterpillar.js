@@ -15,6 +15,9 @@ class Caterpillar {
     this.animationFrameId = null;
     this.animationPhase = 0;
     this.lastAnimationFrameAt = 0;
+    this.lastAnimationTickAt = 0;
+    this.animationFpsCap = 60;
+    this.animationFrameInterval = 1000 / this.animationFpsCap;
     this.activeMotion = null;
     this.velocity = { x: 0, y: 0 };
     this.screenSize = { width: window.innerWidth, height: window.innerHeight };
@@ -99,6 +102,7 @@ class Caterpillar {
     if (this.element) {
       this.refreshMoveParts();
       this.applyTransform();
+      this.element.dataset.fpsCap = String(this.animationFpsCap);
       this.ensureStateEffectsLayer();
       this.renderStateEffects();
 
@@ -110,6 +114,22 @@ class Caterpillar {
 
   getElement() {
     return this.element;
+  }
+
+  setAnimationFpsCap(fps = 60) {
+    const numericFps = Number(fps);
+    const nextFps = Number.isFinite(numericFps) ? Math.max(12, Math.min(60, Math.round(numericFps))) : 60;
+    if (this.animationFpsCap === nextFps) {
+      return;
+    }
+
+    this.animationFpsCap = nextFps;
+    this.animationFrameInterval = 1000 / nextFps;
+    this.lastAnimationTickAt = 0;
+
+    if (this.element) {
+      this.element.dataset.fpsCap = String(nextFps);
+    }
   }
 
   isPetTarget(target) {
@@ -990,12 +1010,19 @@ class Caterpillar {
     }
 
     this.lastAnimationFrameAt = performance.now();
+    this.lastAnimationTickAt = 0;
 
     const animate = (timestamp) => {
       if (!this.element) {
         this.animationFrameId = null;
         return;
       }
+
+      if (this.lastAnimationTickAt > 0 && timestamp - this.lastAnimationTickAt < this.animationFrameInterval) {
+        this.animationFrameId = requestAnimationFrame(animate);
+        return;
+      }
+      this.lastAnimationTickAt = timestamp;
 
       if (!this.isDragging) {
         if (this.movementInterval && !this.isMoving && !this.focusMode) {
@@ -1037,6 +1064,7 @@ class Caterpillar {
     if (this.animationFrameId) {
       cancelAnimationFrame(this.animationFrameId);
       this.animationFrameId = null;
+      this.lastAnimationTickAt = 0;
     }
   }
 

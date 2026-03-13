@@ -16,6 +16,7 @@ class PetController extends Caterpillar {
     this.weatherEffects = null;
     this.systemMetrics = null;
     this.edgeBehaviorTimer = null;
+    this.lowPowerMode = false;
   }
 
   async init(characterId) {
@@ -271,10 +272,23 @@ class PetController extends Caterpillar {
 
     const cpuHigh = metrics.cpuUsage >= 80;
     const memoryHigh = metrics.memoryUsage >= 90;
+    const shouldEnableLowPower = metrics.cpuUsage >= 65 || metrics.memoryUsage >= 82;
+    const targetFpsCap = (metrics.cpuUsage >= 85 || metrics.memoryUsage >= 92)
+      ? 20
+      : (shouldEnableLowPower ? 30 : 60);
 
     this.element.dataset.systemStress = cpuHigh ? 'high' : (metrics.cpuUsage >= 60 ? 'medium' : 'low');
     this.element.dataset.memoryPressure = memoryHigh ? 'high' : (metrics.memoryUsage >= 75 ? 'medium' : 'low');
     this.element.style.setProperty('--pet-system-scale', memoryHigh ? '1.08' : '1');
+    this.setAnimationFpsCap(targetFpsCap);
+
+    if (this.lowPowerMode !== shouldEnableLowPower) {
+      this.lowPowerMode = shouldEnableLowPower;
+      this.element.dataset.lowPower = shouldEnableLowPower ? 'true' : 'false';
+      if (this.weatherEffects && typeof this.weatherEffects.setLowPower === 'function') {
+        this.weatherEffects.setLowPower(shouldEnableLowPower);
+      }
+    }
 
     if (cpuHigh) {
       this.setMood('excited', { silent: true });

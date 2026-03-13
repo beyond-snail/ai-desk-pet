@@ -7,7 +7,7 @@
 桌面端 v1.0 核心链路已落地，并已进入“交互手感 + 性能收口”阶段：
 - Electron 透明置顶桌面窗口
 - 角色系统（毛毛虫 / 赛博机器人 / 像素宠物 / 彩虹机器人）
-- 彩虹机器人 3D 外观升级（球形渐变、四肢圆柱渐变、默认微笑、手臂联动走路）
+- 彩虹机器人 Sprite 帧序列 2.5D 外观（按情绪/移动播放轻量帧）
 - 情绪、照顾、成长、进化
 - 内置免费天气（IP 定位 + Open-Meteo）与系统状态联动
 - 番茄钟、主动行为、多宠物
@@ -20,11 +20,13 @@
 - 角色独立运动参数与连续巡游控制
 - 启动时默认不展示快捷操作条
 - 运动与动画已合并为单 requestAnimationFrame 主循环，以降低长期运行开销
+- 系统高负载下自动降帧（60/30/20 FPS 分档），减少持续运行时 CPU 占用
 - 本地 macOS DMG 打包验证通过
 
 详细实现可查看 [technical-documentation.md](technical-documentation.md)。
 
 如果需要让 Claude / 其他代理读取仓库内全部文档，请先看 [docs/document-authority.md](docs/document-authority.md)。
+产品角色接管与执行节奏请看 [docs/product-role-handover.md](docs/product-role-handover.md)。
 
 历史规划与历史阶段指令已归档到 `docs/archive/`，根路径仅保留入口说明，避免误读。
 

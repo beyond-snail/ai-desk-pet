@@ -1,0 +1,41 @@
+<svg width="120" height="160" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="head" cx="34%" cy="26%" r="70%">
+      <stop offset="0%" stop-color="#eaf4fb"/>
+      <stop offset="65%" stop-color="#89b4c9"/>
+      <stop offset="100%" stop-color="#4b748d"/>
+    </radialGradient>
+    <radialGradient id="body" cx="36%" cy="24%" r="72%">
+      <stop offset="0%" stop-color="#dceaf2"/>
+      <stop offset="65%" stop-color="#80a8bc"/>
+      <stop offset="100%" stop-color="#456c82"/>
+    </radialGradient>
+    <linearGradient id="visor" x1="28" y1="48" x2="92" y2="84" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#12364f"/>
+      <stop offset="100%" stop-color="#0b2437"/>
+    </linearGradient>
+    <linearGradient id="limb" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#c7dce7"/>
+      <stop offset="100%" stop-color="#557a90"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="60" cy="156" rx="31" ry="4" fill="#102331" fill-opacity="0.24"/>
+  <g>
+    <rect x="22" y="26" width="76" height="62" rx="22" fill="url(#head)"/>
+    <rect x="28" y="48" width="64" height="36" rx="10" fill="url(#visor)"/>
+    <circle cx="43" cy="62" r="6" fill="#87bed8"/>
+    <circle cx="77" cy="62" r="6" fill="#87bed8"/>
+    <path d="M46 80 Q60 74 74 80" stroke="#93c4da" stroke-width="2.4" stroke-linecap="round"/>
+    <rect x="32" y="92" width="56" height="40" rx="10" fill="url(#body)"/>
+    <rect x="33" y="101" width="54" height="4" rx="2" fill="#d98f8f"/>
+    <rect x="33" y="106" width="54" height="4" rx="2" fill="#cbb57d"/>
+    <rect x="33" y="111" width="54" height="4" rx="2" fill="#83b996"/>
+    <circle cx="60" cy="124" r="4" fill="#8bb7cb"/>
+    <rect x="18" y="94" width="16" height="28" rx="8" fill="url(#limb)"/>
+    <rect x="86" y="94" width="16" height="28" rx="8" fill="url(#limb)"/>
+    <rect x="38" y="130" width="18" height="22" rx="9" fill="url(#limb)"/>
+    <rect x="64" y="130" width="18" height="22" rx="9" fill="url(#limb)"/>
+    <rect x="34" y="148" width="24" height="10" rx="5" fill="#5f778a"/>
+    <rect x="62" y="148" width="24" height="10" rx="5" fill="#5f778a"/>
+  </g>
+</svg>

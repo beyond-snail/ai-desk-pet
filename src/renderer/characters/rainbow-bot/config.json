@@ -3,8 +3,8 @@
   "name": "彩虹机器人",
   "description": "大眼睛会随情绪变化的可爱机器人，身上有彩虹条纹",
   "dimensions": {
-    "width": 90,
-    "height": 120
+    "width": 96,
+    "height": 128
   },
   "animations": {
     "idle": { "speed": 1.8, "amplitude": 1.5, "legRotation": 0, "frequency": 0.03 },
@@ -15,9 +15,9 @@
     "sad": { "speed": 0.7, "amplitude": 0.8, "legRotation": 0, "frequency": 0.02 }
   },
   "moveParts": {
-    "bodySelector": ".rb-body-group",
-    "limbSelector": ".rb-leg-l-group, .rb-leg-r-group",
-    "headSelector": ".rb-body-group"
+    "bodySelector": ".rb-shell",
+    "limbSelector": ".rb-shell",
+    "headSelector": ".rb-shell"
   },
   "growth": {
     "stages": ["blueprint", "prototype", "v1", "v2", "final"],
