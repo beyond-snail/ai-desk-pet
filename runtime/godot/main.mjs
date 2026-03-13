@@ -1,16 +1,27 @@
 import net from 'node:net';
 import { createLineReader } from '../shared-ipc/line-codec.mjs';
 import { createMessage, decodeLine, encodeMessage, validateMessage } from '../shared-ipc/protocol.mjs';
+import { DefaultRobotController } from './default-robot-controller.mjs';
+import { InteractionController } from './interaction-controller.mjs';
 import { GodotWindowController } from './window-controller.mjs';
 
 const SIDE_CAR_HOST = process.env.RUNTIME3D_IPC_HOST || '127.0.0.1';
 const SIDE_CAR_PORT = Number(process.env.RUNTIME3D_IPC_PORT || 47831);
+const SCENARIO = process.env.RUNTIME3D_SCENARIO || 'interaction-smoke';
 const LOG_PREFIX = '[runtime3d:godot]';
+
 const windowController = new GodotWindowController();
+const interactionController = new InteractionController();
+const robotController = new DefaultRobotController({ offscreenProbability: 0.45 });
 
 let socket = null;
-let handshakeDone = false;
 let appQuitSent = false;
+let loopTimer = null;
+let loopTicks = 0;
+let chatReply = '';
+let ttsRequested = false;
+let voiceWakeupReceived = false;
+let interactionTriggered = false;
 
 function send(event, payload = {}, requestId) {
   const message = createMessage({
@@ -22,6 +33,58 @@ function send(event, payload = {}, requestId) {
   });
   socket.write(encodeMessage(message));
   console.log(`${LOG_PREFIX} sent ${event}`);
+}
+
+function startMainLoop() {
+  if (loopTimer) {
+    return;
+  }
+  loopTimer = setInterval(() => {
+    const frame = robotController.update(16);
+    loopTicks += 1;
+    if (loopTicks % 120 === 0) {
+      send('system.metrics.push', {
+        source: 'godot.main_loop',
+        loopTicks,
+        locomotion: frame.locomotion,
+        roamingState: frame.movement.state
+      });
+    }
+  }, 16);
+}
+
+function stopMainLoop() {
+  if (!loopTimer) {
+    return;
+  }
+  clearInterval(loopTimer);
+  loopTimer = null;
+}
+
+function triggerInteractionScenario() {
+  if (interactionTriggered || !SCENARIO.includes('interaction')) {
+    return;
+  }
+  interactionTriggered = true;
+
+  interactionController.onSingleClick();
+  send('pet.action', { action: 'menu.open', trigger: 'single_click' });
+
+  for (const action of ['chat', 'feed', 'pet', 'clean']) {
+    const payload = interactionController.onMenuAction(action);
+    send('pet.action', payload);
+  }
+
+  send('chat.request', {
+    text: '今天的专注安排是什么？',
+    provider: 'runtime3d-local',
+    limit_mode: 'daily'
+  });
+
+  send('speech.listen.start', {
+    mode: 'local-keyword',
+    keywords: ['你好桌宠', '过来', '走开', '喂食']
+  });
 }
 
 function onMessage(message) {
@@ -46,26 +109,64 @@ function onMessage(message) {
       key: 'runtime3d.window.interactive_regions',
       value: windowController.snapshot().interactiveRegions
     });
+    triggerInteractionScenario();
     return;
   }
 
-  if (message.event === 'pet.action') {
-    send('pet.voice_wakeup', { wakeword: '你好桌宠' });
+  if (message.event === 'chat.stream_chunk') {
+    chatReply += String(message.payload?.chunk || '');
+    return;
+  }
+
+  if (message.event === 'chat.done') {
+    if (!ttsRequested) {
+      send('speech.tts.speak', {
+        text: chatReply,
+        voice: 'local-default'
+      });
+      ttsRequested = true;
+    }
+    return;
+  }
+
+  if (message.event === 'chat.error') {
+    if (!ttsRequested) {
+      send('speech.tts.speak', {
+        text: '网络暂时拥挤，我先陪你休息一下。',
+        voice: 'local-default'
+      });
+      ttsRequested = true;
+    }
+    return;
+  }
+
+  if (message.event === 'pet.voice_wakeup') {
+    voiceWakeupReceived = true;
+    send('pet.action', interactionController.onDoubleClick());
+    send('pet.action', interactionController.onDragDrop());
     return;
   }
 
   if (message.event === 'app.hide') {
     windowController.hide();
-    send('app.quit', { reason: 'smoke-sequence-complete' });
+    stopMainLoop();
+    send('app.quit', {
+      reason: 'interaction-smoke-complete',
+      loopTicks,
+      voiceWakeupReceived,
+      ttsRequested,
+      interaction: interactionController.snapshot(),
+      robotSnapshot: robotController.snapshot()
+    });
     appQuitSent = true;
-    return;
   }
 }
 
 function bootstrap() {
   socket = net.createConnection({ host: SIDE_CAR_HOST, port: SIDE_CAR_PORT }, () => {
     console.log(`${LOG_PREFIX} connected ${SIDE_CAR_HOST}:${SIDE_CAR_PORT}`);
-    send('app.show', { reason: 'runtime3d-bootstrap-smoke' });
+    startMainLoop();
+    send('app.show', { reason: SCENARIO });
   });
 
   const lineReader = createLineReader((line) => {
@@ -77,15 +178,21 @@ function bootstrap() {
   socket.on('data', lineReader);
 
   socket.on('error', (error) => {
+    stopMainLoop();
     console.error(`${LOG_PREFIX} socket error: ${error.message}`);
     process.exitCode = 1;
   });
 
   socket.on('close', () => {
+    stopMainLoop();
     if (appQuitSent) {
-      handshakeDone = true;
-      const snapshot = windowController.snapshot();
-      console.log(`${LOG_PREFIX} window_state ${JSON.stringify(snapshot)}`);
+      console.log(
+        `${LOG_PREFIX} interaction_summary ${JSON.stringify({
+          loopTicks,
+          chatReplyLength: chatReply.length,
+          voiceWakeupReceived
+        })}`
+      );
       console.log(`${LOG_PREFIX} handshake ok`);
       return;
     }

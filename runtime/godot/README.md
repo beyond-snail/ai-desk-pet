@@ -22,6 +22,11 @@ Stage C motion foundation:
 - `roaming-controller.mjs`: acceleration/turning/offscreen-return path logic
 - `default-robot-controller.mjs`: robot movement + animation composition
 
+Stage D interaction foundation:
+
+- `interaction-controller.mjs`: click/double-click/drag and quick action semantics
+- `main.mjs`: end-to-end interaction smoke orchestration (chat + voice + tts path)
+
 ## Local run
 
 ```bash

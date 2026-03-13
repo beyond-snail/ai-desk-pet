@@ -39,12 +39,15 @@ async function main() {
   const env = {
     ...process.env,
     RUNTIME3D_IPC_HOST: host,
-    RUNTIME3D_IPC_PORT: String(port)
+    RUNTIME3D_IPC_PORT: String(port),
+    RUNTIME3D_SCENARIO: 'interaction-smoke'
   };
 
   let sidecarReady = false;
   let godotHandshake = false;
   let sidecarHandshake = false;
+  let godotSummary = false;
+  let sidecarSummary = false;
 
   const sidecar = createChild(
     'runtime/qt-sidecar/main.mjs',
@@ -56,6 +59,9 @@ async function main() {
       }
       if (line.includes('handshake ok')) {
         sidecarHandshake = true;
+      }
+      if (line.includes('interaction_summary')) {
+        sidecarSummary = true;
       }
     }
   );
@@ -81,6 +87,9 @@ async function main() {
       if (line.includes('handshake ok')) {
         godotHandshake = true;
       }
+      if (line.includes('interaction_summary')) {
+        godotSummary = true;
+      }
     }
   );
 
@@ -96,7 +105,7 @@ async function main() {
       sidecar.kill('SIGTERM');
       throw new Error(`ipc smoke timed out after ${timeoutMs}ms`);
     }
-    if (godotHandshake && sidecarHandshake) {
+    if (godotHandshake && sidecarHandshake && godotSummary && sidecarSummary) {
       break;
     }
     await new Promise((resolve) => setTimeout(resolve, 30));
@@ -107,7 +116,7 @@ async function main() {
     throw new Error(`child process exited with non-zero code (godot=${godotCode}, sidecar=${sidecarCode})`);
   }
 
-  console.log('[ipc-smoke] handshake stable');
+  console.log('[ipc-smoke] interaction handshake stable');
 }
 
 main().catch((error) => {

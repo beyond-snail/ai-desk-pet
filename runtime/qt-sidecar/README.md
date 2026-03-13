@@ -17,6 +17,11 @@ Stage B bootstrap implemented with executable Node entrypoint:
 - `main.mjs`: sidecar process stub + IPC server
 - `system-controller.mjs`: tray/hotkey/window state model
 
+Stage D interaction foundation:
+
+- `chat-service.mjs`: minimal chat streaming service stub
+- `voice-service.mjs`: minimal local voice listen/tts service stub
+
 ## Local run
 
 ```bash
