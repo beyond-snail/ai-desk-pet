@@ -16,6 +16,12 @@ Stage B bootstrap implemented with executable Node entrypoint:
 - `main.mjs`: Godot runtime process stub
 - `window-controller.mjs`: window visibility + click-through region state model
 
+Stage C motion foundation:
+
+- `animation-state-machine.mjs`: locomotion state transitions
+- `roaming-controller.mjs`: acceleration/turning/offscreen-return path logic
+- `default-robot-controller.mjs`: robot movement + animation composition
+
 ## Local run
 
 ```bash
@@ -23,3 +29,9 @@ node runtime/godot/main.mjs
 ```
 
 This process expects Qt sidecar bootstrap server on `127.0.0.1:47831` by default.
+
+Motion logic smoke:
+
+```bash
+node scripts/runtime3d-robot-motion-smoke.mjs
+```

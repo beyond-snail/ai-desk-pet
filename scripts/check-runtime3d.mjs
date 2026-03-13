@@ -18,16 +18,21 @@ const requiredFiles = [
   'runtime/shared-ipc/line-codec.mjs',
   'runtime/godot/main.mjs',
   'runtime/godot/window-controller.mjs',
+  'runtime/godot/animation-state-machine.mjs',
+  'runtime/godot/roaming-controller.mjs',
+  'runtime/godot/default-robot-controller.mjs',
   'runtime/qt-sidecar/main.mjs',
   'runtime/qt-sidecar/system-controller.mjs',
   'runtime/migration/README.md',
   'runtime/migration/keys-map.json',
   'scripts/runtime3d-ipc-smoke.mjs',
+  'scripts/runtime3d-robot-motion-smoke.mjs',
   'docs/adr/0001-runtime3d-topology.md',
   'docs/adr/0002-ipc-versioning.md',
   'docs/adr/0003-data-migration-strategy.md',
   'docs/3d-runtime-baseline-2026-03-13.md',
-  'docs/runtime3d-stage-b-report-2026-03-13.md'
+  'docs/runtime3d-stage-b-report-2026-03-13.md',
+  'docs/runtime3d-stage-c-motion-foundation-2026-03-13.md'
 ];
 
 const requiredEvents = [
@@ -101,8 +106,18 @@ if (!hasError) {
   }
 }
 
+if (!hasError) {
+  const motionSmoke = spawnSync(process.execPath, ['scripts/runtime3d-robot-motion-smoke.mjs'], {
+    stdio: 'inherit'
+  });
+  if (motionSmoke.status !== 0) {
+    hasError = true;
+    console.error('runtime3d robot motion smoke failed');
+  }
+}
+
 if (hasError) {
   process.exit(1);
 }
 
-console.log('runtime3d scaffold + ipc smoke ok');
+console.log('runtime3d scaffold + ipc smoke + motion smoke ok');

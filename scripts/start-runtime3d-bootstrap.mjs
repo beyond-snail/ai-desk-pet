@@ -9,5 +9,5 @@ if (check.status !== 0) {
 }
 
 console.log('runtime3d bootstrap ready');
-console.log('runtime3d stage-b bootstrap ready (entrypoints + ipc handshake)');
-console.log('next steps: implement real Godot/Qt runtime features for stage C/D');
+console.log('runtime3d stage-b+c bootstrap ready (entrypoints + ipc + motion logic)');
+console.log('next steps: bind motion logic to real Godot scene and animation resources');

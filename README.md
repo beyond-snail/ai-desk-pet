@@ -4,7 +4,7 @@
 
 ## 当前状态
 
-- 主线：`Runtime3D`（A 阶段 + B1/B2 bootstrap 已落地）
+- 主线：`Runtime3D`（A 阶段 + B1/B2 + C 阶段运动逻辑基础已落地）
 - 研发策略：视觉与性能优先，先切换再回填玩法
 - 执行方式：按 `A-G` 阶段任务书推进
 - 当前默认入口：`npm start` / `npm run dev` -> Runtime3D bootstrap
@@ -21,6 +21,7 @@
 - 3D 换轨任务书（Codex 执行）：[docs/3d-runtime-migration-tasks-for-codex.md](docs/3d-runtime-migration-tasks-for-codex.md)
 - 3D 基线报告（迁移前）：[docs/3d-runtime-baseline-2026-03-13.md](docs/3d-runtime-baseline-2026-03-13.md)
 - 3D 阶段报告（B 阶段）：[docs/runtime3d-stage-b-report-2026-03-13.md](docs/runtime3d-stage-b-report-2026-03-13.md)
+- 3D 阶段报告（C 运动基础）：[docs/runtime3d-stage-c-motion-foundation-2026-03-13.md](docs/runtime3d-stage-c-motion-foundation-2026-03-13.md)
 - ADR 决策记录：`docs/adr/*`
 - 历史实现快照：[technical-documentation.md](technical-documentation.md)
 - 外部提案输入（仅参考）：[docs/新技术方案.md](docs/新技术方案.md)
@@ -39,6 +40,7 @@ npm start
 npm run start:runtime3d
 npm run check:runtime3d
 npm run smoke:runtime3d:ipc
+npm run smoke:runtime3d:motion
 npm run build
 ```
 
@@ -46,6 +48,7 @@ npm run build
 - 当前仍使用 `npm scripts` 作为统一任务编排入口（校验、bootstrap、后续构建流水线占位）。
 - 这不代表运行时仍是 Electron 主线；运行时主线目标是 `Qt6 + Godot`。
 - `npm run check` 会执行 runtime3d IPC 冒烟（Godot/Qt 双进程握手）。
+- `npm run check` 还会执行默认机器人运动仿真冒烟（状态机 + 离屏回归）。
 
 ## 项目结构（当前主线相关）
 

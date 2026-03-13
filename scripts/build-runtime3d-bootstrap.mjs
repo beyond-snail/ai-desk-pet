@@ -19,11 +19,12 @@ writeFileSync(
       runtime: 'runtime3d-bootstrap',
       schema_version: 'v1',
       generated_at: new Date().toISOString(),
-      stage: 'B',
+      stage: 'C-foundation',
       includes: [
         'runtime/godot executable bootstrap',
         'runtime/qt-sidecar executable bootstrap',
-        'ipc schema v1 smoke handshake'
+        'ipc schema v1 smoke handshake',
+        'default robot motion logic smoke'
       ],
       notes: 'Bootstrap artifact placeholder. Replace with real Godot + Qt sidecar package in stage F2.'
     },
