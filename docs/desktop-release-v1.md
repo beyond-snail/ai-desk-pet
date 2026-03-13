@@ -11,9 +11,9 @@
 ## 1. 用户拿到的是什么
 
 桌面端安装包按平台分发：
-- macOS: `AI桌宠-<version>-<arch>.dmg`
-- Windows: `AI桌宠-<version>-x64.exe`
-- Linux: `AI桌宠-<version>-x64.AppImage`
+- macOS: `AIDeskPet-<version>-<arch>.dmg`
+- Windows: `AIDeskPet-<version>-x64.exe`
+- Linux: `AIDeskPet-<version>-x64.AppImage`
 
 安装后，应用表现为：
 - 一个透明、无边框、置顶的 Electron 桌面窗口
@@ -104,7 +104,7 @@ CI 行为：
 - 三套内置角色可渲染并切换
 - Electron 源码模式可启动
 - `npm run build:mac:local` 可生成 DMG
-- `dist/mac/AI桌宠.app` 可启动
+- `dist/mac/AIDeskPet.app` 可启动
 
 未在当前机器实测：
 - Windows 安装包运行验证

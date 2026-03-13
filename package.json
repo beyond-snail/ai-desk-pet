@@ -38,7 +38,7 @@
   },
   "build": {
     "appId": "com.ai-desk-pet.app",
-    "productName": "AI桌宠",
+    "productName": "AIDeskPet",
     "directories": {
       "output": "dist",
       "buildResources": "build"
@@ -68,7 +68,7 @@
       "entitlementsInherit": "build/entitlements.mac.inherit.plist"
     },
     "dmg": {
-      "title": "AI桌宠",
+      "title": "AIDeskPet",
       "contents": [
         {
           "x": 130,
@@ -101,7 +101,7 @@
       "installerHeaderIcon": "assets/icon.ico",
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "AI桌宠"
+      "shortcutName": "AIDeskPet"
     },
     "linux": {
       "icon": "assets/icon.png",

@@ -622,7 +622,7 @@
 - `npm run build:linux`
 
 当前已多次在本机生成：
-- `dist/AI桌宠-1.0.0-x64.dmg`
+- `dist/AIDeskPet-1.0.0-x64.dmg`
 
 ### 15.2 当前发布状态
 

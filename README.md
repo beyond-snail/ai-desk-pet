@@ -152,8 +152,8 @@ npm run build:dist
 ## 当前已验证产物
 
 已在本机生成并验证：
-- `dist/AI桌宠-1.0.0-x64.dmg`
-- `dist/mac/AI桌宠.app`
+- `dist/AIDeskPet-1.0.0-x64.dmg`
+- `dist/mac/AIDeskPet.app`
 
 说明：
 - 当前 macOS 构建为未签名产物，适合开发验证和内部测试

@@ -79,3 +79,23 @@
   5. `git commit -m "一次性提交当前产品文档与应用配置改动"`。
   6. `git push origin main` 推送远端。
   7. `git status -sb` 确认无 `ahead`。
+
+### 2026-03-13（英文名与桌面图标统一）
+- 提交哈希：`见本次提交输出`
+- 提交信息：`统一英文产品名AIDeskPet并更新桌面图标`
+- 主要内容：
+  - 产品名统一为 `AIDeskPet`（`productName` / DMG 标题 / Windows 快捷方式名）。
+  - 使用 `assets/icon.png` 重新生成 `assets/icon.icns`，修复 macOS 桌面图标未更新问题。
+  - 同步 README、技术文档与发布说明中的产物名称。
+- 校验与打包：
+  - `npm run check` 通过。
+  - `npm run build:dist` 通过，生成 `dist/AIDeskPet-1.0.0-x64.dmg`。
+- 执行步骤：
+  1. `git status --short` 确认改动范围。
+  2. `npm run check` 最低校验。
+  3. 重新生成 `assets/icon.icns`。
+  4. `npm run build:dist` 本地打包验证。
+  5. `git add` 暂存本次文件。
+  6. `git commit -m "统一英文产品名AIDeskPet并更新桌面图标"`。
+  7. `git push origin main` 推送远端。
+  8. `git status -sb` 确认无 `ahead`。
