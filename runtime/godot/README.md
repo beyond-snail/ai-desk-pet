@@ -27,6 +27,10 @@ Stage D interaction foundation:
 - `interaction-controller.mjs`: click/double-click/drag and quick action semantics
 - `main.mjs`: end-to-end interaction smoke orchestration (chat + voice + tts path)
 
+Stage G backfill foundation:
+
+- `gameplay-system.mjs`: care/growth/focus/proactive/environment/memory state model
+
 ## Local run
 
 ```bash

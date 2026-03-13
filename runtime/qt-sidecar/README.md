@@ -22,6 +22,10 @@ Stage D interaction foundation:
 - `chat-service.mjs`: minimal chat streaming service stub
 - `voice-service.mjs`: minimal local voice listen/tts service stub
 
+Stage G2 persistence foundation:
+
+- `persistence-store.mjs`: local settings/chat/memory/pets persistence store
+
 ## Local run
 
 ```bash

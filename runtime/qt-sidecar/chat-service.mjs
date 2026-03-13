@@ -20,4 +20,12 @@ export class ChatService {
       yield chunk;
     }
   }
+
+  inferMemoryFact(request) {
+    const text = String(request?.text || '').trim();
+    if (!text) {
+      return '';
+    }
+    return `用户近期关注：${text.slice(0, 24)}`;
+  }
 }

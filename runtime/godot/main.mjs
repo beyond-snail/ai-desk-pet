@@ -2,6 +2,7 @@ import net from 'node:net';
 import { createLineReader } from '../shared-ipc/line-codec.mjs';
 import { createMessage, decodeLine, encodeMessage, validateMessage } from '../shared-ipc/protocol.mjs';
 import { DefaultRobotController } from './default-robot-controller.mjs';
+import { GameplaySystem } from './gameplay-system.mjs';
 import { InteractionController } from './interaction-controller.mjs';
 import { GodotWindowController } from './window-controller.mjs';
 
@@ -13,6 +14,7 @@ const LOG_PREFIX = '[runtime3d:godot]';
 const windowController = new GodotWindowController();
 const interactionController = new InteractionController();
 const robotController = new DefaultRobotController({ offscreenProbability: 0.45 });
+const gameplaySystem = new GameplaySystem();
 
 let socket = null;
 let appQuitSent = false;
@@ -41,13 +43,15 @@ function startMainLoop() {
   }
   loopTimer = setInterval(() => {
     const frame = robotController.update(16);
+    gameplaySystem.tick(16);
     loopTicks += 1;
     if (loopTicks % 120 === 0) {
       send('system.metrics.push', {
         source: 'godot.main_loop',
         loopTicks,
         locomotion: frame.locomotion,
-        roamingState: frame.movement.state
+        roamingState: frame.movement.state,
+        gameplay: gameplaySystem.snapshot()
       });
     }
   }, 16);
@@ -72,6 +76,7 @@ function triggerInteractionScenario() {
 
   for (const action of ['chat', 'feed', 'pet', 'clean']) {
     const payload = interactionController.onMenuAction(action);
+    gameplaySystem.applyAction(action);
     send('pet.action', payload);
   }
 
@@ -85,6 +90,7 @@ function triggerInteractionScenario() {
     mode: 'local-keyword',
     keywords: ['你好桌宠', '过来', '走开', '喂食']
   });
+  send('pet.focus_mode', { enabled: true, source: 'voice_start' });
 }
 
 function onMessage(message) {
@@ -119,6 +125,11 @@ function onMessage(message) {
   }
 
   if (message.event === 'chat.done') {
+    gameplaySystem.appendChat({
+      role: 'assistant',
+      text: chatReply
+    });
+    gameplaySystem.addMemoryFact(`最近回复长度:${chatReply.length}`);
     if (!ttsRequested) {
       send('speech.tts.speak', {
         text: chatReply,
@@ -142,8 +153,27 @@ function onMessage(message) {
 
   if (message.event === 'pet.voice_wakeup') {
     voiceWakeupReceived = true;
+    gameplaySystem.setFocusActive(true);
     send('pet.action', interactionController.onDoubleClick());
+    gameplaySystem.applyAction('celebrate');
     send('pet.action', interactionController.onDragDrop());
+    gameplaySystem.applyAction('drop');
+    return;
+  }
+
+  if (message.event === 'speech.listen.stop') {
+    gameplaySystem.setFocusActive(false);
+    send('pet.focus_mode', { enabled: false, source: 'voice_stop' });
+    return;
+  }
+
+  if (message.event === 'system.metrics.push') {
+    const spokenLength = Number(message.payload?.spokenLength || 0);
+    const systemLoad = spokenLength > 30 ? 'high' : 'normal';
+    gameplaySystem.updateEnvironment({
+      weather: 'clear',
+      systemLoad
+    });
     return;
   }
 
@@ -156,7 +186,8 @@ function onMessage(message) {
       voiceWakeupReceived,
       ttsRequested,
       interaction: interactionController.snapshot(),
-      robotSnapshot: robotController.snapshot()
+      robotSnapshot: robotController.snapshot(),
+      gameplay: gameplaySystem.snapshot()
     });
     appQuitSent = true;
   }

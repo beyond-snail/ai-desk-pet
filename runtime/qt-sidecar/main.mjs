@@ -2,6 +2,7 @@ import net from 'node:net';
 import { createLineReader } from '../shared-ipc/line-codec.mjs';
 import { createMessage, decodeLine, encodeMessage, validateMessage } from '../shared-ipc/protocol.mjs';
 import { ChatService } from './chat-service.mjs';
+import { PersistenceStore } from './persistence-store.mjs';
 import { QtSystemController } from './system-controller.mjs';
 import { VoiceService } from './voice-service.mjs';
 
@@ -11,6 +12,7 @@ const LOG_PREFIX = '[runtime3d:qt-sidecar]';
 
 const systemController = new QtSystemController();
 const chatService = new ChatService();
+const persistenceStore = new PersistenceStore();
 const voiceService = new VoiceService();
 const requiredActions = ['chat', 'feed', 'pet', 'clean', 'celebrate', 'drop'];
 
@@ -54,6 +56,7 @@ function maybeSendAppHide() {
     state.ttsSpoken;
   if (ready && !appHideSent) {
     appHideSent = true;
+    persistenceStore.setSetting('runtime3d.last_interaction_status', 'ready_to_hide');
     send('app.hide', { reason: 'interaction-chain-complete' });
   }
 }
@@ -62,10 +65,18 @@ async function onChatRequest(message) {
   state.chatRequestReceived = true;
   const requestId = message.request_id;
   try {
+    const userText = String(message.payload?.text || '');
+    persistenceStore.appendChat({ role: 'user', text: userText, timestamp: Date.now() });
     for await (const chunk of chatService.streamReply(message.payload)) {
       send('chat.stream_chunk', { chunk }, requestId);
     }
     state.chatDone = true;
+    persistenceStore.appendChat({
+      role: 'assistant',
+      text: 'stream_done',
+      timestamp: Date.now()
+    });
+    persistenceStore.appendMemory(chatService.inferMemoryFact(message.payload));
     send('chat.done', { provider: 'runtime3d-local' }, requestId);
   } catch (error) {
     send(
@@ -87,7 +98,22 @@ function onMessage(message) {
 
   if (message.event === 'app.show') {
     systemController.showWindow();
+    persistenceStore.setSetting('runtime3d.window.visible', true);
     send('settings.get', { key: 'runtime3d.window.interactive_regions' });
+    return;
+  }
+
+  if (message.event === 'settings.set') {
+    const key = String(message.payload?.key || '');
+    if (key) {
+      persistenceStore.setSetting(key, message.payload?.value);
+    }
+    return;
+  }
+
+  if (message.event === 'settings.get') {
+    const key = String(message.payload?.key || '');
+    send('settings.set', { key, value: persistenceStore.getSetting(key) });
     return;
   }
 
@@ -97,6 +123,12 @@ function onMessage(message) {
       actionSet.add(action);
     }
     maybeSendAppHide();
+    return;
+  }
+
+  if (message.event === 'pet.focus_mode') {
+    const enabled = Boolean(message.payload?.enabled);
+    persistenceStore.setSetting('runtime3d.focus.enabled', enabled);
     return;
   }
 
@@ -121,7 +153,10 @@ function onMessage(message) {
     state.ttsSpoken = spoken.spoken;
     send('system.metrics.push', {
       source: 'qt-sidecar.tts',
-      spokenLength: spoken.length
+      spokenLength: spoken.length,
+      store: {
+        chatCount: persistenceStore.getState().chatHistory.length
+      }
     });
     maybeSendAppHide();
     return;
@@ -130,6 +165,7 @@ function onMessage(message) {
   if (message.event === 'app.quit') {
     state.appQuitReceived = true;
     systemController.hideWindow();
+    persistenceStore.setSetting('runtime3d.window.visible', false);
     const hasAllActions = requiredActions.every((action) => actionSet.has(action));
     const finalOk =
       hasAllActions &&
@@ -145,7 +181,8 @@ function onMessage(message) {
         voiceStopSent: state.voiceStopSent,
         voiceWakeupSent: state.voiceWakeupSent,
         ttsSpoken: state.ttsSpoken,
-        appHideSent
+        appHideSent,
+        persistedChatCount: persistenceStore.getState().chatHistory.length
       })}`
     );
     if (!finalOk) {

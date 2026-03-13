@@ -4,7 +4,7 @@
 
 ## 当前状态
 
-- 主线：`Runtime3D`（A 阶段 + B/C/D/E 基础链路已落地）
+- 主线：`Runtime3D`（A 阶段 + B/C/D/E/F/G 基础链路已落地）
 - 研发策略：视觉与性能优先，先切换再回填玩法
 - 执行方式：按 `A-G` 阶段任务书推进
 - 当前默认入口：`npm start` / `npm run dev` -> Runtime3D bootstrap
@@ -24,6 +24,9 @@
 - 3D 阶段报告（C 运动基础）：[docs/runtime3d-stage-c-motion-foundation-2026-03-13.md](docs/runtime3d-stage-c-motion-foundation-2026-03-13.md)
 - 3D 阶段报告（D 交互基础）：[docs/runtime3d-stage-d-interaction-foundation-2026-03-13.md](docs/runtime3d-stage-d-interaction-foundation-2026-03-13.md)
 - 3D 阶段报告（E 迁移基础）：[docs/runtime3d-stage-e-migration-foundation-2026-03-13.md](docs/runtime3d-stage-e-migration-foundation-2026-03-13.md)
+- 3D 阶段报告（F 性能与构建基础）：[docs/runtime3d-stage-f-performance-build-foundation-2026-03-13.md](docs/runtime3d-stage-f-performance-build-foundation-2026-03-13.md)
+- 3D 阶段报告（G 回填基础）：[docs/runtime3d-stage-g-backfill-foundation-2026-03-13.md](docs/runtime3d-stage-g-backfill-foundation-2026-03-13.md)
+- 3D 最终 DoD 状态：[docs/runtime3d-final-dod-status-2026-03-13.md](docs/runtime3d-final-dod-status-2026-03-13.md)
 - ADR 决策记录：`docs/adr/*`
 - 历史实现快照：[technical-documentation.md](technical-documentation.md)
 - 外部提案输入（仅参考）：[docs/新技术方案.md](docs/新技术方案.md)
@@ -44,6 +47,8 @@ npm run check:runtime3d
 npm run smoke:runtime3d:ipc
 npm run smoke:runtime3d:motion
 npm run smoke:runtime3d:migration
+npm run smoke:runtime3d:backfill
+npm run smoke:runtime3d:performance
 npm run build
 ```
 
@@ -54,6 +59,9 @@ npm run build
 - `npm run check` 还会执行默认机器人运动仿真冒烟（状态机 + 离屏回归）。
 - `npm run check` 还会覆盖 D 阶段最小交互链路（四动作 + 聊天流式 + 语音/TTS）。
 - `npm run check` 还会覆盖 E 阶段迁移冒烟（空/普通/重度样本 + 幂等性）。
+- `npm run check` 还会覆盖 G 阶段回填冒烟（养成/专注/记忆/持久化）。
+- `npm run check` 还会覆盖 F 阶段性能冒烟（仿真帧时与内存增量）。
+- `npm run build` 会生成候选包：`dist/runtime3d-bootstrap/runtime3d-candidate-<platform>.tar.gz`。
 
 ## 项目结构（当前主线相关）
 

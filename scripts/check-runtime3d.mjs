@@ -22,16 +22,21 @@ const requiredFiles = [
   'runtime/godot/animation-state-machine.mjs',
   'runtime/godot/roaming-controller.mjs',
   'runtime/godot/default-robot-controller.mjs',
+  'runtime/godot/gameplay-system.mjs',
   'runtime/qt-sidecar/main.mjs',
   'runtime/qt-sidecar/system-controller.mjs',
   'runtime/qt-sidecar/chat-service.mjs',
   'runtime/qt-sidecar/voice-service.mjs',
+  'runtime/qt-sidecar/persistence-store.mjs',
   'runtime/migration/README.md',
   'runtime/migration/keys-map.json',
   'runtime/migration/migrator.mjs',
   'scripts/runtime3d-ipc-smoke.mjs',
   'scripts/runtime3d-robot-motion-smoke.mjs',
   'scripts/runtime3d-migration-smoke.mjs',
+  'scripts/runtime3d-backfill-smoke.mjs',
+  'scripts/runtime3d-performance-smoke.mjs',
+  'scripts/package-runtime3d-candidate.mjs',
   'docs/adr/0001-runtime3d-topology.md',
   'docs/adr/0002-ipc-versioning.md',
   'docs/adr/0003-data-migration-strategy.md',
@@ -39,7 +44,10 @@ const requiredFiles = [
   'docs/runtime3d-stage-b-report-2026-03-13.md',
   'docs/runtime3d-stage-c-motion-foundation-2026-03-13.md',
   'docs/runtime3d-stage-d-interaction-foundation-2026-03-13.md',
-  'docs/runtime3d-stage-e-migration-foundation-2026-03-13.md'
+  'docs/runtime3d-stage-e-migration-foundation-2026-03-13.md',
+  'docs/runtime3d-stage-f-performance-build-foundation-2026-03-13.md',
+  'docs/runtime3d-stage-g-backfill-foundation-2026-03-13.md',
+  'docs/runtime3d-final-dod-status-2026-03-13.md'
 ];
 
 const requiredEvents = [
@@ -133,8 +141,28 @@ if (!hasError) {
   }
 }
 
+if (!hasError) {
+  const backfillSmoke = spawnSync(process.execPath, ['scripts/runtime3d-backfill-smoke.mjs'], {
+    stdio: 'inherit'
+  });
+  if (backfillSmoke.status !== 0) {
+    hasError = true;
+    console.error('runtime3d backfill smoke failed');
+  }
+}
+
+if (!hasError) {
+  const perfSmoke = spawnSync(process.execPath, ['scripts/runtime3d-performance-smoke.mjs'], {
+    stdio: 'inherit'
+  });
+  if (perfSmoke.status !== 0) {
+    hasError = true;
+    console.error('runtime3d performance smoke failed');
+  }
+}
+
 if (hasError) {
   process.exit(1);
 }
 
-console.log('runtime3d scaffold + interaction ipc smoke + motion smoke + migration smoke ok');
+console.log('runtime3d scaffold + interaction/motion/migration/backfill/performance smoke ok');

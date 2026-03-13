@@ -55,6 +55,15 @@
 ### `docs/runtime3d-stage-e-migration-foundation-2026-03-13.md`
 用途：Runtime3D E 阶段（数据迁移基础）实现与验收记录。
 
+### `docs/runtime3d-stage-f-performance-build-foundation-2026-03-13.md`
+用途：Runtime3D F 阶段（性能与构建基础）实现与验收记录。
+
+### `docs/runtime3d-stage-g-backfill-foundation-2026-03-13.md`
+用途：Runtime3D G 阶段（玩法回填基础）实现与验收记录。
+
+### `docs/runtime3d-final-dod-status-2026-03-13.md`
+用途：Runtime3D A-G 阶段完成状态与 Final DoD 检查记录。
+
 ### `docs/adr/*`
 用途：Runtime3D 架构决策记录（为什么这么做）。
 
@@ -96,8 +105,11 @@
 7. `docs/runtime3d-stage-c-motion-foundation-2026-03-13.md`
 8. `docs/runtime3d-stage-d-interaction-foundation-2026-03-13.md`
 9. `docs/runtime3d-stage-e-migration-foundation-2026-03-13.md`
-10. `docs/adr/*`
-11. 其他历史/参考文档（按需）
+10. `docs/runtime3d-stage-f-performance-build-foundation-2026-03-13.md`
+11. `docs/runtime3d-stage-g-backfill-foundation-2026-03-13.md`
+12. `docs/runtime3d-final-dod-status-2026-03-13.md`
+13. `docs/adr/*`
+14. 其他历史/参考文档（按需）
 
 ### 3D 换轨实施场景（强制）
 1. `docs/product-roadmap-2026.md`
@@ -108,9 +120,12 @@
 6. `docs/runtime3d-stage-c-motion-foundation-2026-03-13.md`
 7. `docs/runtime3d-stage-d-interaction-foundation-2026-03-13.md`
 8. `docs/runtime3d-stage-e-migration-foundation-2026-03-13.md`
-9. `docs/adr/*`
-10. `README.md`
-11. `technical-documentation.md`（仅历史语义比对）
+9. `docs/runtime3d-stage-f-performance-build-foundation-2026-03-13.md`
+10. `docs/runtime3d-stage-g-backfill-foundation-2026-03-13.md`
+11. `docs/runtime3d-final-dod-status-2026-03-13.md`
+12. `docs/adr/*`
+13. `README.md`
+14. `technical-documentation.md`（仅历史语义比对）
 
 ## 5. 冲突处理规则
 

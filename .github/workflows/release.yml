@@ -15,7 +15,7 @@ jobs:
       matrix:
         include:
           - os: macos-latest
-            name: runtime3d-bootstrap-release
+            name: runtime3d-candidate-release
             build_command: npm run build
             asset_glob: |
               dist/runtime3d-bootstrap/**
@@ -50,7 +50,7 @@ jobs:
       - name: Validate source
         run: npm run check
 
-      - name: Build release assets (bootstrap)
+      - name: Build release assets (candidate)
         run: ${{ matrix.build_command }}
 
       - name: Publish GitHub Release assets
