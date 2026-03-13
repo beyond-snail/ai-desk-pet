@@ -156,13 +156,20 @@ class QuickActions {
       return false;
     }
 
-    // 固定在屏幕中央底部
+    // 固定在屏幕下方，并为输入面板预留空间
     const menuWidth = 280;
     const menuHeight = 60;
     const edgePadding = 20;
+    const inputPanel = document.getElementById('input-panel');
+    const inputPanelVisible = Boolean(
+      inputPanel &&
+      !inputPanel.classList.contains('hidden') &&
+      inputPanel.classList.contains('expanded')
+    );
+    const inputPanelReserved = inputPanelVisible ? Math.max(54, inputPanel.offsetHeight || 54) + 14 : 0;
 
     const x = window.innerWidth / 2 - menuWidth / 2;
-    const y = window.innerHeight - menuHeight - edgePadding;
+    const y = window.innerHeight - menuHeight - edgePadding - inputPanelReserved;
 
     this.element.style.left = `${x.toFixed(1)}px`;
     this.element.style.top = `${y.toFixed(1)}px`;

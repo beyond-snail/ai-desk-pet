@@ -99,27 +99,23 @@ class CharacterAnimator {
       state.lastFacing = facingIntent;
     }
 
-    const targetLean = this.clamp(
-      state.lastFacing * (state.walking ? 3.2 : 1.6) + directionX * (state.walking ? 5.8 : 2.3),
-      -10,
-      10
-    );
-    state.lean += (targetLean - state.lean) * 0.24;
-
     const cadence = state.walking
       ? 0.74 + normalizedSpeed * 0.42
       : 0.58 + normalizedSpeed * 0.16;
-    const shiftX = this.clamp(directionX * (state.walking ? 2.6 : 1.2), -3.4, 3.4);
-    const bobScale = state.walking ? Math.min(1.14, 0.86 + normalizedSpeed * 0.2) : 0.72;
-    const squash = state.walking ? 1 - Math.min(0.05, normalizedSpeed * 0.028) : 1;
-    const antennaSwing = Math.sin((phase || 0) * (state.walking ? 1.35 : 0.76)) * (state.walking ? 7 : 3.2);
+    const idleDrift = Math.sin((phase || 0) * 0.42) * 0.8;
+    const shiftX = this.clamp(directionX * (state.walking ? 2.6 : 0.7) + idleDrift, -3.6, 3.6);
+    const bobScale = state.walking
+      ? Math.min(1.14, 0.86 + normalizedSpeed * 0.2)
+      : 0.76 + Math.abs(Math.sin((phase || 0) * 0.26)) * 0.08;
+    const squash = state.walking
+      ? 1 - Math.min(0.05, normalizedSpeed * 0.028)
+      : 0.988 + Math.sin((phase || 0) * 0.34) * 0.012;
 
     root.style.setProperty('--pet-walk-speed', String(cadence.toFixed(3)));
-    root.style.setProperty('--rb-lean', `${state.lean.toFixed(2)}deg`);
+    root.style.setProperty('--rb-lean', '0deg');
     root.style.setProperty('--rb-shift-x', `${shiftX.toFixed(2)}px`);
     root.style.setProperty('--rb-bob-scale', String(bobScale.toFixed(3)));
     root.style.setProperty('--rb-shell-squash', String(squash.toFixed(3)));
-    root.style.setProperty('--rb-antenna-swing', `${antennaSwing.toFixed(2)}deg`);
   }
 
   static applyCaterpillar(context) {

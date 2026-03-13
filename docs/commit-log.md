@@ -99,3 +99,26 @@
   6. `git commit -m "统一英文产品名AIDeskPet并更新桌面图标"`。
   7. `git push origin main` 推送远端。
   8. `git status -sb` 确认无 `ahead`。
+
+### 2026-03-13（机器人UI与动作体验修复）
+- 提交哈希：`见本次提交输出`
+- 提交信息：`修复机器人布局与动作表现：底部聊天、双天线、常亮与随机走动`
+- 主要内容：
+  - 隐藏右侧状态竖排图标，界面保持简洁。
+  - 聊天输入面板改为底部居中，四个动作按钮位于输入面板上方，聊天气泡优先吸附按钮上方。
+  - Rainbow Bot 全帧素材改为双天线，去除倾斜姿态。
+  - Rainbow Bot 改为常驻高亮渲染。
+  - 修复聊天后可能不再随机走动的问题，并补充轻微呼吸/漂移动作。
+  - 同步修复说明文档 `docs/rainbow-bot-fix-2026-03-13.md`。
+- 校验与打包：
+  - `npm run check` 通过。
+  - `npm run build:dist` 通过，生成 `dist/AIDeskPet-1.0.0-x64.dmg`。
+- 执行步骤：
+  1. `git status --short` 确认改动范围。
+  2. 修改渲染层布局、动作策略与 Rainbow Bot 素材。
+  3. `npm run check` 最低校验。
+  4. `npm run build:dist` 本地打包验证。
+  5. `git add` 暂存本次文件。
+  6. `git commit -m "修复机器人布局与动作表现：底部聊天、双天线、常亮与随机走动"`。
+  7. `git push origin main` 推送远端。
+  8. `git status -sb` 确认无 `ahead`。

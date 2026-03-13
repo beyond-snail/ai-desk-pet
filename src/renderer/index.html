@@ -115,25 +115,20 @@
       }
 
       function positionInputPanel() {
-        const petElement = getPetElement();
-        if (!petElement) {
+        if (!inputPanel || inputPanel.classList.contains('hidden')) {
           return;
         }
 
-        const rect = petElement.getBoundingClientRect();
         const panelWidth = isInputPanelExpanded() ? Math.min(340, Math.max(220, window.innerWidth - 88)) : 40;
         const panelHeight = isInputPanelExpanded()
           ? Math.max(48, inputPanel.offsetHeight || 48)
           : 40;
-        const preferredLeft = rect.right + 10;
-        const fallbackLeft = rect.left - panelWidth - 10;
-        const left = preferredLeft + panelWidth <= window.innerWidth - 12
-          ? preferredLeft
-          : fallbackLeft;
-        const top = rect.top + rect.height / 2 - panelHeight / 2;
+        const safeBottom = 18;
+        const left = Math.max(12, Math.min(window.innerWidth - panelWidth - 12, (window.innerWidth - panelWidth) / 2));
+        const top = Math.max(12, window.innerHeight - panelHeight - safeBottom);
 
-        inputPanel.style.left = `${Math.max(12, Math.min(window.innerWidth - panelWidth - 12, left))}px`;
-        inputPanel.style.top = `${Math.max(12, Math.min(window.innerHeight - panelHeight - 12, top))}px`;
+        inputPanel.style.left = `${left}px`;
+        inputPanel.style.top = `${top}px`;
       }
 
       function setStatusBarVisible(visible) {
@@ -141,31 +136,11 @@
           return;
         }
 
-        statusBar.classList.toggle('hidden', !visible);
+        statusBar.classList.add('hidden');
       }
 
       function positionStatusBar() {
-        if (!statusBar || statusBar.classList.contains('hidden')) {
-          return;
-        }
-
-        const petElement = getPetElement();
-        if (!petElement) {
-          return;
-        }
-
-        const rect = petElement.getBoundingClientRect();
-        const gap = 8;
-        const estimatedWidth = statusBar.offsetWidth || 24;
-        const estimatedHeight = statusBar.offsetHeight || 78;
-        const rightSideLeft = rect.right + gap;
-        const leftSideLeft = rect.left - estimatedWidth - gap;
-        const canUseRight = rightSideLeft + estimatedWidth <= window.innerWidth - 8;
-        const left = canUseRight ? rightSideLeft : leftSideLeft;
-        const top = rect.top + rect.height * 0.12;
-
-        statusBar.style.left = `${Math.max(8, Math.min(window.innerWidth - estimatedWidth - 8, left))}px`;
-        statusBar.style.top = `${Math.max(8, Math.min(window.innerHeight - estimatedHeight - 8, top))}px`;
+        // 状态点位已下线，不再定位
       }
 
       function updateStatusBar(state) {
@@ -221,8 +196,8 @@
         inputPanel.classList.add('expanded');
         inputPanel.dataset.expanded = 'true';
         positionInputPanel();
-        petController.isMoving = true;
-        quickActions.hide();
+        petController.isMoving = false;
+        quickActions.showForPet();
         userInput.focus();
       }
 
@@ -425,8 +400,7 @@
         petController.isMoving = false;
         petController.startContinuousMovement();
         setPetInteractionEnabled(true);
-        setStatusBarVisible(true);
-        positionStatusBar();
+        setStatusBarVisible(false);
         isPetVisible = true;
         if (!keepSuppressed) {
           proactiveBehavior.setSuppressed(false);
@@ -671,7 +645,7 @@
       await careSystem.init();
       const initialCareState = careSystem.getState();
       updateStatusBar(initialCareState);
-      setStatusBarVisible(true);
+      setStatusBarVisible(false);
       positionStatusBar();
       await focusMode.init();
       await memoryManager.init();
@@ -986,7 +960,6 @@
         if (detail.state) {
           petController.applyCareState(detail.state);
           updateStatusBar(detail.state);
-          positionStatusBar();
 
           const petElement = getPetElement();
           if (petElement) {
@@ -1127,8 +1100,6 @@
         if (!event.detail || event.detail.instanceId !== petController.instanceId) {
           return;
         }
-
-        positionStatusBar();
 
         if (!inputPanel.classList.contains('hidden')) {
           positionInputPanel();
