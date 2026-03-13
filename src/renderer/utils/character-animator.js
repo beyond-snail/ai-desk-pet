@@ -1,10 +1,35 @@
 class CharacterAnimator {
+  static rainbowBotState = new WeakMap();
+
   static quantize(value, step = 2) {
     return Math.round(value / step) * step;
   }
 
   static clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
+  }
+
+  static ensureRainbowBotState(root) {
+    if (!root) {
+      return {
+        walking: false,
+        holdUntil: 0,
+        lastFacing: 1,
+        lean: 0
+      };
+    }
+
+    let state = this.rainbowBotState.get(root);
+    if (!state) {
+      state = {
+        walking: false,
+        holdUntil: 0,
+        lastFacing: 1,
+        lean: 0
+      };
+      this.rainbowBotState.set(root, state);
+    }
+    return state;
   }
 
   static apply(strategy, context) {
@@ -32,7 +57,9 @@ class CharacterAnimator {
       root,
       isMoving,
       segments,
-      speedRatio
+      speedRatio,
+      direction,
+      phase
     } = context;
 
     const body = segments[0] || null;
@@ -45,15 +72,54 @@ class CharacterAnimator {
       return;
     }
 
+    const state = this.ensureRainbowBotState(root);
+    const now = performance.now();
+    const normalizedSpeed = this.clamp(Number(speedRatio) || 0, 0, 1.6);
+    const directionX = Number.isFinite(direction?.x) ? direction.x : 0;
+    const movingEnough = Boolean(isMoving) && normalizedSpeed > 0.08;
+
+    if (movingEnough) {
+      state.walking = true;
+      state.holdUntil = now + 260;
+    } else if (state.walking && now >= state.holdUntil) {
+      state.walking = false;
+    }
+
     const currentAnimation = root.dataset.animation || '';
-    if (isMoving) {
+    if (state.walking) {
       if (!currentAnimation || currentAnimation === 'walk') {
         root.dataset.animation = 'walk';
       }
-      root.style.setProperty('--pet-walk-speed', String((0.78 + (speedRatio || 0) * 0.44).toFixed(3)));
     } else if (currentAnimation === 'walk') {
       delete root.dataset.animation;
     }
+
+    const facingIntent = directionX >= 0 ? 1 : -1;
+    if (state.walking) {
+      state.lastFacing = facingIntent;
+    }
+
+    const targetLean = this.clamp(
+      state.lastFacing * (state.walking ? 3.2 : 1.6) + directionX * (state.walking ? 5.8 : 2.3),
+      -10,
+      10
+    );
+    state.lean += (targetLean - state.lean) * 0.24;
+
+    const cadence = state.walking
+      ? 0.74 + normalizedSpeed * 0.42
+      : 0.58 + normalizedSpeed * 0.16;
+    const shiftX = this.clamp(directionX * (state.walking ? 2.6 : 1.2), -3.4, 3.4);
+    const bobScale = state.walking ? Math.min(1.14, 0.86 + normalizedSpeed * 0.2) : 0.72;
+    const squash = state.walking ? 1 - Math.min(0.05, normalizedSpeed * 0.028) : 1;
+    const antennaSwing = Math.sin((phase || 0) * (state.walking ? 1.35 : 0.76)) * (state.walking ? 7 : 3.2);
+
+    root.style.setProperty('--pet-walk-speed', String(cadence.toFixed(3)));
+    root.style.setProperty('--rb-lean', `${state.lean.toFixed(2)}deg`);
+    root.style.setProperty('--rb-shift-x', `${shiftX.toFixed(2)}px`);
+    root.style.setProperty('--rb-bob-scale', String(bobScale.toFixed(3)));
+    root.style.setProperty('--rb-shell-squash', String(squash.toFixed(3)));
+    root.style.setProperty('--rb-antenna-swing', `${antennaSwing.toFixed(2)}deg`);
   }
 
   static applyCaterpillar(context) {

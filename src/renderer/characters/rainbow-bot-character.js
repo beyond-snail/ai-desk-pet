@@ -4,11 +4,13 @@ class RainbowBotCharacter extends BaseCharacter {
     this._assetBasePath = '';
     this._imageEl = null;
     this._observer = null;
-    this._frameRafId = null;
+    this._frameTimerId = null;
     this._lastFrameAt = 0;
     this._frameIndex = 0;
     this._activeSequenceKey = '';
     this._currentSrc = '';
+    this._renderedSequenceKey = '';
+    this._renderedFrameIndex = -1;
     this._currentMood = 'idle';
     this._isLowPower = false;
     this._fpsCap = 60;
@@ -37,14 +39,14 @@ class RainbowBotCharacter extends BaseCharacter {
     };
 
     this._baseFps = {
-      idle: 2.2,
-      walk: 8,
-      happy: 5.2,
-      talking: 7,
+      idle: 1.8,
+      walk: 5.8,
+      happy: 4.1,
+      talking: 4.8,
       sleepy: 1.4,
-      confused: 2.6,
-      dizzy: 6,
-      sad: 1.3
+      confused: 2.2,
+      dizzy: 4.2,
+      sad: 1.2
     };
   }
 
@@ -71,9 +73,9 @@ class RainbowBotCharacter extends BaseCharacter {
   }
 
   destroy() {
-    if (this._frameRafId) {
-      cancelAnimationFrame(this._frameRafId);
-      this._frameRafId = null;
+    if (this._frameTimerId) {
+      clearTimeout(this._frameTimerId);
+      this._frameTimerId = null;
     }
     if (this._observer) {
       this._observer.disconnect();
@@ -82,6 +84,8 @@ class RainbowBotCharacter extends BaseCharacter {
     this._imageEl = null;
     this._activeSequenceKey = '';
     this._currentSrc = '';
+    this._renderedSequenceKey = '';
+    this._renderedFrameIndex = -1;
     super.destroy();
   }
 
@@ -154,9 +158,9 @@ class RainbowBotCharacter extends BaseCharacter {
     let effectiveFps = Math.min(baseFps, Math.max(1, fpsCap - 1));
 
     if (this._isLowPower) {
-      effectiveFps *= sequenceKey === 'walk' ? 0.72 : 0.52;
+      effectiveFps *= sequenceKey === 'walk' ? 0.58 : 0.4;
       if (fpsCap <= 24 && sequenceKey !== 'walk') {
-        effectiveFps = Math.min(effectiveFps, 1.0);
+        effectiveFps = Math.min(effectiveFps, 0.9);
       }
     }
 
@@ -183,9 +187,16 @@ class RainbowBotCharacter extends BaseCharacter {
     }
 
     if (this.rootElement) {
-      this.rootElement.dataset.spriteState = sequenceKey;
-      this.rootElement.dataset.spriteFrame = String(safeIndex);
+      const frameText = String(safeIndex);
+      if (this.rootElement.dataset.spriteState !== sequenceKey) {
+        this.rootElement.dataset.spriteState = sequenceKey;
+      }
+      if (this.rootElement.dataset.spriteFrame !== frameText) {
+        this.rootElement.dataset.spriteFrame = frameText;
+      }
     }
+    this._renderedSequenceKey = sequenceKey;
+    this._renderedFrameIndex = safeIndex;
   }
 
   _syncState({ resetFrame = false, forceRender = false } = {}) {
@@ -201,34 +212,53 @@ class RainbowBotCharacter extends BaseCharacter {
     this._applyCurrentFrame(nextKey, forceRender || changed || resetFrame);
   }
 
-  _startFrameLoop() {
-    if (this._frameRafId) {
+  _scheduleFrameTick(delayMs = 120) {
+    if (this._frameTimerId) {
+      clearTimeout(this._frameTimerId);
+    }
+    this._frameTimerId = window.setTimeout(() => {
+      this._frameTimerId = null;
+      this._runFrameTick();
+    }, delayMs);
+  }
+
+  _runFrameTick() {
+    if (!this.rootElement || !this._imageEl) {
+      this._frameTimerId = null;
       return;
     }
 
-    const tick = (timestamp) => {
-      if (!this.rootElement || !this._imageEl) {
-        this._frameRafId = null;
-        return;
-      }
+    if (document.hidden) {
+      this._scheduleFrameTick(420);
+      return;
+    }
 
-      const sequenceKey = this._activeSequenceKey || this._resolveSequenceKey();
-      const frames = this._getSequenceFrames(sequenceKey);
-      if (frames.length > 1) {
-        const interval = this._getFrameInterval(sequenceKey);
-        if (!this._lastFrameAt || timestamp - this._lastFrameAt >= interval) {
-          this._lastFrameAt = timestamp;
-          this._frameIndex = (this._frameIndex + 1) % frames.length;
-          this._applyCurrentFrame(sequenceKey, false);
-        }
-      } else {
-        this._frameIndex = 0;
+    const sequenceKey = this._activeSequenceKey || this._resolveSequenceKey();
+    const frames = this._getSequenceFrames(sequenceKey);
+    const interval = this._getFrameInterval(sequenceKey);
+    const now = performance.now();
+
+    if (frames.length > 1) {
+      if (!this._lastFrameAt || now - this._lastFrameAt >= interval) {
+        this._lastFrameAt = now;
+        this._frameIndex = (this._frameIndex + 1) % frames.length;
         this._applyCurrentFrame(sequenceKey, false);
       }
+    } else if (this._renderedSequenceKey !== sequenceKey || this._renderedFrameIndex !== 0) {
+      this._frameIndex = 0;
+      this._applyCurrentFrame(sequenceKey, false);
+    }
 
-      this._frameRafId = requestAnimationFrame(tick);
-    };
+    const nextDelay = frames.length > 1
+      ? Math.max(70, Math.min(320, interval * 0.92))
+      : 360;
+    this._scheduleFrameTick(nextDelay);
+  }
 
-    this._frameRafId = requestAnimationFrame(tick);
+  _startFrameLoop() {
+    if (this._frameTimerId) {
+      return;
+    }
+    this._runFrameTick();
   }
 }

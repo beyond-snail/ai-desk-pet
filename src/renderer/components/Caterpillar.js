@@ -58,6 +58,7 @@ class Caterpillar {
     this.lastTurnAt = 0;
     this.turnHoldUntil = 0;
     this.isTurning = false;
+    this.motionHoldUntil = 0;
     this.careBehaviorInterval = null;
     this.lastAffectionBehaviorAt = 0;
     this.stateEffectsLayer = null;
@@ -290,7 +291,9 @@ class Caterpillar {
           return;
         }
 
-        this.lookAt(event.clientX);
+        if (this.isHovered && !this.isCurrentlyMoving) {
+          this.lookAt(event.clientX);
+        }
       },
       mouseup: (event) => {
         const wasDragging = this.isDragging;
@@ -340,15 +343,19 @@ class Caterpillar {
         this.currentPath = [];
         this.pathIndex = 0;
         this.velocity = { x: 0, y: 0 };
+        this.motionHoldUntil = 0;
         this.dragStart.x = event.clientX - this.position.x;
         this.dragStart.y = event.clientY - this.position.y;
         this.updateIgnoreMouseEvents(false);
         this.dispatchHoverChange(true);
       },
-      mouseenter: () => {
+      mouseenter: (event) => {
         this.currentScale = 1.08;
         this.isHovered = true;
         this.updateIgnoreMouseEvents(false);
+        if (event && typeof event.clientX === 'number') {
+          this.lookAt(event.clientX);
+        }
         this.applyTransform();
         this.dispatchHoverChange(true);
       },
@@ -911,6 +918,7 @@ class Caterpillar {
       this.pathIndex += 1;
       this.isCurrentlyMoving = false;
       this.currentSpeedRatio = 0;
+      this.motionHoldUntil = 0;
       return;
     }
 
@@ -962,8 +970,13 @@ class Caterpillar {
         x: this.velocity.x / velocityMagnitude,
         y: this.velocity.y / velocityMagnitude
       };
-      this.currentFacing = this.direction.x >= 0 ? 1 : -1;
-      this.applyTransform();
+      if (Math.abs(this.direction.x) > 0.08) {
+        const nextFacing = this.direction.x >= 0 ? 1 : -1;
+        if (nextFacing !== this.currentFacing) {
+          this.currentFacing = nextFacing;
+          this.applyTransform();
+        }
+      }
     }
 
     const nextX = this.position.x + this.velocity.x;
@@ -983,11 +996,15 @@ class Caterpillar {
       this.velocity = { x: 0, y: 0 };
       this.isCurrentlyMoving = false;
       this.currentSpeedRatio = 0;
+      this.motionHoldUntil = 0;
       this.generateRandomPath();
       return;
     }
 
-    this.isCurrentlyMoving = velocityMagnitude > 0.12;
+    if (velocityMagnitude > 0.14) {
+      this.motionHoldUntil = now + 220;
+    }
+    this.isCurrentlyMoving = velocityMagnitude > 0.14 || now < this.motionHoldUntil;
     this.element.dataset.motion = this.isCurrentlyMoving ? 'moving' : 'idle';
     this.setPosition(nextX, nextY);
 
@@ -999,6 +1016,7 @@ class Caterpillar {
         this.velocity.y *= 0.2;
         this.isCurrentlyMoving = false;
         this.currentSpeedRatio = 0;
+        this.motionHoldUntil = 0;
       }
     }
   }
@@ -1186,8 +1204,11 @@ class Caterpillar {
     }
 
     const dx = x - (this.position.x + this.element.offsetWidth / 2);
-    this.currentFacing = dx >= 0 ? 1 : -1;
-    this.applyTransform();
+    const nextFacing = dx >= 0 ? 1 : -1;
+    if (nextFacing !== this.currentFacing) {
+      this.currentFacing = nextFacing;
+      this.applyTransform();
+    }
   }
 
   stopMovement() {
@@ -1200,6 +1221,7 @@ class Caterpillar {
     this.activeMotion = null;
     this.velocity = { x: 0, y: 0 };
     this.currentSpeedRatio = 0;
+    this.motionHoldUntil = 0;
     this.isTurning = false;
     if (this.element) {
       this.element.dataset.motion = 'idle';
