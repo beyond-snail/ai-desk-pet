@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { chmodSync, cpSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { chmodSync, cpSync, mkdirSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { resolveNativeEntry } from './runtime3d-native-utils.mjs';
 
@@ -10,124 +10,125 @@ function mustPass(command, args) {
   }
 }
 
-const appName = 'AIDeskPet-runtime3d';
+const runtimeName = 'AIDeskPet-runtime3d';
+const appBundleName = 'AIDeskPet.app';
+const appExecutableName = 'AIDeskPet';
 
 mustPass(process.execPath, ['scripts/build-runtime3d-native-binaries.mjs']);
 mustPass(process.execPath, ['scripts/check-runtime3d-native.mjs']);
 mustPass(process.execPath, ['scripts/runtime3d-ipc-smoke.mjs']);
 
 const entry = resolveNativeEntry();
+const entryDir = entry.manifest.platforms[entry.key].dir;
 const releaseRootDir = resolve('dist/runtime3d-release');
 const outputDir = resolve(releaseRootDir, entry.key);
-const packageDirName = `${appName}-${entry.key}`;
-const stageDir = resolve(outputDir, packageDirName);
-const launcherName = `${appName}-launcher-${entry.key}.sh`;
-const manifestName = `${appName}-manifest-${entry.key}.json`;
-const performanceName = `${appName}-performance-${entry.key}.json`;
-const installName = `${appName}-install-${entry.key}.txt`;
+const manifestName = `${runtimeName}-manifest-${entry.key}.json`;
+const performanceName = `${runtimeName}-performance-${entry.key}.json`;
 const performanceReportPath = resolve(outputDir, performanceName);
+const dmgPath = resolve(outputDir, `${runtimeName}-${entry.key}.dmg`);
 
 const legacyTargets = [
   resolve(releaseRootDir, '.DS_Store'),
   resolve(releaseRootDir, 'bundle'),
   resolve(releaseRootDir, 'release-manifest.json'),
   resolve(releaseRootDir, 'performance-report.json'),
-  resolve(releaseRootDir, `${appName}-${entry.key}.tar.gz`),
-  resolve(releaseRootDir, `${appName}-${entry.key}.dmg`)
+  resolve(releaseRootDir, `${runtimeName}-${entry.key}.tar.gz`),
+  resolve(releaseRootDir, `${runtimeName}-${entry.key}.dmg`)
 ];
 for (const legacyTarget of legacyTargets) {
   rmSync(legacyTarget, { recursive: true, force: true });
 }
 
 rmSync(outputDir, { recursive: true, force: true });
-mkdirSync(stageDir, { recursive: true });
+mkdirSync(outputDir, { recursive: true });
 
 mustPass(process.execPath, ['scripts/runtime3d-performance-smoke.mjs', '--report', performanceReportPath]);
 
-const copyTargets = ['runtime/native/manifest.json', `runtime/native/${entry.manifest.platforms[entry.key].dir}`];
+const appBuildRoot = resolve(outputDir, '.app-build');
+const appRoot = resolve(appBuildRoot, appBundleName);
+const appContents = resolve(appRoot, 'Contents');
+const appMacOSDir = resolve(appContents, 'MacOS');
+const appResourcesDir = resolve(appContents, 'Resources');
+const bundledRuntimeDir = resolve(appResourcesDir, 'runtime/native', entryDir);
 
-for (const target of copyTargets) {
-  const from = resolve(target);
-  const to = resolve(stageDir, target);
-  mkdirSync(resolve(to, '..'), { recursive: true });
-  cpSync(from, to, { recursive: true });
-}
+mkdirSync(appMacOSDir, { recursive: true });
+mkdirSync(bundledRuntimeDir, { recursive: true });
 
-const runScriptPath = resolve(stageDir, launcherName);
+cpSync(resolve(`runtime/native/${entryDir}/qt-sidecar`), resolve(bundledRuntimeDir, 'qt-sidecar'));
+cpSync(resolve(`runtime/native/${entryDir}/godot-runtime`), resolve(bundledRuntimeDir, 'godot-runtime'));
+chmodSync(resolve(bundledRuntimeDir, 'qt-sidecar'), 0o755);
+chmodSync(resolve(bundledRuntimeDir, 'godot-runtime'), 0o755);
+
+const launcherPath = resolve(appMacOSDir, appExecutableName);
 writeFileSync(
-  runScriptPath,
+  launcherPath,
   [
     '#!/usr/bin/env bash',
     'set -euo pipefail',
     '',
-    'ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"',
-    'OS_NAME="$(uname -s)"',
-    'ARCH_NAME="$(uname -m)"',
-    'if [[ "$OS_NAME" != "Darwin" ]]; then',
-    '  echo "unsupported os: $OS_NAME"',
-    '  exit 1',
-    'fi',
-    'if [[ "$ARCH_NAME" == "x86_64" ]]; then',
-    '  ENTRY_DIR="darwin-x64"',
-    'elif [[ "$ARCH_NAME" == "arm64" ]]; then',
-    '  ENTRY_DIR="darwin-arm64"',
-    'else',
-    '  echo "unsupported arch: $ARCH_NAME"',
+    'APP_ROOT="$(cd "$(dirname "$0")/.." && pwd)"',
+    `RUNTIME_DIR="$APP_ROOT/Resources/runtime/native/${entryDir}"`,
+    '',
+    'if [[ ! -x "$RUNTIME_DIR/qt-sidecar" || ! -x "$RUNTIME_DIR/godot-runtime" ]]; then',
+    '  echo "runtime binaries missing in app bundle: $RUNTIME_DIR"',
     '  exit 1',
     'fi',
     '',
     'export RUNTIME3D_SCENARIO="${RUNTIME3D_SCENARIO:-daemon}"',
-    '"$ROOT_DIR/runtime/native/$ENTRY_DIR/qt-sidecar" &',
+    '"$RUNTIME_DIR/qt-sidecar" &',
     'SIDECAR_PID=$!',
     'trap "kill $SIDECAR_PID >/dev/null 2>&1 || true" EXIT',
     'sleep 0.15',
-    'exec "$ROOT_DIR/runtime/native/$ENTRY_DIR/godot-runtime"',
+    'exec "$RUNTIME_DIR/godot-runtime"',
     ''
   ].join('\n')
 );
-chmodSync(runScriptPath, 0o755);
+chmodSync(launcherPath, 0o755);
 
+const plistPath = resolve(appContents, 'Info.plist');
 writeFileSync(
-  resolve(stageDir, installName),
+  plistPath,
   [
-    `${appName} install/run notes`,
-    '',
-    `Platform: ${entry.key}`,
-    `Launcher: ./${launcherName}`,
-    '',
-    'Quick start:',
-    `1) chmod +x ${launcherName}`,
-    `2) ./${launcherName}`,
-    '',
-    'Smoke test:',
-    `RUNTIME3D_SCENARIO=interaction-smoke ./${launcherName}`
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">',
+    '<plist version="1.0">',
+    '<dict>',
+    '  <key>CFBundleName</key>',
+    '  <string>AIDeskPet</string>',
+    '  <key>CFBundleDisplayName</key>',
+    '  <string>AIDeskPet</string>',
+    '  <key>CFBundleIdentifier</key>',
+    '  <string>com.aideskpet.runtime3d</string>',
+    '  <key>CFBundleVersion</key>',
+    '  <string>1.0.0</string>',
+    '  <key>CFBundleShortVersionString</key>',
+    '  <string>1.0.0</string>',
+    '  <key>CFBundleExecutable</key>',
+    `  <string>${appExecutableName}</string>`,
+    '  <key>CFBundlePackageType</key>',
+    '  <string>APPL</string>',
+    '  <key>CFBundleIconFile</key>',
+    '  <string>icon.icns</string>',
+    '  <key>LSMinimumSystemVersion</key>',
+    '  <string>12.0</string>',
+    '</dict>',
+    '</plist>',
+    ''
   ].join('\n')
 );
 
-writeFileSync(
-  resolve(outputDir, manifestName),
-  JSON.stringify(
-    {
-      generatedAt: new Date().toISOString(),
-      appName,
-      platform: entry.key,
-      runtime: 'runtime3d-native',
-      packageType: 'release-candidate',
-      outputDir: `dist/runtime3d-release/${entry.key}`,
-      dmgFile: `${appName}-${entry.key}.dmg`,
-      launcher: launcherName,
-      performanceReport: performanceName,
-      includes: copyTargets
-    },
-    null,
-    2
-  )
-);
+const iconSource = resolve('assets/icon.icns');
+cpSync(iconSource, resolve(appResourcesDir, 'icon.icns'));
 
-const dmgPath = resolve(outputDir, `${appName}-${entry.key}.dmg`);
+const dmgStageDir = resolve(outputDir, '.dmg-stage');
+rmSync(dmgStageDir, { recursive: true, force: true });
+mkdirSync(dmgStageDir, { recursive: true });
+cpSync(appRoot, resolve(dmgStageDir, appBundleName), { recursive: true });
+symlinkSync('/Applications', resolve(dmgStageDir, 'Applications'));
+
 const dmg = spawnSync(
   'hdiutil',
-  ['create', '-volname', packageDirName, '-srcfolder', packageDirName, '-ov', '-format', 'UDZO', dmgPath],
+  ['create', '-volname', `${runtimeName}-${entry.key}`, '-srcfolder', dmgStageDir, '-ov', '-format', 'UDZO', dmgPath],
   {
     cwd: outputDir,
     stdio: 'inherit',
@@ -141,7 +142,31 @@ const dmg = spawnSync(
 if (dmg.status !== 0) {
   process.exit(dmg.status ?? 1);
 }
-rmSync(stageDir, { recursive: true, force: true });
+
+writeFileSync(
+  resolve(outputDir, manifestName),
+  JSON.stringify(
+    {
+      generatedAt: new Date().toISOString(),
+      appName: 'AIDeskPet',
+      runtimeName,
+      platform: entry.key,
+      runtime: 'runtime3d-native',
+      packageType: 'release-candidate',
+      outputDir: `dist/runtime3d-release/${entry.key}`,
+      dmgFile: `${runtimeName}-${entry.key}.dmg`,
+      appBundle: appBundleName,
+      launcher: `${appBundleName}/Contents/MacOS/${appExecutableName}`,
+      performanceReport: performanceName,
+      bundledRuntimeDir: entryDir
+    },
+    null,
+    2
+  )
+);
+
+rmSync(appBuildRoot, { recursive: true, force: true });
+rmSync(dmgStageDir, { recursive: true, force: true });
 
 console.log(`runtime3d release bundle created: ${dmgPath}`);
 console.log(`runtime3d release output dir: ${outputDir}`);

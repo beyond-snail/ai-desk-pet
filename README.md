@@ -56,7 +56,8 @@ npm run build:runtime3d:release
 - `dist/runtime3d-release/<platform-arch>/AIDeskPet-runtime3d-manifest-<platform-arch>.json`
 - `dist/runtime3d-release/<platform-arch>/AIDeskPet-runtime3d-performance-<platform-arch>.json`
 - `dist/runtime3d-release/<platform-arch>/AIDeskPet-runtime3d-<platform-arch>.dmg`
-- `/Volumes/AIDeskPet-runtime3d-<platform-arch>/AIDeskPet-runtime3d-launcher-<platform-arch>.sh`（挂载 dmg 后）
+- `/Volumes/AIDeskPet-runtime3d-<platform-arch>/AIDeskPet.app`
+- `/Volumes/AIDeskPet-runtime3d-<platform-arch>/Applications`（拖拽安装目标）
 
 ## Native 运行时约定
 
