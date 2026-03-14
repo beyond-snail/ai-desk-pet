@@ -43,8 +43,8 @@ Output artifacts:
 
 1. `dist/runtime3d-release/<platform-arch>/AIDeskPet-runtime3d-manifest-<platform-arch>.json`
 2. `dist/runtime3d-release/<platform-arch>/AIDeskPet-runtime3d-performance-<platform-arch>.json`
-3. `dist/runtime3d-release/<platform-arch>/AIDeskPet-runtime3d-<platform-arch>.tar.gz`
-4. `dist/runtime3d-release/<platform-arch>/AIDeskPet-runtime3d-<platform-arch>/AIDeskPet-runtime3d-launcher-<platform-arch>.sh`
+3. `dist/runtime3d-release/<platform-arch>/AIDeskPet-runtime3d-<platform-arch>.dmg`
+4. `/Volumes/AIDeskPet-runtime3d-<platform-arch>/AIDeskPet-runtime3d-launcher-<platform-arch>.sh`
 
 ## Notes
 

@@ -32,7 +32,8 @@ const legacyTargets = [
   resolve(releaseRootDir, 'bundle'),
   resolve(releaseRootDir, 'release-manifest.json'),
   resolve(releaseRootDir, 'performance-report.json'),
-  resolve(releaseRootDir, `${appName}-${entry.key}.tar.gz`)
+  resolve(releaseRootDir, `${appName}-${entry.key}.tar.gz`),
+  resolve(releaseRootDir, `${appName}-${entry.key}.dmg`)
 ];
 for (const legacyTarget of legacyTargets) {
   rmSync(legacyTarget, { recursive: true, force: true });
@@ -113,7 +114,7 @@ writeFileSync(
       runtime: 'runtime3d-native',
       packageType: 'release-candidate',
       outputDir: `dist/runtime3d-release/${entry.key}`,
-      packageDir: `dist/runtime3d-release/${entry.key}/${packageDirName}`,
+      dmgFile: `${appName}-${entry.key}.dmg`,
       launcher: launcherName,
       performanceReport: performanceName,
       includes: copyTargets
@@ -123,19 +124,24 @@ writeFileSync(
   )
 );
 
-const archivePath = resolve(outputDir, `${appName}-${entry.key}.tar.gz`);
-const tar = spawnSync('tar', ['-czf', archivePath, packageDirName], {
-  cwd: outputDir,
-  stdio: 'inherit',
-  env: {
-    ...process.env,
-    LANG: 'C',
-    LC_ALL: 'C'
+const dmgPath = resolve(outputDir, `${appName}-${entry.key}.dmg`);
+const dmg = spawnSync(
+  'hdiutil',
+  ['create', '-volname', packageDirName, '-srcfolder', packageDirName, '-ov', '-format', 'UDZO', dmgPath],
+  {
+    cwd: outputDir,
+    stdio: 'inherit',
+    env: {
+      ...process.env,
+      LANG: 'C',
+      LC_ALL: 'C'
+    }
   }
-});
-if (tar.status !== 0) {
-  process.exit(tar.status ?? 1);
+);
+if (dmg.status !== 0) {
+  process.exit(dmg.status ?? 1);
 }
+rmSync(stageDir, { recursive: true, force: true });
 
-console.log(`runtime3d release bundle created: ${archivePath}`);
+console.log(`runtime3d release bundle created: ${dmgPath}`);
 console.log(`runtime3d release output dir: ${outputDir}`);
