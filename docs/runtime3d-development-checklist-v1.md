@@ -33,8 +33,8 @@
 
 ## 4. 打包与验收
 
-- [ ] C1 dmg-only 打包收口（Mac）
-- [ ] C2 打包后自动冒烟（挂载/启动/核心交互）
+- [x] C1 dmg-only 打包收口（Mac）
+- [x] C2 打包后自动冒烟（挂载/启动/核心交互）
 - [ ] C3 30 分钟稳定性与性能门槛验证
 
 ## 5. 当前验收证据（2026-03-14）
@@ -43,3 +43,5 @@
 2. 玩法域覆盖：`scripts/smoke-runtime3d-parity-domains.mjs`（聊天/四动作/成长/专注/主动/天气/多宠物）
 3. runtime3d 命名空间接入：`src/renderer/runtime3d/runtime3d-bootstrap.js` + `src/renderer/index.html`
 4. 正式 3D 模型替换接口：`src/renderer/runtime3d/runtime3d-model-profiles.js` + 角色渲染数据口
+5. dmg-only 打包收口：`scripts/build-runtime3d-release.sh` + 统一产物目录 `dist/runtime3d-release/`
+6. 打包后自动冒烟：`scripts/smoke-runtime3d-dmg.sh`（挂载/启动/卸载）

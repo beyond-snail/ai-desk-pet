@@ -21,6 +21,20 @@ make smoke-runtime3d
 make build-runtime3d-release
 ```
 
+Runtime3D 打包产物（Mac 先行）：
+
+- 默认（本机架构）：
+  - `dist/runtime3d-release/darwin-x64/AIDeskPet-runtime3d-darwin-x64-v<version>.dmg`
+  - 或 `dist/runtime3d-release/darwin-arm64/AIDeskPet-runtime3d-darwin-arm64-v<version>.dmg`
+- 指定多架构构建：
+  - `RUNTIME3D_ARCHES="x64 arm64" make build-runtime3d-release`
+
+Runtime3D 安装步骤（macOS）：
+
+1. 双击打开对应架构的 `.dmg`
+2. 将 `AIDeskPet.app` 拖入 `Applications`
+3. 首次运行若被系统拦截，执行：系统设置 -> 隐私与安全性 -> 仍要打开
+
 ## 当前状态
 
 桌面端 v1.0 核心链路已落地，并已进入“交互手感 + 性能收口”阶段：

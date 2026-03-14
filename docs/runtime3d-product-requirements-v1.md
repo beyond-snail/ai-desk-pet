@@ -56,6 +56,7 @@
 ### FR-05 打包交付
 1. 提供 macOS dmg 产物。
 2. 安装后可直接启动并进入可交互状态。
+3. 产物目录统一为 `dist/runtime3d-release/darwin-<arch>/AIDeskPet-runtime3d-darwin-<arch>-v<version>.dmg`。
 
 验收：dmg 可挂载安装，应用可启动并跑通核心交互。
 
