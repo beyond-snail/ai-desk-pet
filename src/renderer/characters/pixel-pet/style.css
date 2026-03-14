@@ -4,9 +4,26 @@
   height: 77px;
   isolation: isolate;
   image-rendering: pixelated;
+  perspective: 560px;
+  transform-style: preserve-3d;
+  --pp-rotate-y: 8deg;
+  --pp-depth: 9px;
   --pixel-body: #ffcc66;
   --pixel-outline: #996633;
   --pixel-eye: #333333;
+}
+
+.caterpillar[data-character='pixel-pet']::before {
+  content: '';
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 8px;
+  height: 10px;
+  background: radial-gradient(ellipse at center, rgba(64, 42, 22, 0.44) 0%, rgba(64, 42, 22, 0.12) 56%, transparent 82%);
+  filter: blur(0.9px);
+  transform: translateZ(-14px) rotateX(82deg);
+  pointer-events: none;
 }
 
 .caterpillar[data-character='pixel-pet'] * {
@@ -34,6 +51,8 @@
   border: 2px solid var(--pixel-outline);
   box-shadow: inset -6px 0 0 rgba(0, 0, 0, 0.12);
   animation: pixel-bounce 0.7s steps(2) infinite;
+  transform-style: preserve-3d;
+  transform: translateZ(var(--pp-depth)) rotateY(var(--pp-rotate-y));
 }
 
 .caterpillar[data-character='pixel-pet'] .pixel-ear {
@@ -121,10 +140,15 @@
   background: var(--pixel-body);
   border: 2px solid var(--pixel-outline);
   animation: pixel-walk 0.45s steps(2) infinite;
+  transform: translateZ(calc(var(--pp-depth) * -0.2));
 }
 
 .caterpillar[data-character='pixel-pet'] .pixel-foot.left { left: 2px; }
 .caterpillar[data-character='pixel-pet'] .pixel-foot.right { right: 2px; }
+
+.caterpillar[data-character='pixel-pet'][data-direction='left'] {
+  --pp-rotate-y: -8deg;
+}
 
 .caterpillar[data-character='pixel-pet'][data-mood='happy'] .pixel-eye {
   height: 2px;
@@ -181,7 +205,7 @@
 .caterpillar[data-character='pixel-pet'][data-mood='sleepy'] .pixel-body {
   filter: brightness(0.82);
   animation: none;
-  transform: rotate(3deg);
+  transform: translateZ(var(--pp-depth)) rotateY(var(--pp-rotate-y)) rotate(3deg);
 }
 
 .caterpillar[data-character='pixel-pet'][data-mood='sleepy'] .pixel-foot {
@@ -296,7 +320,7 @@
 .caterpillar[data-character='pixel-pet'][data-mood='sad'] .pixel-body {
   filter: saturate(0.55) brightness(0.85);
   animation: none;
-  transform: translateY(2px);
+  transform: translateZ(var(--pp-depth)) rotateY(var(--pp-rotate-y)) translateY(2px);
 }
 
 .caterpillar[data-character='pixel-pet'][data-mood='sad'] .pixel-ear {

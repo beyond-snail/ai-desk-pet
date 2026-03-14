@@ -199,6 +199,12 @@ class CharacterAnimator {
     });
 
     if (root) {
+      const facing = direction.x >= 0 ? 1 : -1;
+      const depth = this.clamp(12 + (speedRatio || 0) * 8, 10, 20);
+      const rotateY = this.clamp(facing * (10 + (speedRatio || 0) * 6), -18, 18);
+      root.style.setProperty('--cb-rotate-y', `${rotateY.toFixed(2)}deg`);
+      root.style.setProperty('--cb-depth', `${depth.toFixed(2)}px`);
+
       const antenna = root.querySelector('.bot-antenna');
       if (antenna) {
         const swing = Math.sin(phase * 0.9 * cadence) * (isMoving ? 8 : 3);
@@ -237,6 +243,12 @@ class CharacterAnimator {
     });
 
     if (root) {
+      const facing = direction.x >= 0 ? 1 : -1;
+      const depth = this.clamp(9 + (speedRatio || 0) * 7, 8, 16);
+      const rotateY = this.clamp(facing * (8 + (speedRatio || 0) * 5), -14, 14);
+      root.style.setProperty('--pp-rotate-y', `${rotateY.toFixed(2)}deg`);
+      root.style.setProperty('--pp-depth', `${depth.toFixed(2)}px`);
+
       const ears = root.querySelectorAll('.pixel-ear');
       ears.forEach((ear, index) => {
         const sign = index === 0 ? -1 : 1;
