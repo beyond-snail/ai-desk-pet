@@ -3,18 +3,19 @@
   width: 96px;
   height: 128px;
   isolation: isolate;
-  perspective: 640px;
+  perspective: 520px;
   transform-style: preserve-3d;
   --rb-walk-speed: var(--pet-walk-speed, 1);
   --rb-lean: 0deg;
   --rb-shift-x: 0px;
   --rb-bob-scale: 1;
   --rb-shell-squash: 1;
-  --rb-proxy-rotate-y: 12deg;
-  --rb-proxy-rotate-x: -1.4deg;
-  --rb-depth-main: 14px;
-  --rb-front-glow: 0.52;
-  filter: brightness(1.14) saturate(1.16) drop-shadow(0 0 16px rgba(126, 204, 255, 0.34)) !important;
+  --rb-proxy-rotate-y: 0deg;
+  --rb-proxy-rotate-x: 0deg;
+  --rb-depth-main: 6px;
+  --rb-front-glow: 0.14;
+  --rb-back-glow: 0.1;
+  filter: brightness(1.03) saturate(1.05) drop-shadow(0 2px 8px rgba(88, 170, 224, 0.18)) !important;
 }
 
 .caterpillar[data-character='rainbow-bot'] .rb-stage {
@@ -33,17 +34,18 @@
 }
 
 .caterpillar[data-character='rainbow-bot'] .rb-layer-back {
-  transform: translateZ(calc(var(--rb-depth-main) * -0.42)) scale(0.98);
+  transform: translateZ(calc(var(--rb-depth-main) * -0.16)) scale(0.995);
+  opacity: var(--rb-back-glow);
 }
 
 .caterpillar[data-character='rainbow-bot'] .rb-layer-main {
-  transform: translateZ(calc(var(--rb-depth-main) * 0.15));
+  transform: translateZ(0px);
 }
 
 .caterpillar[data-character='rainbow-bot'] .rb-layer-front {
-  transform: translateZ(calc(var(--rb-depth-main) * 0.68)) scale(1.018);
+  transform: translateZ(calc(var(--rb-depth-main) * 0.22)) scale(1.003);
   opacity: var(--rb-front-glow);
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
 }
 
 .caterpillar[data-character='rainbow-bot'] .rb-shadow {
@@ -54,8 +56,8 @@
   height: 16px;
   border-radius: 50%;
   background: radial-gradient(circle at center, rgba(16, 58, 92, 0.42) 0%, rgba(16, 58, 92, 0.06) 66%, transparent 100%);
-  transform: translateZ(-20px) rotateX(78deg) scale(1.03);
-  filter: blur(2.6px);
+  transform: translateZ(-12px) rotateX(76deg) scale(1.01);
+  filter: blur(1.6px);
 }
 
 .caterpillar[data-character='rainbow-bot'] .rb-shell {
@@ -74,24 +76,24 @@
   object-fit: contain;
   pointer-events: none;
   user-select: none;
-  filter: brightness(1.08) saturate(1.12) drop-shadow(0 6px 12px rgba(44, 114, 148, 0.32));
+  filter: brightness(1.02) saturate(1.04) drop-shadow(0 3px 8px rgba(44, 114, 148, 0.2));
   backface-visibility: hidden;
 }
 
 .caterpillar[data-character='rainbow-bot'] .rb-body-image-back {
-  filter: brightness(0.78) saturate(0.82) blur(0.36px);
+  filter: brightness(0.94) saturate(0.95);
 }
 
 .caterpillar[data-character='rainbow-bot'] .rb-body-image-front {
-  filter: brightness(1.26) saturate(1.22) blur(0.18px);
+  filter: brightness(1.08) saturate(1.08);
 }
 
 .caterpillar[data-character='rainbow-bot'][data-low-power='true'] .rb-body-image {
-  filter: brightness(1.08) saturate(1.12) drop-shadow(0 4px 8px rgba(44, 114, 148, 0.24));
+  filter: brightness(1.01) saturate(1.03) drop-shadow(0 2px 5px rgba(44, 114, 148, 0.16));
 }
 
 .caterpillar[data-character='rainbow-bot'][data-direction='left'] {
-  --rb-proxy-rotate-y: -12deg;
+  --rb-proxy-rotate-y: -3deg;
 }
 
 @keyframes rb-idle-float {

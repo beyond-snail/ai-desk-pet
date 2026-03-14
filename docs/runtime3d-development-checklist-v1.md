@@ -46,6 +46,7 @@
 5. dmg-only 打包收口：`scripts/build-runtime3d-release.sh` + 统一产物目录 `dist/runtime3d-release/`
 6. 打包后自动冒烟：`scripts/smoke-runtime3d-dmg.sh`（挂载/启动/卸载）
 7. 30 分钟性能门槛：`scripts/perf-runtime3d-macos.sh`，报告：`dist/runtime3d-release/perf-report-20260314-142854/perf-summary.json`
+8. 默认机器人运行态视觉修正（去重影/降透视变形）：`src/renderer/characters/rainbow-bot/style.css` + `src/renderer/characters/rainbow-bot-character.js`
 
 ## 6. 全量完成状态（2026-03-14）
 

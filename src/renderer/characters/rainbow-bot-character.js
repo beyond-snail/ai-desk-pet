@@ -234,25 +234,29 @@ class RainbowBotCharacter extends BaseCharacter {
     const direction = this.rootElement.dataset.direction || 'right';
     const moving = sequenceKey === 'walk';
 
-    const rotateY = direction === 'left' ? -12 : 12;
-    const walkPitch = moving ? -3.2 : -1.4;
+    const rotateY = moving
+      ? (direction === 'left' ? -6 : 6)
+      : (direction === 'left' ? -3 : 3);
+    const walkPitch = moving ? -1.2 : -0.4;
     const moodDepth =
       mood === 'excited' || mood === 'happy'
-        ? 20
+        ? 8
         : mood === 'sleepy' || mood === 'sad'
-          ? 10
-          : 14;
+          ? 4
+          : 6;
     const frontGlow =
       mood === 'talking'
-        ? 0.66
+        ? 0.22
         : mood === 'happy'
-          ? 0.72
-          : 0.52;
+          ? 0.18
+          : 0.14;
+    const backGlow = moving ? 0.14 : 0.1;
 
     this.rootElement.style.setProperty('--rb-proxy-rotate-y', `${rotateY}deg`);
     this.rootElement.style.setProperty('--rb-proxy-rotate-x', `${walkPitch}deg`);
     this.rootElement.style.setProperty('--rb-depth-main', `${moodDepth}px`);
     this.rootElement.style.setProperty('--rb-front-glow', String(frontGlow));
+    this.rootElement.style.setProperty('--rb-back-glow', String(backGlow));
   }
 
   _scheduleFrameTick(delayMs = 120) {
