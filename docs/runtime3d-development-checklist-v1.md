@@ -22,8 +22,8 @@
 ## 2. 玩法对齐与重构
 
 - [x] A1 玩法对齐矩阵（main vs runtime3d）补齐
-- [ ] A2 角色系统迁移（保持语义一致）
-- [ ] A3 聊天/四动作/成长/专注/主动/天气/多宠物迁移
+- [x] A2 角色系统迁移（保持语义一致）
+- [x] A3 聊天/四动作/成长/专注/主动/天气/多宠物迁移
 
 ## 3. 3D 角色方案
 
@@ -36,3 +36,9 @@
 - [ ] C1 dmg-only 打包收口（Mac）
 - [ ] C2 打包后自动冒烟（挂载/启动/核心交互）
 - [ ] C3 30 分钟稳定性与性能门槛验证
+
+## 5. 当前验收证据（2026-03-14）
+
+1. 角色语义与切换链路：`scripts/smoke-all-roles-3d-proxy.mjs` + `scripts/smoke-runtime3d-parity-domains.mjs`
+2. 玩法域覆盖：`scripts/smoke-runtime3d-parity-domains.mjs`（聊天/四动作/成长/专注/主动/天气/多宠物）
+3. runtime3d 命名空间接入：`src/renderer/runtime3d/runtime3d-bootstrap.js` + `src/renderer/index.html`

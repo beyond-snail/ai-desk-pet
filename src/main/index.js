@@ -11,6 +11,34 @@ const BUILT_IN_LLM = {
 };
 
 const DAILY_LIMIT = 100;
+const RUNTIME3D_PREFIX = 'runtime3d';
+
+const RUNTIME3D_KEY_MAP = {
+  characterId: 'runtime3d.character.id',
+  selectedCharacter: 'runtime3d.character.selected',
+  petManagerState: 'runtime3d.multi_pet.state',
+  growthState: 'runtime3d.growth.state',
+  careState: 'runtime3d.care.state',
+  chatHistory: 'runtime3d.chat.history',
+  longTermMemory: 'runtime3d.memory.long_term',
+  featureFlags: 'runtime3d.feature.flags',
+  focusModeStats: 'runtime3d.focus.stats',
+  proactiveTimeGreetings: 'runtime3d.proactive.time_greetings',
+  lastShutdownAt: 'runtime3d.system.last_shutdown_at',
+  growthDiary: 'runtime3d.growth.diary',
+  weatherApiKey: 'runtime3d.weather.api_key',
+  weatherCity: 'runtime3d.weather.city',
+  llmApiKey: 'runtime3d.llm.api_key',
+  llmProvider: 'runtime3d.llm.provider',
+  llmModel: 'runtime3d.llm.model',
+  llmBaseUrl: 'runtime3d.llm.base_url',
+  autoLaunch: 'runtime3d.system.auto_launch',
+  locationCache: 'runtime3d.system.location_cache',
+  dailyUsage: 'runtime3d.chat.daily_usage'
+};
+const LEGACY_KEY_BY_RUNTIME3D = Object.fromEntries(
+  Object.entries(RUNTIME3D_KEY_MAP).map(([legacyKey, runtime3dKey]) => [runtime3dKey, legacyKey])
+);
 
 let store = null;
 
@@ -23,6 +51,47 @@ async function initStore() {
   const Store = module.default;
   store = new Store();
   return store;
+}
+
+function resolveRuntime3dKey(input) {
+  const key = String(input || '').trim();
+  if (!key) {
+    return `${RUNTIME3D_PREFIX}.unknown`;
+  }
+
+  if (RUNTIME3D_KEY_MAP[key]) {
+    return RUNTIME3D_KEY_MAP[key];
+  }
+
+  if (key.startsWith(`${RUNTIME3D_PREFIX}.`)) {
+    return key;
+  }
+
+  return `${RUNTIME3D_PREFIX}.${key}`;
+}
+
+function readRuntime3dValue(key, defaultValue = undefined) {
+  const originalKey = String(key || '').trim();
+  const runtime3dKey = resolveRuntime3dKey(key);
+  const namespaced = store.get(runtime3dKey);
+  if (namespaced !== undefined) {
+    return namespaced;
+  }
+
+  const legacyKey = LEGACY_KEY_BY_RUNTIME3D[runtime3dKey];
+  if (legacyKey) {
+    return store.get(legacyKey, defaultValue);
+  }
+
+  if (originalKey && originalKey !== runtime3dKey) {
+    return store.get(originalKey, defaultValue);
+  }
+
+  return defaultValue;
+}
+
+function writeRuntime3dValue(key, value) {
+  store.set(resolveRuntime3dKey(key), value);
 }
 
 let autoUpdater = null;
@@ -63,7 +132,7 @@ function sendContextAction(action) {
 }
 
 function buildContextMenu() {
-  const featureFlags = store.get('featureFlags') || {};
+  const featureFlags = readRuntime3dValue('featureFlags', {}) || {};
   const template = [
     {
       label: '喂食',
@@ -232,7 +301,7 @@ function createTray() {
 }
 
 async function resolveWeatherLocation() {
-  const cached = store.get('locationCache');
+  const cached = readRuntime3dValue('locationCache');
   const now = Date.now();
   const oneDayMs = 24 * 60 * 60 * 1000;
 
@@ -259,7 +328,7 @@ async function resolveWeatherLocation() {
       country: payload.country || '',
       timestamp: now
     };
-    store.set('locationCache', nextLocation);
+    writeRuntime3dValue('locationCache', nextLocation);
     return nextLocation;
   } catch (_error) {
     return cached || null;
@@ -268,10 +337,10 @@ async function resolveWeatherLocation() {
 
 function checkDailyLimit() {
   const today = new Date().toISOString().slice(0, 10);
-  const record = store.get('dailyUsage') || { date: '', count: 0 };
+  const record = readRuntime3dValue('dailyUsage') || { date: '', count: 0 };
 
   if (record.date !== today) {
-    store.set('dailyUsage', { date: today, count: 0 });
+    writeRuntime3dValue('dailyUsage', { date: today, count: 0 });
     return { allowed: true, remaining: DAILY_LIMIT };
   }
 
@@ -284,24 +353,24 @@ function checkDailyLimit() {
 
 function incrementDailyUsage() {
   const today = new Date().toISOString().slice(0, 10);
-  const record = store.get('dailyUsage') || { date: '', count: 0 };
+  const record = readRuntime3dValue('dailyUsage') || { date: '', count: 0 };
 
   if (record.date !== today) {
-    store.set('dailyUsage', { date: today, count: 1 });
+    writeRuntime3dValue('dailyUsage', { date: today, count: 1 });
   } else {
-    store.set('dailyUsage', { date: today, count: record.count + 1 });
+    writeRuntime3dValue('dailyUsage', { date: today, count: record.count + 1 });
   }
 }
 
 function getLlmRuntimeConfig() {
-  const userApiKey = store.get('llmApiKey');
+  const userApiKey = readRuntime3dValue('llmApiKey');
   const isBuiltIn = !userApiKey;
   return {
     isBuiltIn,
     apiKey: userApiKey || BUILT_IN_LLM.apiKey,
-    provider: isBuiltIn ? BUILT_IN_LLM.provider : (store.get('llmProvider') || 'deepseek'),
-    model: isBuiltIn ? BUILT_IN_LLM.model : (store.get('llmModel') || 'deepseek-chat'),
-    baseUrl: isBuiltIn ? BUILT_IN_LLM.baseUrl : (store.get('llmBaseUrl') || 'https://api.deepseek.com/v1')
+    provider: isBuiltIn ? BUILT_IN_LLM.provider : (readRuntime3dValue('llmProvider') || 'deepseek'),
+    model: isBuiltIn ? BUILT_IN_LLM.model : (readRuntime3dValue('llmModel') || 'deepseek-chat'),
+    baseUrl: isBuiltIn ? BUILT_IN_LLM.baseUrl : (readRuntime3dValue('llmBaseUrl') || 'https://api.deepseek.com/v1')
   };
 }
 
@@ -603,11 +672,11 @@ function registerIpc() {
   });
 
   ipcMain.handle('store:get', (_event, key) => {
-    return store.get(key);
+    return readRuntime3dValue(key);
   });
 
   ipcMain.on('store:set', (_event, key, value) => {
-    store.set(key, value);
+    writeRuntime3dValue(key, value);
   });
 
   ipcMain.handle('llm:chat', (_event, messages, options = {}) => {
@@ -637,11 +706,11 @@ function registerIpc() {
       openAtLogin: Boolean(enabled),
       openAsHidden: true
     });
-    store.set('autoLaunch', Boolean(enabled));
+    writeRuntime3dValue('autoLaunch', Boolean(enabled));
   });
 
   ipcMain.handle('app:get-auto-launch', () => {
-    return store.get('autoLaunch', false);
+    return readRuntime3dValue('autoLaunch', false);
   });
 
   ipcMain.handle('system:get-snapshot', () => {
