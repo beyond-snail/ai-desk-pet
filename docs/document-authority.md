@@ -35,10 +35,33 @@
 
 若与主方案冲突，以 `docs/3d-runtime-migration-spec.md` 为准。
 
+### `docs/runtime3d-product-requirements-v1.md`
+用途：Runtime3D 需求基线（先定义做什么与验收口径）。
+
+应相信它用于：
+- 功能范围冻结
+- 非功能指标
+- 上线门槛
+
+若与实现细节冲突，以需求口径为准，先更新开发文档再改代码。
+
+### `docs/runtime3d-development-checklist-v1.md`
+用途：Runtime3D 开发任务清单（勾选推进与阶段验收）。
+
+应相信它用于：
+- 任务拆解
+- 阶段状态
+- 提交与验收记录
+
+若与临时对话指令冲突，以清单与需求文档为准。
+
 ## 2. 当前有效专项文档
 
 ### `docs/product-roadmap-2026.md`
 用途：版本目标与产品优先级。
+
+### `docs/runtime3d-collaboration-summary-and-rules-2026-03-14.md`
+用途：长期协作规则沉淀（需求先行、清单推进、提交推送规范）。
 
 ### `docs/3d-runtime-baseline-2026-03-13.md`
 用途：迁移前包体与运行指标基线。
@@ -103,39 +126,45 @@
 
 ### 常规开发场景
 1. `README.md`
-2. `docs/3d-runtime-migration-spec.md`
-3. `docs/3d-runtime-migration-tasks-for-codex.md`
-4. `docs/product-roadmap-2026.md`
-5. `docs/3d-runtime-baseline-2026-03-13.md`
-6. `docs/runtime3d-stage-b-report-2026-03-13.md`
-7. `docs/runtime3d-stage-c-motion-foundation-2026-03-13.md`
-8. `docs/runtime3d-stage-d-interaction-foundation-2026-03-13.md`
-9. `docs/runtime3d-stage-e-migration-foundation-2026-03-13.md`
-10. `docs/runtime3d-stage-f-performance-build-foundation-2026-03-13.md`
-11. `docs/runtime3d-stage-g-backfill-foundation-2026-03-13.md`
-12. `docs/runtime3d-final-dod-status-2026-03-13.md`
-13. `docs/runtime3d-release-native-switch-2026-03-14.md`
-14. `docs/runtime3d-platform-installation.md`
-15. `docs/adr/*`
-16. 其他历史/参考文档（按需）
+2. `docs/runtime3d-product-requirements-v1.md`
+3. `docs/runtime3d-development-checklist-v1.md`
+4. `docs/3d-runtime-migration-spec.md`
+5. `docs/3d-runtime-migration-tasks-for-codex.md`
+6. `docs/product-roadmap-2026.md`
+7. `docs/runtime3d-collaboration-summary-and-rules-2026-03-14.md`
+8. `docs/3d-runtime-baseline-2026-03-13.md`
+9. `docs/runtime3d-stage-b-report-2026-03-13.md`
+10. `docs/runtime3d-stage-c-motion-foundation-2026-03-13.md`
+11. `docs/runtime3d-stage-d-interaction-foundation-2026-03-13.md`
+12. `docs/runtime3d-stage-e-migration-foundation-2026-03-13.md`
+13. `docs/runtime3d-stage-f-performance-build-foundation-2026-03-13.md`
+14. `docs/runtime3d-stage-g-backfill-foundation-2026-03-13.md`
+15. `docs/runtime3d-final-dod-status-2026-03-13.md`
+16. `docs/runtime3d-release-native-switch-2026-03-14.md`
+17. `docs/runtime3d-platform-installation.md`
+18. `docs/adr/*`
+19. 其他历史/参考文档（按需）
 
 ### 3D 换轨实施场景（强制）
 1. `docs/product-roadmap-2026.md`
-2. `docs/3d-runtime-migration-spec.md`
-3. `docs/3d-runtime-migration-tasks-for-codex.md`
-4. `docs/3d-runtime-baseline-2026-03-13.md`
-5. `docs/runtime3d-stage-b-report-2026-03-13.md`
-6. `docs/runtime3d-stage-c-motion-foundation-2026-03-13.md`
-7. `docs/runtime3d-stage-d-interaction-foundation-2026-03-13.md`
-8. `docs/runtime3d-stage-e-migration-foundation-2026-03-13.md`
-9. `docs/runtime3d-stage-f-performance-build-foundation-2026-03-13.md`
-10. `docs/runtime3d-stage-g-backfill-foundation-2026-03-13.md`
-11. `docs/runtime3d-final-dod-status-2026-03-13.md`
-12. `docs/runtime3d-release-native-switch-2026-03-14.md`
-13. `docs/runtime3d-platform-installation.md`
-14. `docs/adr/*`
-15. `README.md`
-16. `technical-documentation.md`（仅历史语义比对）
+2. `docs/runtime3d-product-requirements-v1.md`
+3. `docs/runtime3d-development-checklist-v1.md`
+4. `docs/3d-runtime-migration-spec.md`
+5. `docs/3d-runtime-migration-tasks-for-codex.md`
+6. `docs/runtime3d-collaboration-summary-and-rules-2026-03-14.md`
+7. `docs/3d-runtime-baseline-2026-03-13.md`
+8. `docs/runtime3d-stage-b-report-2026-03-13.md`
+9. `docs/runtime3d-stage-c-motion-foundation-2026-03-13.md`
+10. `docs/runtime3d-stage-d-interaction-foundation-2026-03-13.md`
+11. `docs/runtime3d-stage-e-migration-foundation-2026-03-13.md`
+12. `docs/runtime3d-stage-f-performance-build-foundation-2026-03-13.md`
+13. `docs/runtime3d-stage-g-backfill-foundation-2026-03-13.md`
+14. `docs/runtime3d-final-dod-status-2026-03-13.md`
+15. `docs/runtime3d-release-native-switch-2026-03-14.md`
+16. `docs/runtime3d-platform-installation.md`
+17. `docs/adr/*`
+18. `README.md`
+19. `technical-documentation.md`（仅历史语义比对）
 
 ## 5. 冲突处理规则
 
@@ -143,9 +172,11 @@
 
 1. `docs/3d-runtime-migration-spec.md`
 2. `docs/3d-runtime-migration-tasks-for-codex.md`
-3. `README.md`
-4. 其他当前有效专项文档
-5. 历史/参考文档
+3. `docs/runtime3d-product-requirements-v1.md`
+4. `docs/runtime3d-development-checklist-v1.md`
+5. `README.md`
+6. 其他当前有效专项文档
+7. 历史/参考文档
 
 ## 6. 维护约定
 

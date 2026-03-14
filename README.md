@@ -13,11 +13,16 @@
 ## 文档入口
 
 - 文档权威说明：[docs/document-authority.md](docs/document-authority.md)
+- 需求文档（先读）：[docs/runtime3d-product-requirements-v1.md](docs/runtime3d-product-requirements-v1.md)
+- 开发清单（再读）：[docs/runtime3d-development-checklist-v1.md](docs/runtime3d-development-checklist-v1.md)
+- 协作规则总结：[docs/runtime3d-collaboration-summary-and-rules-2026-03-14.md](docs/runtime3d-collaboration-summary-and-rules-2026-03-14.md)
 - 3D 主方案：[docs/3d-runtime-migration-spec.md](docs/3d-runtime-migration-spec.md)
 - 3D 任务书：[docs/3d-runtime-migration-tasks-for-codex.md](docs/3d-runtime-migration-tasks-for-codex.md)
 - 原生切换说明（2026-03-14）：[docs/runtime3d-release-native-switch-2026-03-14.md](docs/runtime3d-release-native-switch-2026-03-14.md)
 - 平台安装说明：[docs/runtime3d-platform-installation.md](docs/runtime3d-platform-installation.md)
 - Final DoD 状态：[docs/runtime3d-final-dod-status-2026-03-13.md](docs/runtime3d-final-dod-status-2026-03-13.md)
+
+建议执行顺序：需求文档 -> 开发清单 -> 代码实现 -> 验证 -> 文档回写 -> 提交并推送。
 
 ## 命令
 
