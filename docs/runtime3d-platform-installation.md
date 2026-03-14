@@ -16,9 +16,9 @@
 每个平台目录包含：
 
 - `AIDeskPet-runtime3d-<platform-arch>.tar.gz`
-- `release-manifest.json`
-- `performance-report.json`
-- `bundle/run-runtime3d.sh`
+- `AIDeskPet-runtime3d-manifest-<platform-arch>.json`
+- `AIDeskPet-runtime3d-performance-<platform-arch>.json`
+- `AIDeskPet-runtime3d-<platform-arch>/AIDeskPet-runtime3d-launcher-<platform-arch>.sh`
 
 ## 2. macOS 安装与运行
 
@@ -32,18 +32,18 @@ mkdir -p extracted
 bsdtar -xzf AIDeskPet-runtime3d-darwin-x64.tar.gz -C extracted
 ```
 
-2. 进入 bundle 并运行：
+2. 进入应用目录并运行：
 
 ```bash
-cd extracted/bundle
-chmod +x run-runtime3d.sh
-./run-runtime3d.sh
+cd extracted/AIDeskPet-runtime3d-darwin-x64
+chmod +x AIDeskPet-runtime3d-launcher-darwin-x64.sh
+./AIDeskPet-runtime3d-launcher-darwin-x64.sh
 ```
 
 3. 交互冒烟运行（可选）：
 
 ```bash
-RUNTIME3D_SCENARIO=interaction-smoke ./run-runtime3d.sh
+RUNTIME3D_SCENARIO=interaction-smoke ./AIDeskPet-runtime3d-launcher-darwin-x64.sh
 ```
 
 ### 2.2 Apple Silicon (arm64)
@@ -56,18 +56,18 @@ mkdir -p extracted
 bsdtar -xzf AIDeskPet-runtime3d-darwin-arm64.tar.gz -C extracted
 ```
 
-2. 进入 bundle 并运行：
+2. 进入应用目录并运行：
 
 ```bash
-cd extracted/bundle
-chmod +x run-runtime3d.sh
-./run-runtime3d.sh
+cd extracted/AIDeskPet-runtime3d-darwin-arm64
+chmod +x AIDeskPet-runtime3d-launcher-darwin-arm64.sh
+./AIDeskPet-runtime3d-launcher-darwin-arm64.sh
 ```
 
 3. 交互冒烟运行（可选）：
 
 ```bash
-RUNTIME3D_SCENARIO=interaction-smoke ./run-runtime3d.sh
+RUNTIME3D_SCENARIO=interaction-smoke ./AIDeskPet-runtime3d-launcher-darwin-arm64.sh
 ```
 
 ## 3. Windows 安装说明（预留）
@@ -86,7 +86,7 @@ RUNTIME3D_SCENARIO=interaction-smoke ./run-runtime3d.sh
 计划接入后将提供：
 
 - `dist/runtime3d-release/linux-x64/AIDeskPet-runtime3d-linux-x64.tar.gz`
-- `dist/runtime3d-release/linux-x64/bundle/run-runtime3d.sh`
+- `dist/runtime3d-release/linux-x64/AIDeskPet-runtime3d-linux-x64/AIDeskPet-runtime3d-launcher-linux-x64.sh`
 
 ## 5. 验证命令
 

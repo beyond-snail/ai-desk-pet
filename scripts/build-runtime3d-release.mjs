@@ -10,6 +10,8 @@ function mustPass(command, args) {
   }
 }
 
+const appName = 'AIDeskPet-runtime3d';
+
 mustPass(process.execPath, ['scripts/build-runtime3d-native-binaries.mjs']);
 mustPass(process.execPath, ['scripts/check-runtime3d-native.mjs']);
 mustPass(process.execPath, ['scripts/runtime3d-ipc-smoke.mjs']);
@@ -17,35 +19,31 @@ mustPass(process.execPath, ['scripts/runtime3d-ipc-smoke.mjs']);
 const entry = resolveNativeEntry();
 const releaseRootDir = resolve('dist/runtime3d-release');
 const outputDir = resolve(releaseRootDir, entry.key);
-const stageDir = resolve(outputDir, 'bundle');
-const performanceReportPath = resolve(outputDir, 'performance-report.json');
-mustPass(process.execPath, ['scripts/runtime3d-performance-smoke.mjs', '--report', performanceReportPath]);
+const packageDirName = `${appName}-${entry.key}`;
+const stageDir = resolve(outputDir, packageDirName);
+const launcherName = `${appName}-launcher-${entry.key}.sh`;
+const manifestName = `${appName}-manifest-${entry.key}.json`;
+const performanceName = `${appName}-performance-${entry.key}.json`;
+const installName = `${appName}-install-${entry.key}.txt`;
+const performanceReportPath = resolve(outputDir, performanceName);
 
 const legacyTargets = [
+  resolve(releaseRootDir, '.DS_Store'),
   resolve(releaseRootDir, 'bundle'),
   resolve(releaseRootDir, 'release-manifest.json'),
   resolve(releaseRootDir, 'performance-report.json'),
-  resolve(releaseRootDir, `AIDeskPet-runtime3d-${entry.key}.tar.gz`)
+  resolve(releaseRootDir, `${appName}-${entry.key}.tar.gz`)
 ];
 for (const legacyTarget of legacyTargets) {
   rmSync(legacyTarget, { recursive: true, force: true });
 }
 
-rmSync(stageDir, { recursive: true, force: true });
+rmSync(outputDir, { recursive: true, force: true });
 mkdirSync(stageDir, { recursive: true });
 
-const copyTargets = [
-  'README.md',
-  'docs/3d-runtime-migration-spec.md',
-  'docs/3d-runtime-migration-tasks-for-codex.md',
-  'docs/runtime3d-final-dod-status-2026-03-13.md',
-  'docs/runtime3d-release-native-switch-2026-03-14.md',
-  'runtime/shared-ipc/schema-v1.json',
-  'runtime/migration/keys-map.json',
-  'runtime/native/manifest.json',
-  'runtime/native/README.md',
-  `runtime/native/${entry.manifest.platforms[entry.key].dir}`
-];
+mustPass(process.execPath, ['scripts/runtime3d-performance-smoke.mjs', '--report', performanceReportPath]);
+
+const copyTargets = ['runtime/native/manifest.json', `runtime/native/${entry.manifest.platforms[entry.key].dir}`];
 
 for (const target of copyTargets) {
   const from = resolve(target);
@@ -54,49 +52,70 @@ for (const target of copyTargets) {
   cpSync(from, to, { recursive: true });
 }
 
-const runScriptPath = resolve(stageDir, 'run-runtime3d.sh');
+const runScriptPath = resolve(stageDir, launcherName);
 writeFileSync(
   runScriptPath,
   [
     '#!/usr/bin/env bash',
     'set -euo pipefail',
     '',
-    'ROOT_DIR=\"$(cd \"$(dirname \"$0\")\" && pwd)\"',
-    'OS_NAME=\"$(uname -s)\"',
-    'ARCH_NAME=\"$(uname -m)\"',
-    'if [[ \"$OS_NAME\" != \"Darwin\" ]]; then',
-    '  echo \"unsupported os: $OS_NAME\"',
+    'ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"',
+    'OS_NAME="$(uname -s)"',
+    'ARCH_NAME="$(uname -m)"',
+    'if [[ "$OS_NAME" != "Darwin" ]]; then',
+    '  echo "unsupported os: $OS_NAME"',
     '  exit 1',
     'fi',
-    'if [[ \"$ARCH_NAME\" == \"x86_64\" ]]; then',
-    '  ENTRY_DIR=\"darwin-x64\"',
-    'elif [[ \"$ARCH_NAME\" == \"arm64\" ]]; then',
-    '  ENTRY_DIR=\"darwin-arm64\"',
+    'if [[ "$ARCH_NAME" == "x86_64" ]]; then',
+    '  ENTRY_DIR="darwin-x64"',
+    'elif [[ "$ARCH_NAME" == "arm64" ]]; then',
+    '  ENTRY_DIR="darwin-arm64"',
     'else',
-    '  echo \"unsupported arch: $ARCH_NAME\"',
+    '  echo "unsupported arch: $ARCH_NAME"',
     '  exit 1',
     'fi',
     '',
-    'export RUNTIME3D_SCENARIO=\"${RUNTIME3D_SCENARIO:-daemon}\"',
-    '\"$ROOT_DIR/runtime/native/$ENTRY_DIR/qt-sidecar\" &',
+    'export RUNTIME3D_SCENARIO="${RUNTIME3D_SCENARIO:-daemon}"',
+    '"$ROOT_DIR/runtime/native/$ENTRY_DIR/qt-sidecar" &',
     'SIDECAR_PID=$!',
-    'trap \"kill $SIDECAR_PID >/dev/null 2>&1 || true\" EXIT',
+    'trap "kill $SIDECAR_PID >/dev/null 2>&1 || true" EXIT',
     'sleep 0.15',
-    'exec \"$ROOT_DIR/runtime/native/$ENTRY_DIR/godot-runtime\"',
+    'exec "$ROOT_DIR/runtime/native/$ENTRY_DIR/godot-runtime"',
     ''
   ].join('\n')
 );
 chmodSync(runScriptPath, 0o755);
 
 writeFileSync(
-  resolve(outputDir, 'release-manifest.json'),
+  resolve(stageDir, installName),
+  [
+    `${appName} install/run notes`,
+    '',
+    `Platform: ${entry.key}`,
+    `Launcher: ./${launcherName}`,
+    '',
+    'Quick start:',
+    `1) chmod +x ${launcherName}`,
+    `2) ./${launcherName}`,
+    '',
+    'Smoke test:',
+    `RUNTIME3D_SCENARIO=interaction-smoke ./${launcherName}`
+  ].join('\n')
+);
+
+writeFileSync(
+  resolve(outputDir, manifestName),
   JSON.stringify(
     {
       generatedAt: new Date().toISOString(),
+      appName,
       platform: entry.key,
       runtime: 'runtime3d-native',
       packageType: 'release-candidate',
       outputDir: `dist/runtime3d-release/${entry.key}`,
+      packageDir: `dist/runtime3d-release/${entry.key}/${packageDirName}`,
+      launcher: launcherName,
+      performanceReport: performanceName,
       includes: copyTargets
     },
     null,
@@ -104,8 +123,8 @@ writeFileSync(
   )
 );
 
-const archivePath = resolve(outputDir, `AIDeskPet-runtime3d-${entry.key}.tar.gz`);
-const tar = spawnSync('tar', ['-czf', archivePath, 'bundle'], {
+const archivePath = resolve(outputDir, `${appName}-${entry.key}.tar.gz`);
+const tar = spawnSync('tar', ['-czf', archivePath, packageDirName], {
   cwd: outputDir,
   stdio: 'inherit',
   env: {

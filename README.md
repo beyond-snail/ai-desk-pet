@@ -53,10 +53,10 @@ npm run build:runtime3d:release
 
 候选产物：
 
-- `dist/runtime3d-release/<platform-arch>/release-manifest.json`
-- `dist/runtime3d-release/<platform-arch>/performance-report.json`
+- `dist/runtime3d-release/<platform-arch>/AIDeskPet-runtime3d-manifest-<platform-arch>.json`
+- `dist/runtime3d-release/<platform-arch>/AIDeskPet-runtime3d-performance-<platform-arch>.json`
 - `dist/runtime3d-release/<platform-arch>/AIDeskPet-runtime3d-<platform-arch>.tar.gz`
-- `dist/runtime3d-release/<platform-arch>/bundle/run-runtime3d.sh`（解包后可直接运行）
+- `dist/runtime3d-release/<platform-arch>/AIDeskPet-runtime3d-<platform-arch>/AIDeskPet-runtime3d-launcher-<platform-arch>.sh`
 
 ## Native 运行时约定
 
