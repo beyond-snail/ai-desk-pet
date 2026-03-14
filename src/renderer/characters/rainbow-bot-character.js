@@ -234,23 +234,30 @@ class RainbowBotCharacter extends BaseCharacter {
     const direction = this.rootElement.dataset.direction || 'right';
     const moving = sequenceKey === 'walk';
 
-    const rotateY = moving
-      ? (direction === 'left' ? -6 : 6)
-      : (direction === 'left' ? -3 : 3);
-    const walkPitch = moving ? -1.2 : -0.4;
-    const moodDepth =
-      mood === 'excited' || mood === 'happy'
-        ? 8
-        : mood === 'sleepy' || mood === 'sad'
-          ? 4
-          : 6;
-    const frontGlow =
-      mood === 'talking'
-        ? 0.22
-        : mood === 'happy'
-          ? 0.18
-          : 0.14;
-    const backGlow = moving ? 0.14 : 0.1;
+    const lowVisualMode = this._isLowPower || this._fpsCap <= 30;
+    const rotateY = lowVisualMode
+      ? 0
+      : (moving ? (direction === 'left' ? -4 : 4) : (direction === 'left' ? -2 : 2));
+    const walkPitch = 0;
+    const moodDepth = lowVisualMode
+      ? 0
+      : (
+        mood === 'excited' || mood === 'happy'
+          ? 5
+          : mood === 'sleepy' || mood === 'sad'
+            ? 2
+            : 3
+      );
+    const frontGlow = lowVisualMode
+      ? 0
+      : (
+        mood === 'talking'
+          ? 0.12
+          : mood === 'happy'
+            ? 0.1
+            : 0.08
+      );
+    const backGlow = lowVisualMode ? 0 : (moving ? 0.06 : 0.05);
 
     this.rootElement.style.setProperty('--rb-proxy-rotate-y', `${rotateY}deg`);
     this.rootElement.style.setProperty('--rb-proxy-rotate-x', `${walkPitch}deg`);
