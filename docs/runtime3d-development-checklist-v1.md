@@ -29,7 +29,7 @@
 
 - [x] B1 SVG 占位 3D 表现接入（rainbow-bot）
 - [x] B2 全角色占位 3D 表现接入
-- [ ] B3 正式 3D 模型替换接口预留
+- [x] B3 正式 3D 模型替换接口预留
 
 ## 4. 打包与验收
 
@@ -42,3 +42,4 @@
 1. 角色语义与切换链路：`scripts/smoke-all-roles-3d-proxy.mjs` + `scripts/smoke-runtime3d-parity-domains.mjs`
 2. 玩法域覆盖：`scripts/smoke-runtime3d-parity-domains.mjs`（聊天/四动作/成长/专注/主动/天气/多宠物）
 3. runtime3d 命名空间接入：`src/renderer/runtime3d/runtime3d-bootstrap.js` + `src/renderer/index.html`
+4. 正式 3D 模型替换接口：`src/renderer/runtime3d/runtime3d-model-profiles.js` + 角色渲染数据口

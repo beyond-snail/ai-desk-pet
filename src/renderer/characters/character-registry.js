@@ -21,7 +21,7 @@ class CharacterRegistry {
   }
 
   register(id, config) {
-    this.characters.set(id, config);
+    this.characters.set(id, this.attachRuntime3dProfile(id, config));
     CharacterRegistry.cachedOptions = this.getAll();
   }
 
@@ -35,6 +35,25 @@ class CharacterRegistry {
 
   getAll() {
     return Array.from(this.characters.entries()).map(([id, config]) => ({ id, ...config }));
+  }
+
+  attachRuntime3dProfile(id, config = {}) {
+    const baseConfig = config || {};
+    const resolver = typeof window.resolveRuntime3dModelProfile === 'function'
+      ? window.resolveRuntime3dModelProfile
+      : null;
+    const profile = resolver ? resolver(id) : null;
+    if (!profile && !baseConfig.runtime3dModel) {
+      return baseConfig;
+    }
+
+    return {
+      ...baseConfig,
+      runtime3dModel: {
+        ...(profile || {}),
+        ...(baseConfig.runtime3dModel || {})
+      }
+    };
   }
 
   getDefaultId() {
@@ -84,7 +103,7 @@ class CharacterRegistry {
 
     this.initialized = true;
     if (!CharacterRegistry.cachedOptions || CharacterRegistry.cachedOptions.length === 0) {
-      CharacterRegistry.cachedOptions = CharacterRegistry.FALLBACK_OPTIONS;
+      CharacterRegistry.cachedOptions = CharacterRegistry.FALLBACK_OPTIONS.map((item) => this.attachRuntime3dProfile(item.id, item));
     }
   }
 }

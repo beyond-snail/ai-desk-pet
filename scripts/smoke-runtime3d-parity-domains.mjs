@@ -20,6 +20,7 @@ const checks = [
     filePath: 'src/renderer/index.html',
     patterns: [
       'runtime3d/runtime3d-bootstrap.js',
+      'runtime3d/runtime3d-model-profiles.js',
       'components/QuickActions.js',
       'components/PetManager.js'
     ]
@@ -37,12 +38,41 @@ const checks = [
     ]
   },
   {
+    id: 'runtime3d-model-profiles',
+    filePath: 'src/renderer/runtime3d/runtime3d-model-profiles.js',
+    patterns: [
+      'window.Runtime3DModelProfiles',
+      'window.resolveRuntime3dModelProfile',
+      'targetModelAsset',
+      'animationSet'
+    ]
+  },
+  {
+    id: 'runtime3d-model-binding',
+    filePath: 'src/renderer/characters/base-character.js',
+    patterns: [
+      'applyRuntime3dProfile()',
+      'dataset.runtime3dModelId',
+      'dataset.runtime3dAsset',
+      'getRuntime3dModelProfile()'
+    ]
+  },
+  {
     id: 'role-switching',
     filePath: 'src/renderer/components/PetController.js',
     patterns: [
       'async switchCharacter(characterId)',
       'pet:character-switched',
       'getCharacterOptions()'
+    ]
+  },
+  {
+    id: 'role-registry-runtime3d',
+    filePath: 'src/renderer/characters/character-registry.js',
+    patterns: [
+      'attachRuntime3dProfile(id, config = {})',
+      'resolveRuntime3dModelProfile',
+      'runtime3dModel'
     ]
   },
   {

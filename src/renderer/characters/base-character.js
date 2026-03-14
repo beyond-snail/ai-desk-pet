@@ -32,8 +32,25 @@ class BaseCharacter {
     container.innerHTML = '';
     container.appendChild(fragment);
     this.rootElement = container.querySelector('[data-character]') || container.firstElementChild;
+    this.applyRuntime3dProfile();
     this.loadCSS();
     return this.rootElement;
+  }
+
+  applyRuntime3dProfile() {
+    if (!this.rootElement) {
+      return;
+    }
+
+    const profile = this.getRuntime3dModelProfile();
+    if (!profile) {
+      return;
+    }
+
+    this.rootElement.dataset.runtime3dModelId = profile.modelId || '';
+    this.rootElement.dataset.runtime3dRig = profile.rig || '';
+    this.rootElement.dataset.runtime3dAsset = profile.targetModelAsset || '';
+    this.rootElement.dataset.runtime3dSource = profile.source || '';
   }
 
   loadCSS() {
@@ -182,8 +199,13 @@ class BaseCharacter {
     return {
       id: this.config.id,
       name: this.config.name,
-      description: this.config.description || ''
+      description: this.config.description || '',
+      runtime3dModel: this.getRuntime3dModelProfile()
     };
+  }
+
+  getRuntime3dModelProfile() {
+    return this.config.runtime3dModel || null;
   }
 
   destroy() {
