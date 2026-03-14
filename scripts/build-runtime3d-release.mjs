@@ -14,6 +14,7 @@ const runtimeName = 'AIDeskPet-runtime3d';
 const appBundleName = 'AIDeskPet.app';
 const appExecutableName = 'AIDeskPet';
 
+mustPass(process.execPath, ['scripts/clean-runtime3d-dist.mjs']);
 mustPass(process.execPath, ['scripts/build-runtime3d-native-binaries.mjs']);
 mustPass(process.execPath, ['scripts/check-runtime3d-native.mjs']);
 mustPass(process.execPath, ['scripts/runtime3d-ipc-smoke.mjs']);
@@ -26,6 +27,7 @@ const manifestName = `${runtimeName}-manifest-${entry.key}.json`;
 const performanceName = `${runtimeName}-performance-${entry.key}.json`;
 const performanceReportPath = resolve(outputDir, performanceName);
 const dmgPath = resolve(outputDir, `${runtimeName}-${entry.key}.dmg`);
+const pkgPath = resolve(outputDir, `${runtimeName}-${entry.key}.pkg`);
 
 const legacyTargets = [
   resolve(releaseRootDir, '.DS_Store'),
@@ -33,7 +35,8 @@ const legacyTargets = [
   resolve(releaseRootDir, 'release-manifest.json'),
   resolve(releaseRootDir, 'performance-report.json'),
   resolve(releaseRootDir, `${runtimeName}-${entry.key}.tar.gz`),
-  resolve(releaseRootDir, `${runtimeName}-${entry.key}.dmg`)
+  resolve(releaseRootDir, `${runtimeName}-${entry.key}.dmg`),
+  resolve(releaseRootDir, `${runtimeName}-${entry.key}.pkg`)
 ];
 for (const legacyTarget of legacyTargets) {
   rmSync(legacyTarget, { recursive: true, force: true });
@@ -145,6 +148,26 @@ if (dmg.status !== 0) {
 
 mustPass(process.execPath, ['scripts/runtime3d-release-app-smoke.mjs', '--dmg', dmgPath]);
 
+const pkgStageDir = resolve(outputDir, '.pkg-stage');
+const pkgApplicationsDir = resolve(pkgStageDir, 'Applications');
+rmSync(pkgStageDir, { recursive: true, force: true });
+mkdirSync(pkgApplicationsDir, { recursive: true });
+cpSync(appRoot, resolve(pkgApplicationsDir, appBundleName), { recursive: true });
+
+mustPass('pkgbuild', [
+  '--root',
+  pkgStageDir,
+  '--identifier',
+  'com.aideskpet.runtime3d',
+  '--version',
+  '1.0.0',
+  '--install-location',
+  '/',
+  pkgPath
+]);
+
+mustPass(process.execPath, ['scripts/runtime3d-release-pkg-smoke.mjs', '--pkg', pkgPath]);
+
 writeFileSync(
   resolve(outputDir, manifestName),
   JSON.stringify(
@@ -157,6 +180,7 @@ writeFileSync(
       packageType: 'release-candidate',
       outputDir: `dist/runtime3d-release/${entry.key}`,
       dmgFile: `${runtimeName}-${entry.key}.dmg`,
+      pkgFile: `${runtimeName}-${entry.key}.pkg`,
       appBundle: appBundleName,
       launcher: `${appBundleName}/Contents/MacOS/${appExecutableName}`,
       performanceReport: performanceName,
@@ -169,6 +193,8 @@ writeFileSync(
 
 rmSync(appBuildRoot, { recursive: true, force: true });
 rmSync(dmgStageDir, { recursive: true, force: true });
+rmSync(pkgStageDir, { recursive: true, force: true });
 
 console.log(`runtime3d release bundle created: ${dmgPath}`);
+console.log(`runtime3d release installer created: ${pkgPath}`);
 console.log(`runtime3d release output dir: ${outputDir}`);

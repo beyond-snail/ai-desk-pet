@@ -48,6 +48,7 @@ const requiredFiles = [
   'scripts/runtime3d-backfill-smoke.mjs',
   'scripts/runtime3d-performance-smoke.mjs',
   'scripts/runtime3d-release-app-smoke.mjs',
+  'scripts/runtime3d-release-pkg-smoke.mjs',
   'scripts/runtime3d-native-utils.mjs',
   'scripts/check-runtime3d-native.mjs',
   'scripts/build-runtime3d-native-binaries.mjs',

@@ -24,6 +24,7 @@
 基础命令：
 
 ```bash
+npm run clean:dist
 npm run check
 npm start
 npm run build
@@ -52,12 +53,15 @@ npm run build:runtime3d:release
 ```
 
 说明：`build:runtime3d:release` 会在生成 dmg 后自动执行 `.app` 冒烟自测（挂载/启动/握手/卸载）。
+同一流程会同时生成 `.pkg` 安装包，并执行 payload 冒烟校验（校验 `Applications/AIDeskPet.app` 关键文件）。
+另外，构建前会自动执行 `clean:dist`，清理旧 Electron/旧 bootstrap 产物，避免发布目录混杂。
 
 候选产物：
 
 - `dist/runtime3d-release/<platform-arch>/AIDeskPet-runtime3d-manifest-<platform-arch>.json`
 - `dist/runtime3d-release/<platform-arch>/AIDeskPet-runtime3d-performance-<platform-arch>.json`
 - `dist/runtime3d-release/<platform-arch>/AIDeskPet-runtime3d-<platform-arch>.dmg`
+- `dist/runtime3d-release/<platform-arch>/AIDeskPet-runtime3d-<platform-arch>.pkg`
 - `/Volumes/AIDeskPet-runtime3d-<platform-arch>/AIDeskPet.app`
 - `/Volumes/AIDeskPet-runtime3d-<platform-arch>/Applications`（拖拽安装目标）
 

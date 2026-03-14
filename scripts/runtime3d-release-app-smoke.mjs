@@ -38,14 +38,12 @@ if (attach.status !== 0) {
 
 const lines = String(attach.stdout || '').split('\n');
 const mountLine = lines.find((line) => line.includes('/Volumes/'));
-const diskLine = lines.find((line) => line.startsWith('/dev/disk') && line.includes('GUID_partition_scheme'));
-if (!mountLine || !diskLine) {
+if (!mountLine) {
   console.error('failed to parse mounted dmg info');
   process.exit(1);
 }
 
 const mountPoint = mountLine.split('\t').pop().trim().replace(/\s+\d+$/, '');
-const disk = diskLine.split('\t')[0].trim();
 const appExec = `${mountPoint}/AIDeskPet.app/Contents/MacOS/AIDeskPet`;
 
 const smoke = run(appExec, [], {
@@ -57,7 +55,7 @@ const smoke = run(appExec, [], {
   maxBuffer: 1024 * 1024 * 8
 });
 
-const detach = run('hdiutil', ['detach', disk]);
+const detach = run('hdiutil', ['detach', mountPoint]);
 if (detach.status !== 0) {
   process.stderr.write(detach.stderr || '');
 }

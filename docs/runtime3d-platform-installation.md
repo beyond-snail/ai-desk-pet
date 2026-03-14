@@ -16,6 +16,7 @@
 每个平台目录包含：
 
 - `AIDeskPet-runtime3d-<platform-arch>.dmg`
+- `AIDeskPet-runtime3d-<platform-arch>.pkg`
 - `AIDeskPet-runtime3d-manifest-<platform-arch>.json`
 - `AIDeskPet-runtime3d-performance-<platform-arch>.json`
 
@@ -28,14 +29,14 @@
 
 ### 2.1 Intel (x64)
 
-1. 挂载 dmg：
+1. 推荐直接安装（pkg）：
 
 ```bash
 cd dist/runtime3d-release/darwin-x64
-open AIDeskPet-runtime3d-darwin-x64.dmg
+open AIDeskPet-runtime3d-darwin-x64.pkg
 ```
 
-2. 在 Finder 中把 `AIDeskPet.app` 拖到 `Applications`。
+2. 按安装向导完成安装，默认安装到 `/Applications/AIDeskPet.app`。
 
 3. 从 `应用程序` 启动：
 
@@ -43,7 +44,22 @@ open AIDeskPet-runtime3d-darwin-x64.dmg
 open /Applications/AIDeskPet.app
 ```
 
-4. 如需交互冒烟模式（可选）：
+4. 若你需要拖拽安装，可改用 dmg：
+
+```bash
+cd dist/runtime3d-release/darwin-x64
+open AIDeskPet-runtime3d-darwin-x64.dmg
+```
+
+5. 在 Finder 中把 `AIDeskPet.app` 拖到 `Applications`。
+
+6. 从 `应用程序` 启动：
+
+```bash
+open /Applications/AIDeskPet.app
+```
+
+7. 如需交互冒烟模式（可选）：
 
 ```bash
 RUNTIME3D_SCENARIO=interaction-smoke /Applications/AIDeskPet.app/Contents/MacOS/AIDeskPet
@@ -51,14 +67,14 @@ RUNTIME3D_SCENARIO=interaction-smoke /Applications/AIDeskPet.app/Contents/MacOS/
 
 ### 2.2 Apple Silicon (arm64)
 
-1. 挂载 dmg：
+1. 推荐直接安装（pkg）：
 
 ```bash
 cd dist/runtime3d-release/darwin-arm64
-open AIDeskPet-runtime3d-darwin-arm64.dmg
+open AIDeskPet-runtime3d-darwin-arm64.pkg
 ```
 
-2. 在 Finder 中把 `AIDeskPet.app` 拖到 `Applications`。
+2. 按安装向导完成安装，默认安装到 `/Applications/AIDeskPet.app`。
 
 3. 从 `应用程序` 启动：
 
@@ -66,7 +82,22 @@ open AIDeskPet-runtime3d-darwin-arm64.dmg
 open /Applications/AIDeskPet.app
 ```
 
-4. 如需交互冒烟模式（可选）：
+4. 若你需要拖拽安装，可改用 dmg：
+
+```bash
+cd dist/runtime3d-release/darwin-arm64
+open AIDeskPet-runtime3d-darwin-arm64.dmg
+```
+
+5. 在 Finder 中把 `AIDeskPet.app` 拖到 `Applications`。
+
+6. 从 `应用程序` 启动：
+
+```bash
+open /Applications/AIDeskPet.app
+```
+
+7. 如需交互冒烟模式（可选）：
 
 ```bash
 RUNTIME3D_SCENARIO=interaction-smoke /Applications/AIDeskPet.app/Contents/MacOS/AIDeskPet
@@ -109,6 +140,7 @@ open /Applications/AIDeskPet.app
 在仓库根目录执行：
 
 ```bash
+npm run clean:dist
 npm run check
 npm run build:runtime3d:release
 ```

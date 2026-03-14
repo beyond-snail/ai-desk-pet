@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node scripts/start-runtime3d-release.mjs",
     "dev": "node scripts/start-runtime3d-release.mjs",
+    "clean:dist": "node scripts/clean-runtime3d-dist.mjs",
     "start:runtime3d": "node scripts/start-runtime3d-release.mjs",
     "start:runtime3d:qt": "node runtime/qt-sidecar/main.mjs",
     "start:runtime3d:godot": "node runtime/godot/main.mjs",
@@ -15,6 +16,7 @@
     "smoke:runtime3d:backfill": "node scripts/runtime3d-backfill-smoke.mjs",
     "smoke:runtime3d:performance": "node scripts/runtime3d-performance-smoke.mjs",
     "smoke:runtime3d:app": "node scripts/runtime3d-release-app-smoke.mjs",
+    "smoke:runtime3d:pkg": "node scripts/runtime3d-release-pkg-smoke.mjs",
     "build:runtime3d:native-binaries": "node scripts/build-runtime3d-native-binaries.mjs",
     "check:runtime3d:native": "node scripts/check-runtime3d-native.mjs",
     "check": "npm run check:syntax && npm run check:characters && npm run check:runtime3d",
