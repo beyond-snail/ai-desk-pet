@@ -16,6 +16,7 @@
 - 3D 主方案：[docs/3d-runtime-migration-spec.md](docs/3d-runtime-migration-spec.md)
 - 3D 任务书：[docs/3d-runtime-migration-tasks-for-codex.md](docs/3d-runtime-migration-tasks-for-codex.md)
 - 原生切换说明（2026-03-14）：[docs/runtime3d-release-native-switch-2026-03-14.md](docs/runtime3d-release-native-switch-2026-03-14.md)
+- 平台安装说明：[docs/runtime3d-platform-installation.md](docs/runtime3d-platform-installation.md)
 - Final DoD 状态：[docs/runtime3d-final-dod-status-2026-03-13.md](docs/runtime3d-final-dod-status-2026-03-13.md)
 
 ## 命令
@@ -52,10 +53,10 @@ npm run build:runtime3d:release
 
 候选产物：
 
-- `dist/runtime3d-release/release-manifest.json`
-- `dist/runtime3d-release/performance-report.json`
-- `dist/runtime3d-release/AIDeskPet-runtime3d-<platform-arch>.tar.gz`
-- `dist/runtime3d-release/bundle/run-runtime3d.sh`（解包后可直接运行）
+- `dist/runtime3d-release/<platform-arch>/release-manifest.json`
+- `dist/runtime3d-release/<platform-arch>/performance-report.json`
+- `dist/runtime3d-release/<platform-arch>/AIDeskPet-runtime3d-<platform-arch>.tar.gz`
+- `dist/runtime3d-release/<platform-arch>/bundle/run-runtime3d.sh`（解包后可直接运行）
 
 ## Native 运行时约定
 
@@ -63,7 +64,6 @@ npm run build:runtime3d:release
 
 - `runtime/native/manifest.json`
 
-当前仓库提供 `darwin-arm64` / `darwin-x64` shim 产物用于门禁验证。  
 当前仓库已提供可执行原生运行时（由 `runtime/native-src` 编译产出），保持同名入口：
 
 - `qt-sidecar`

@@ -64,7 +64,8 @@ const requiredFiles = [
   'docs/runtime3d-stage-f-performance-build-foundation-2026-03-13.md',
   'docs/runtime3d-stage-g-backfill-foundation-2026-03-13.md',
   'docs/runtime3d-final-dod-status-2026-03-13.md',
-  'docs/runtime3d-release-native-switch-2026-03-14.md'
+  'docs/runtime3d-release-native-switch-2026-03-14.md',
+  'docs/runtime3d-platform-installation.md'
 ];
 
 const requiredEvents = [

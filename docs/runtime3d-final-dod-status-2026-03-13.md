@@ -36,9 +36,10 @@ npm run build
 
 Expected artifacts:
 
-1. `dist/runtime3d-release/release-manifest.json`
-2. `dist/runtime3d-release/performance-report.json`
-3. `dist/runtime3d-release/AIDeskPet-runtime3d-<platform-arch>.tar.gz`
+1. `dist/runtime3d-release/<platform-arch>/release-manifest.json`
+2. `dist/runtime3d-release/<platform-arch>/performance-report.json`
+3. `dist/runtime3d-release/<platform-arch>/AIDeskPet-runtime3d-<platform-arch>.tar.gz`
+4. `dist/runtime3d-release/<platform-arch>/bundle/run-runtime3d.sh`
 
 ## Remaining work category
 

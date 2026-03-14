@@ -13,15 +13,24 @@ function mustPass(command, args) {
 mustPass(process.execPath, ['scripts/build-runtime3d-native-binaries.mjs']);
 mustPass(process.execPath, ['scripts/check-runtime3d-native.mjs']);
 mustPass(process.execPath, ['scripts/runtime3d-ipc-smoke.mjs']);
-mustPass(process.execPath, [
-  'scripts/runtime3d-performance-smoke.mjs',
-  '--report',
-  'dist/runtime3d-release/performance-report.json'
-]);
 
 const entry = resolveNativeEntry();
-const outputDir = resolve('dist/runtime3d-release');
+const releaseRootDir = resolve('dist/runtime3d-release');
+const outputDir = resolve(releaseRootDir, entry.key);
 const stageDir = resolve(outputDir, 'bundle');
+const performanceReportPath = resolve(outputDir, 'performance-report.json');
+mustPass(process.execPath, ['scripts/runtime3d-performance-smoke.mjs', '--report', performanceReportPath]);
+
+const legacyTargets = [
+  resolve(releaseRootDir, 'bundle'),
+  resolve(releaseRootDir, 'release-manifest.json'),
+  resolve(releaseRootDir, 'performance-report.json'),
+  resolve(releaseRootDir, `AIDeskPet-runtime3d-${entry.key}.tar.gz`)
+];
+for (const legacyTarget of legacyTargets) {
+  rmSync(legacyTarget, { recursive: true, force: true });
+}
+
 rmSync(stageDir, { recursive: true, force: true });
 mkdirSync(stageDir, { recursive: true });
 
@@ -87,6 +96,7 @@ writeFileSync(
       platform: entry.key,
       runtime: 'runtime3d-native',
       packageType: 'release-candidate',
+      outputDir: `dist/runtime3d-release/${entry.key}`,
       includes: copyTargets
     },
     null,
@@ -109,3 +119,4 @@ if (tar.status !== 0) {
 }
 
 console.log(`runtime3d release bundle created: ${archivePath}`);
+console.log(`runtime3d release output dir: ${outputDir}`);

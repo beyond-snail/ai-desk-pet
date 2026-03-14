@@ -67,6 +67,9 @@
 ### `docs/runtime3d-release-native-switch-2026-03-14.md`
 用途：Runtime3D 默认入口切换到 release-native 的执行说明和门禁标准。
 
+### `docs/runtime3d-platform-installation.md`
+用途：按平台归档的产物目录规范与安装/运行说明。
+
 ### `docs/adr/*`
 用途：Runtime3D 架构决策记录（为什么这么做）。
 
@@ -112,8 +115,9 @@
 11. `docs/runtime3d-stage-g-backfill-foundation-2026-03-13.md`
 12. `docs/runtime3d-final-dod-status-2026-03-13.md`
 13. `docs/runtime3d-release-native-switch-2026-03-14.md`
-14. `docs/adr/*`
-15. 其他历史/参考文档（按需）
+14. `docs/runtime3d-platform-installation.md`
+15. `docs/adr/*`
+16. 其他历史/参考文档（按需）
 
 ### 3D 换轨实施场景（强制）
 1. `docs/product-roadmap-2026.md`
@@ -128,9 +132,10 @@
 10. `docs/runtime3d-stage-g-backfill-foundation-2026-03-13.md`
 11. `docs/runtime3d-final-dod-status-2026-03-13.md`
 12. `docs/runtime3d-release-native-switch-2026-03-14.md`
-13. `docs/adr/*`
-14. `README.md`
-15. `technical-documentation.md`（仅历史语义比对）
+13. `docs/runtime3d-platform-installation.md`
+14. `docs/adr/*`
+15. `README.md`
+16. `technical-documentation.md`（仅历史语义比对）
 
 ## 5. 冲突处理规则
 
