@@ -2,6 +2,25 @@
 
 桌面端养成式 AI 桌宠。当前聚焦 v1.0 桌面产品验证，范围为 macOS、Windows、Linux。移动端暂不纳入实现范围。
 
+## Cleanroom 重构分支说明
+
+当前分支 `rewrite/runtime3d-cleanroom` 采用“需求先行 + 清单推进”流程，目标是新技术主线重构且玩法语义保持与 main 一致。
+
+文档入口：
+
+- 需求文档：[docs/runtime3d-product-requirements-v1.md](docs/runtime3d-product-requirements-v1.md)
+- 开发清单：[docs/runtime3d-development-checklist-v1.md](docs/runtime3d-development-checklist-v1.md)
+- 功能对齐说明：[docs/runtime3d-feature-parity-baseline-main.md](docs/runtime3d-feature-parity-baseline-main.md)
+- 项目内 skill：[skills/aideskpet-delivery-governance-cn/SKILL.md](skills/aideskpet-delivery-governance-cn/SKILL.md)
+
+cleanroom 分支命令（非 npm 主入口）：
+
+```bash
+make check-runtime3d
+make smoke-runtime3d
+make build-runtime3d-release
+```
+
 ## 当前状态
 
 桌面端 v1.0 核心链路已落地，并已进入“交互手感 + 性能收口”阶段：

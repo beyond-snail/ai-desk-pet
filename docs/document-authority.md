@@ -4,6 +4,28 @@
 
 ## 1. 最高优先级
 
+### `docs/runtime3d-product-requirements-v1.md`
+用途：Runtime3D cleanroom 需求基线。
+
+应相信它用于：
+- 功能范围与验收口径
+- “玩法语义不变”边界
+
+### `docs/runtime3d-development-checklist-v1.md`
+用途：Runtime3D cleanroom 逐项推进清单。
+
+应相信它用于：
+- 任务状态
+- 阶段验收
+- 交付节奏
+
+### `docs/runtime3d-feature-parity-baseline-main.md`
+用途：main 与 runtime3d 的功能对齐说明。
+
+应相信它用于：
+- 玩法等价判断
+- 是否发生功能缩减判断
+
 ### `technical-documentation.md`
 用途：当前实现基线文档。
 
@@ -108,11 +130,14 @@
 
 1. `technical-documentation.md`
 2. `README.md`
-3. `docs/product-roadmap-2026.md`
-4. `docs/product-role-handover.md`
-5. `docs/desktop-release-v1.md`
-6. `docs/macos-signing-setup.md`
-7. 其他历史 / 参考文档仅作补充，不作实现依据
+3. `docs/runtime3d-product-requirements-v1.md`
+4. `docs/runtime3d-development-checklist-v1.md`
+5. `docs/runtime3d-feature-parity-baseline-main.md`
+6. `docs/product-roadmap-2026.md`
+7. `docs/product-role-handover.md`
+8. `docs/desktop-release-v1.md`
+9. `docs/macos-signing-setup.md`
+10. 其他历史 / 参考文档仅作补充，不作实现依据
 
 ## 5. 冲突处理规则
 
@@ -120,8 +145,11 @@
 
 1. `technical-documentation.md`
 2. `README.md`
-3. 当前有效专项文档（按读取建议顺序）
-4. 历史 / 参考文档
+3. `docs/runtime3d-product-requirements-v1.md`
+4. `docs/runtime3d-development-checklist-v1.md`
+5. `docs/runtime3d-feature-parity-baseline-main.md`
+6. 当前有效专项文档（按读取建议顺序）
+7. 历史 / 参考文档
 
 
 ## 6. 归档约定

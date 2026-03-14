@@ -3,6 +3,8 @@ class RainbowBotCharacter extends BaseCharacter {
     super(config);
     this._assetBasePath = '';
     this._imageEl = null;
+    this._imageBackEl = null;
+    this._imageFrontEl = null;
     this._observer = null;
     this._frameTimerId = null;
     this._lastFrameAt = 0;
@@ -58,7 +60,9 @@ class RainbowBotCharacter extends BaseCharacter {
 
   render(container) {
     const root = super.render(container);
-    this._imageEl = root ? root.querySelector('.rb-body-image') : null;
+    this._imageEl = root ? root.querySelector('.rb-body-image-main') : null;
+    this._imageBackEl = root ? root.querySelector('.rb-body-image-back') : null;
+    this._imageFrontEl = root ? root.querySelector('.rb-body-image-front') : null;
     this._readRuntimeFlags();
     this._startObserver();
     this._syncState({ resetFrame: true, forceRender: true });
@@ -82,6 +86,8 @@ class RainbowBotCharacter extends BaseCharacter {
       this._observer = null;
     }
     this._imageEl = null;
+    this._imageBackEl = null;
+    this._imageFrontEl = null;
     this._activeSequenceKey = '';
     this._currentSrc = '';
     this._renderedSequenceKey = '';
@@ -131,7 +137,7 @@ class RainbowBotCharacter extends BaseCharacter {
     });
     this._observer.observe(this.rootElement, {
       attributes: true,
-      attributeFilter: ['data-animation', 'data-mood', 'data-low-power', 'data-fps-cap']
+      attributeFilter: ['data-animation', 'data-mood', 'data-low-power', 'data-fps-cap', 'data-direction']
     });
   }
 
@@ -183,6 +189,12 @@ class RainbowBotCharacter extends BaseCharacter {
 
     if (forceRender || this._currentSrc !== nextSrc) {
       this._imageEl.src = nextSrc;
+      if (this._imageBackEl) {
+        this._imageBackEl.src = nextSrc;
+      }
+      if (this._imageFrontEl) {
+        this._imageFrontEl.src = nextSrc;
+      }
       this._currentSrc = nextSrc;
     }
 
@@ -210,6 +222,37 @@ class RainbowBotCharacter extends BaseCharacter {
 
     this._activeSequenceKey = nextKey;
     this._applyCurrentFrame(nextKey, forceRender || changed || resetFrame);
+    this._syncProxy3D(nextKey);
+  }
+
+  _syncProxy3D(sequenceKey) {
+    if (!this.rootElement) {
+      return;
+    }
+
+    const mood = this.rootElement.dataset.mood || this._currentMood || 'idle';
+    const direction = this.rootElement.dataset.direction || 'right';
+    const moving = sequenceKey === 'walk';
+
+    const rotateY = direction === 'left' ? -12 : 12;
+    const walkPitch = moving ? -3.2 : -1.4;
+    const moodDepth =
+      mood === 'excited' || mood === 'happy'
+        ? 20
+        : mood === 'sleepy' || mood === 'sad'
+          ? 10
+          : 14;
+    const frontGlow =
+      mood === 'talking'
+        ? 0.66
+        : mood === 'happy'
+          ? 0.72
+          : 0.52;
+
+    this.rootElement.style.setProperty('--rb-proxy-rotate-y', `${rotateY}deg`);
+    this.rootElement.style.setProperty('--rb-proxy-rotate-x', `${walkPitch}deg`);
+    this.rootElement.style.setProperty('--rb-depth-main', `${moodDepth}px`);
+    this.rootElement.style.setProperty('--rb-front-glow', String(frontGlow));
   }
 
   _scheduleFrameTick(delayMs = 120) {
