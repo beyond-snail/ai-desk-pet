@@ -15,6 +15,7 @@
     "smoke:runtime3d:migration": "node scripts/runtime3d-migration-smoke.mjs",
     "smoke:runtime3d:backfill": "node scripts/runtime3d-backfill-smoke.mjs",
     "smoke:runtime3d:performance": "node scripts/runtime3d-performance-smoke.mjs",
+    "build:runtime3d:native-binaries": "node scripts/build-runtime3d-native-binaries.mjs",
     "build:runtime3d:package": "node scripts/package-runtime3d-candidate.mjs",
     "check:runtime3d:native": "node scripts/check-runtime3d-native.mjs",
     "check": "npm run check:syntax && npm run check:characters && npm run check:runtime3d",

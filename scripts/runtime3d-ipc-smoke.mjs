@@ -1,4 +1,5 @@
 import { spawn } from 'node:child_process';
+import { validateNativeEntry } from './runtime3d-native-utils.mjs';
 
 const host = process.env.RUNTIME3D_IPC_HOST || '127.0.0.1';
 const port = Number(process.env.RUNTIME3D_IPC_PORT || 47000 + Math.floor(Math.random() * 1000));
@@ -25,7 +26,7 @@ function pipePrefixed(stream, prefix, onLine) {
 }
 
 function createChild(commandPath, env, prefix, onLine) {
-  const child = spawn(process.execPath, [commandPath], {
+  const child = spawn(commandPath, [], {
     env,
     stdio: ['ignore', 'pipe', 'pipe']
   });
@@ -36,6 +37,14 @@ function createChild(commandPath, env, prefix, onLine) {
 }
 
 async function main() {
+  const validation = validateNativeEntry();
+  if (!validation.ok) {
+    for (const error of validation.errors) {
+      console.error(`[ipc-smoke] ${error}`);
+    }
+    process.exit(1);
+  }
+
   const env = {
     ...process.env,
     RUNTIME3D_IPC_HOST: host,
@@ -50,7 +59,7 @@ async function main() {
   let sidecarSummary = false;
 
   const sidecar = createChild(
-    'runtime/qt-sidecar/main.mjs',
+    validation.entry.sidecarPath,
     env,
     '[ipc-smoke][sidecar]',
     (line) => {
@@ -80,7 +89,7 @@ async function main() {
   }
 
   const godot = createChild(
-    'runtime/godot/main.mjs',
+    validation.entry.godotPath,
     env,
     '[ipc-smoke][godot]',
     (line) => {

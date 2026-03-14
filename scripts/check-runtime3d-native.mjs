@@ -16,15 +16,26 @@ const healthTargets = [
 
 for (const target of healthTargets) {
   const result = spawnSync(target.path, ['--healthcheck'], {
-    stdio: 'inherit',
+    stdio: 'pipe',
+    encoding: 'utf8',
     env: {
       ...process.env,
       RUNTIME3D_SCENARIO: 'healthcheck'
     }
   });
+  if (result.stdout) {
+    process.stdout.write(result.stdout);
+  }
+  if (result.stderr) {
+    process.stderr.write(result.stderr);
+  }
   if (result.status !== 0) {
     console.error(`native healthcheck failed: ${target.name}`);
     process.exit(result.status ?? 1);
+  }
+  if (!String(result.stdout || '').toLowerCase().includes('native')) {
+    console.error(`native binary contract failed: ${target.name} did not report native healthcheck`);
+    process.exit(1);
   }
 }
 

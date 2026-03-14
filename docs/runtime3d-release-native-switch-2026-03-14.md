@@ -9,6 +9,8 @@ Default commands now target native runtime launch and native release packaging:
 - `npm start` -> `scripts/start-runtime3d-release.mjs`
 - `npm run build` -> `scripts/build-runtime3d-release.mjs`
 
+Runtime gameplay path is now provided by native binaries in `runtime/native/*` (no Node gameplay runtime on the main execution path).
+
 ## Native artifact contract
 
 Native artifact manifest is defined at:
@@ -45,5 +47,5 @@ Output artifacts:
 
 ## Notes
 
-Current repository includes shim executables for native contract validation.
-For production launch, replace shim binaries with real Qt6/Godot native binaries while preserving contract names.
+Current repository includes native runtime binaries generated from `runtime/native-src` and packaged in `runtime/native/*`.
+For production launch, continue replacing them with platform-certified Qt6/Godot builds while preserving contract names.

@@ -6,6 +6,7 @@ const requiredDirs = [
   'runtime/qt-sidecar',
   'runtime/shared-ipc',
   'runtime/migration',
+  'runtime/native-src',
   'docs/adr'
 ];
 
@@ -22,6 +23,10 @@ const requiredFiles = [
   'runtime/native/darwin-arm64/godot-runtime',
   'runtime/native/darwin-x64/qt-sidecar',
   'runtime/native/darwin-x64/godot-runtime',
+  'runtime/native-src/go.mod',
+  'runtime/native-src/internal/ipc/ipc.go',
+  'runtime/native-src/cmd/qt-sidecar/main.go',
+  'runtime/native-src/cmd/godot-runtime/main.go',
   'runtime/godot/main.mjs',
   'runtime/godot/window-controller.mjs',
   'runtime/godot/interaction-controller.mjs',
@@ -44,6 +49,7 @@ const requiredFiles = [
   'scripts/runtime3d-performance-smoke.mjs',
   'scripts/runtime3d-native-utils.mjs',
   'scripts/check-runtime3d-native.mjs',
+  'scripts/build-runtime3d-native-binaries.mjs',
   'scripts/start-runtime3d-release.mjs',
   'scripts/build-runtime3d-release.mjs',
   'scripts/package-runtime3d-candidate.mjs',

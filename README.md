@@ -7,6 +7,7 @@
 - 主线：`Runtime3D release-native`
 - 策略：`Mac 先行`，按上线门禁推进
 - 默认入口：`npm start` / `npm run build` 均为 release-native
+- 玩法运行体：`runtime/native/*/{qt-sidecar,godot-runtime}` 原生二进制（非 npm 运行）
 - 历史 Electron 实现仅保留在 `src/` 与 `technical-documentation.md` 作为参考快照
 
 ## 文档入口
@@ -54,6 +55,7 @@ npm run build:runtime3d:release
 - `dist/runtime3d-release/release-manifest.json`
 - `dist/runtime3d-release/performance-report.json`
 - `dist/runtime3d-release/AIDeskPet-runtime3d-<platform-arch>.tar.gz`
+- `dist/runtime3d-release/bundle/run-runtime3d.sh`（解包后可直接运行）
 
 ## Native 运行时约定
 
@@ -62,7 +64,7 @@ npm run build:runtime3d:release
 - `runtime/native/manifest.json`
 
 当前仓库提供 `darwin-arm64` / `darwin-x64` shim 产物用于门禁验证。  
-生产部署时应替换为真实 Qt6 / Godot 二进制，并保持同名入口：
+当前仓库已提供可执行原生运行时（由 `runtime/native-src` 编译产出），保持同名入口：
 
 - `qt-sidecar`
 - `godot-runtime`

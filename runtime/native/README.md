@@ -2,18 +2,28 @@
 
 This directory defines release-native runtime payloads for `Qt sidecar + Godot runtime`.
 
-Current repository bundles shim executables for:
+Current repository bundles native binaries (Go implementation of runtime contract) for:
 
 - `darwin-arm64`
 - `darwin-x64`
 
-Production rollout expectation:
+Build source:
 
-1. Replace shim executables with real native binaries built from Qt6 and Godot.
-2. Keep binary names stable:
+- `runtime/native-src/cmd/qt-sidecar`
+- `runtime/native-src/cmd/godot-runtime`
+
+Build command:
+
+```bash
+npm run build:runtime3d:native-binaries
+```
+
+Runtime contract:
+
+1. Keep binary names stable:
    - `qt-sidecar`
    - `godot-runtime`
-3. Update `runtime/native/manifest.json` version and platform entries.
+2. Update `runtime/native/manifest.json` version and platform entries when adding platforms.
 
 Healthcheck command required for each binary:
 

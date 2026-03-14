@@ -11,11 +11,13 @@ const SIDECAR_READY_MARKERS = [
 ];
 
 function runPrecheck() {
-  const check = spawnSync(process.execPath, ['scripts/check-runtime3d.mjs'], {
-    stdio: 'inherit'
-  });
-  if (check.status !== 0) {
-    process.exit(check.status ?? 1);
+  if (process.env.RUNTIME3D_STRICT_PRECHECK === '1') {
+    const check = spawnSync(process.execPath, ['scripts/check-runtime3d.mjs'], {
+      stdio: 'inherit'
+    });
+    if (check.status !== 0) {
+      process.exit(check.status ?? 1);
+    }
   }
 
   const native = spawnSync(process.execPath, ['scripts/check-runtime3d-native.mjs'], {
