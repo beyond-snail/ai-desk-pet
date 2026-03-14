@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ "${1:-}" == "--healthcheck" ]]; then
+  echo "qt-sidecar healthcheck ok (shim)"
+  exit 0
+fi
+
+if [[ "${1:-}" == "--version" ]]; then
+  echo "qt-sidecar shim 1.0.0"
+  exit 0
+fi
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+exec node "$REPO_ROOT/runtime/qt-sidecar/main.mjs"

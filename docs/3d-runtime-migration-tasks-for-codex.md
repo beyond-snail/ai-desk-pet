@@ -5,6 +5,12 @@
 本任务书用于指导 Codex 将 AI Desk Pet 从 Electron 2.5D 架构迁移到 Qt6 + Godot 混合架构。  
 要求：玩法语义不变，视觉与性能优先，macOS 先行，达到门槛后尽快切换主线。
 
+统一术语（与主方案保持一致）：
+- `Qt6+Godot`
+- `Mac先行`
+- `视觉性能优先`
+- `快速切换再补功能`
+
 - 执行分支：`feat/3d-runtime-switch-a-bootstrap`
 - 执行方式：按阶段推进，阶段验收通过后进入下一阶段
 

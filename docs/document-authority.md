@@ -64,6 +64,9 @@
 ### `docs/runtime3d-final-dod-status-2026-03-13.md`
 用途：Runtime3D A-G 阶段完成状态与 Final DoD 检查记录。
 
+### `docs/runtime3d-release-native-switch-2026-03-14.md`
+用途：Runtime3D 默认入口切换到 release-native 的执行说明和门禁标准。
+
 ### `docs/adr/*`
 用途：Runtime3D 架构决策记录（为什么这么做）。
 
@@ -108,8 +111,9 @@
 10. `docs/runtime3d-stage-f-performance-build-foundation-2026-03-13.md`
 11. `docs/runtime3d-stage-g-backfill-foundation-2026-03-13.md`
 12. `docs/runtime3d-final-dod-status-2026-03-13.md`
-13. `docs/adr/*`
-14. 其他历史/参考文档（按需）
+13. `docs/runtime3d-release-native-switch-2026-03-14.md`
+14. `docs/adr/*`
+15. 其他历史/参考文档（按需）
 
 ### 3D 换轨实施场景（强制）
 1. `docs/product-roadmap-2026.md`
@@ -123,9 +127,10 @@
 9. `docs/runtime3d-stage-f-performance-build-foundation-2026-03-13.md`
 10. `docs/runtime3d-stage-g-backfill-foundation-2026-03-13.md`
 11. `docs/runtime3d-final-dod-status-2026-03-13.md`
-12. `docs/adr/*`
-13. `README.md`
-14. `technical-documentation.md`（仅历史语义比对）
+12. `docs/runtime3d-release-native-switch-2026-03-14.md`
+13. `docs/adr/*`
+14. `README.md`
+15. `technical-documentation.md`（仅历史语义比对）
 
 ## 5. 冲突处理规则
 

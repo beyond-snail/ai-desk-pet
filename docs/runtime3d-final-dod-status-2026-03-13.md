@@ -12,6 +12,10 @@ This status means:
 2. All stage acceptance checks are represented by executable smoke checks.
 3. Build pipeline produces a runtime3d candidate archive artifact.
 
+Update:
+- On 2026-03-14, default command path switched to release-native mode.
+- See `docs/runtime3d-release-native-switch-2026-03-14.md`.
+
 ## Stage checklist
 
 1. A: repo skeleton + ADR + baseline: done
@@ -32,9 +36,9 @@ npm run build
 
 Expected artifacts:
 
-1. `dist/runtime3d-bootstrap/manifest.json`
-2. `dist/runtime3d-bootstrap/performance-report.json`
-3. `dist/runtime3d-bootstrap/runtime3d-candidate-<platform>.tar.gz`
+1. `dist/runtime3d-release/release-manifest.json`
+2. `dist/runtime3d-release/performance-report.json`
+3. `dist/runtime3d-release/AIDeskPet-runtime3d-<platform-arch>.tar.gz`
 
 ## Remaining work category
 

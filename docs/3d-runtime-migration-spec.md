@@ -5,6 +5,12 @@
 本文档定义 AI Desk Pet 从当前 Electron 2.5D 实现迁移到 Qt6 + Godot 混合架构的完整技术方案。  
 目标是保持玩法语义不变，优先解决包体偏大与运行功耗偏高问题，并在 macOS 先完成可切换版本。
 
+统一术语（全文执行口径）：
+- `Qt6+Godot`
+- `Mac先行`
+- `视觉性能优先`
+- `快速切换再补功能`
+
 - 文档状态：当前有效（迁移主方案）
 - 适用版本：3D Runtime Migration v1
 - 首发平台：macOS（Intel + Apple Silicon）

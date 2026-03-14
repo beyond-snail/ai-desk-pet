@@ -2,11 +2,12 @@
   "name": "ai-desk-pet",
   "version": "1.0.0",
   "description": "AI 桌面宠物 - 你的智能桌面伙伴",
-  "main": "src/main/index.js",
+  "main": "runtime/godot/main.mjs",
   "scripts": {
-    "start": "node scripts/start-runtime3d-bootstrap.mjs",
-    "dev": "node scripts/start-runtime3d-bootstrap.mjs",
-    "start:runtime3d": "node scripts/start-runtime3d-bootstrap.mjs",
+    "start": "node scripts/start-runtime3d-release.mjs",
+    "dev": "node scripts/start-runtime3d-release.mjs",
+    "start:runtime3d": "node scripts/start-runtime3d-release.mjs",
+    "start:runtime3d:bootstrap": "node scripts/start-runtime3d-bootstrap.mjs",
     "start:runtime3d:qt": "node runtime/qt-sidecar/main.mjs",
     "start:runtime3d:godot": "node runtime/godot/main.mjs",
     "smoke:runtime3d:ipc": "node scripts/runtime3d-ipc-smoke.mjs",
@@ -15,121 +16,34 @@
     "smoke:runtime3d:backfill": "node scripts/runtime3d-backfill-smoke.mjs",
     "smoke:runtime3d:performance": "node scripts/runtime3d-performance-smoke.mjs",
     "build:runtime3d:package": "node scripts/package-runtime3d-candidate.mjs",
+    "check:runtime3d:native": "node scripts/check-runtime3d-native.mjs",
     "check": "npm run check:syntax && npm run check:characters && npm run check:runtime3d",
     "check:syntax": "node scripts/check-syntax.mjs",
     "check:characters": "node scripts/verify-character-configs.mjs",
     "check:runtime3d": "node scripts/check-runtime3d.mjs",
-    "build": "node scripts/build-runtime3d-bootstrap.mjs",
-    "build:runtime3d": "node scripts/build-runtime3d-bootstrap.mjs",
-    "build:mac": "node scripts/build-runtime3d-bootstrap.mjs",
-    "build:mac:local": "node scripts/build-runtime3d-bootstrap.mjs",
-    "release:check:mac": "node scripts/check-runtime3d.mjs",
-    "build:mac:release": "npm run release:check:mac && npm run build:runtime3d",
-    "release:check": "npm run check",
-    "build:win": "node scripts/build-runtime3d-bootstrap.mjs",
-    "build:linux": "node scripts/build-runtime3d-bootstrap.mjs",
-    "build:all": "node scripts/build-runtime3d-bootstrap.mjs",
-    "build:dist": "npm run check && npm run build:runtime3d"
+    "build": "node scripts/build-runtime3d-release.mjs",
+    "build:runtime3d": "node scripts/build-runtime3d-release.mjs",
+    "build:runtime3d:release": "node scripts/build-runtime3d-release.mjs",
+    "build:mac": "node scripts/build-runtime3d-release.mjs",
+    "build:mac:local": "node scripts/build-runtime3d-release.mjs",
+    "release:check:mac": "npm run check && npm run check:runtime3d:native",
+    "build:mac:release": "npm run release:check:mac && npm run build:runtime3d:release",
+    "release:check": "npm run release:check:mac",
+    "build:win": "node scripts/build-runtime3d-release.mjs",
+    "build:linux": "node scripts/build-runtime3d-release.mjs",
+    "build:all": "node scripts/build-runtime3d-release.mjs",
+    "build:dist": "npm run release:check && npm run build:runtime3d:release"
   },
   "keywords": [
-    "electron",
+    "godot",
+    "qt6",
     "ai",
     "desktop-pet"
   ],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "electron-store": "^10.1.0",
-    "electron-updater": "^6.6.2"
-  },
-  "devDependencies": {
-    "electron": "^33.4.11",
-    "electron-builder": "^25.1.8"
-  },
-  "build": {
-    "appId": "com.ai-desk-pet.app",
-    "productName": "AIDeskPet",
-    "directories": {
-      "output": "dist",
-      "buildResources": "build"
-    },
-    "files": [
-      "src/**/*",
-      "assets/**/*",
-      "scripts/**/*",
-      "package.json"
-    ],
-    "mac": {
-      "category": "public.app-category.entertainment",
-      "icon": "assets/icon.icns",
-      "target": [
-        {
-          "target": "dmg",
-          "arch": [
-            "x64",
-            "arm64"
-          ]
-        }
-      ],
-      "darkModeSupport": true,
-      "hardenedRuntime": true,
-      "gatekeeperAssess": false,
-      "entitlements": "build/entitlements.mac.plist",
-      "entitlementsInherit": "build/entitlements.mac.inherit.plist"
-    },
-    "dmg": {
-      "title": "AIDeskPet",
-      "contents": [
-        {
-          "x": 130,
-          "y": 220
-        },
-        {
-          "x": 410,
-          "y": 220,
-          "type": "link",
-          "path": "/Applications"
-        }
-      ]
-    },
-    "win": {
-      "icon": "assets/icon.ico",
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64"
-          ]
-        }
-      ]
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "installerIcon": "assets/icon.ico",
-      "uninstallerIcon": "assets/icon.ico",
-      "installerHeaderIcon": "assets/icon.ico",
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "shortcutName": "AIDeskPet"
-    },
-    "linux": {
-      "icon": "assets/icon.png",
-      "target": [
-        "AppImage"
-      ],
-      "category": "Game"
-    },
-    "artifactName": "${productName}-${version}-${arch}.${ext}",
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "beyond-snail",
-        "repo": "ai-desk-pet",
-        "releaseType": "draft"
-      }
-    ]
-  },
+  "dependencies": {},
+  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/beyond-snail/ai-desk-pet.git"

@@ -16,9 +16,9 @@ jobs:
         include:
           - os: macos-latest
             artifact_name: runtime3d-candidate-macos
-            build_command: npm run build
+            build_command: npm run build:runtime3d:release
             artifact_glob: |
-              dist/runtime3d-bootstrap/**
+              dist/runtime3d-release/**
 
     runs-on: ${{ matrix.os }}
 
@@ -36,7 +36,7 @@ jobs:
         run: npm ci
 
       - name: Validate source
-        run: npm run check
+        run: npm run check && npm run check:runtime3d:native
 
       - name: Build runtime3d candidate artifact
         run: ${{ matrix.build_command }}

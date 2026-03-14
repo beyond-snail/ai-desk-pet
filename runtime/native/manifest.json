@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0-release-native",
+  "description": "Runtime3D native artifact manifest",
+  "platforms": {
+    "darwin-arm64": {
+      "dir": "darwin-arm64",
+      "godot_runtime": "godot-runtime",
+      "qt_sidecar": "qt-sidecar"
+    },
+    "darwin-x64": {
+      "dir": "darwin-x64",
+      "godot_runtime": "godot-runtime",
+      "qt_sidecar": "qt-sidecar"
+    }
+  }
+}

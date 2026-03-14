@@ -16,6 +16,12 @@ const requiredFiles = [
   'runtime/shared-ipc/schema-v1.json',
   'runtime/shared-ipc/protocol.mjs',
   'runtime/shared-ipc/line-codec.mjs',
+  'runtime/native/README.md',
+  'runtime/native/manifest.json',
+  'runtime/native/darwin-arm64/qt-sidecar',
+  'runtime/native/darwin-arm64/godot-runtime',
+  'runtime/native/darwin-x64/qt-sidecar',
+  'runtime/native/darwin-x64/godot-runtime',
   'runtime/godot/main.mjs',
   'runtime/godot/window-controller.mjs',
   'runtime/godot/interaction-controller.mjs',
@@ -36,6 +42,10 @@ const requiredFiles = [
   'scripts/runtime3d-migration-smoke.mjs',
   'scripts/runtime3d-backfill-smoke.mjs',
   'scripts/runtime3d-performance-smoke.mjs',
+  'scripts/runtime3d-native-utils.mjs',
+  'scripts/check-runtime3d-native.mjs',
+  'scripts/start-runtime3d-release.mjs',
+  'scripts/build-runtime3d-release.mjs',
   'scripts/package-runtime3d-candidate.mjs',
   'docs/adr/0001-runtime3d-topology.md',
   'docs/adr/0002-ipc-versioning.md',
@@ -47,7 +57,8 @@ const requiredFiles = [
   'docs/runtime3d-stage-e-migration-foundation-2026-03-13.md',
   'docs/runtime3d-stage-f-performance-build-foundation-2026-03-13.md',
   'docs/runtime3d-stage-g-backfill-foundation-2026-03-13.md',
-  'docs/runtime3d-final-dod-status-2026-03-13.md'
+  'docs/runtime3d-final-dod-status-2026-03-13.md',
+  'docs/runtime3d-release-native-switch-2026-03-14.md'
 ];
 
 const requiredEvents = [
@@ -108,6 +119,16 @@ if (!hasError) {
     hasError = true;
     console.error('invalid runtime/shared-ipc/schema-v1.json');
     console.error(error.message);
+  }
+}
+
+if (!hasError) {
+  const nativeSmoke = spawnSync(process.execPath, ['scripts/check-runtime3d-native.mjs'], {
+    stdio: 'inherit'
+  });
+  if (nativeSmoke.status !== 0) {
+    hasError = true;
+    console.error('runtime3d native check failed');
   }
 }
 
