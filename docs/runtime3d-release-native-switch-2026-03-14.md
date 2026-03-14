@@ -39,6 +39,13 @@ Release gate now requires:
 2. `npm run check:runtime3d:native`
 3. `npm run build:runtime3d:release`
 
+`npm run build:runtime3d:release` includes an automatic release-app smoke:
+
+- mount dmg
+- launch `AIDeskPet.app`
+- verify handshake markers
+- detach dmg
+
 Output artifacts:
 
 1. `dist/runtime3d-release/<platform-arch>/AIDeskPet-runtime3d-manifest-<platform-arch>.json`

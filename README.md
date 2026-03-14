@@ -51,6 +51,8 @@ npm run check:runtime3d:native
 npm run build:runtime3d:release
 ```
 
+说明：`build:runtime3d:release` 会在生成 dmg 后自动执行 `.app` 冒烟自测（挂载/启动/握手/卸载）。
+
 候选产物：
 
 - `dist/runtime3d-release/<platform-arch>/AIDeskPet-runtime3d-manifest-<platform-arch>.json`

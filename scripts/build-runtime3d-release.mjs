@@ -143,6 +143,8 @@ if (dmg.status !== 0) {
   process.exit(dmg.status ?? 1);
 }
 
+mustPass(process.execPath, ['scripts/runtime3d-release-app-smoke.mjs', '--dmg', dmgPath]);
+
 writeFileSync(
   resolve(outputDir, manifestName),
   JSON.stringify(
