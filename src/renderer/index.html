@@ -100,9 +100,24 @@
       let pendingHideRequest = false;
       let chatMoodResetTimer = null;
       let isPetVisible = true;
+      const runtime3dPerfMode = Boolean(
+        window.electronAPI &&
+        typeof window.electronAPI.isRuntime3dPerfMode === 'function' &&
+        window.electronAPI.isRuntime3dPerfMode()
+      );
 
       window.growthSystem = growthSystem;
       window.petManager = petManager;
+
+      function signalRuntime3dPerf(stage, detail = {}) {
+        if (!runtime3dPerfMode) {
+          return;
+        }
+
+        if (window.electronAPI && typeof window.electronAPI.runtime3dPerfSignal === 'function') {
+          window.electronAPI.runtime3dPerfSignal(stage, detail);
+        }
+      }
 
       function getPetElement() {
         return petController.getElement();
@@ -510,6 +525,84 @@
         emitCareParticles(action);
       }
 
+      function startRuntime3dPerfScenario() {
+        if (!runtime3dPerfMode) {
+          return;
+        }
+
+        const totalDurationMs = 30 * 60 * 1000;
+        const idlePhaseMs = 10 * 60 * 1000;
+        const activePhaseMs = 10 * 60 * 1000;
+        const startAt = Date.now();
+        let currentPhase = 'idle';
+        let perfTimer = null;
+
+        signalRuntime3dPerf('perf-scenario-start', {
+          totalDurationMs,
+          idlePhaseMs,
+          activePhaseMs
+        });
+        signalRuntime3dPerf('perf-phase-idle');
+
+        const getRandomTarget = () => {
+          const petElement = getPetElement();
+          const width = petElement ? (petElement.offsetWidth || 96) : 96;
+          const height = petElement ? (petElement.offsetHeight || 56) : 56;
+          return {
+            x: Math.max(24, Math.round(Math.random() * Math.max(24, window.innerWidth - width - 24))),
+            y: Math.max(24, Math.round(Math.random() * Math.max(24, window.innerHeight - height - 24)))
+          };
+        };
+
+        const runPerfStep = () => {
+          const elapsed = Date.now() - startAt;
+          if (elapsed >= totalDurationMs) {
+            if (perfTimer) {
+              clearInterval(perfTimer);
+              perfTimer = null;
+            }
+            hideInputPanel();
+            signalRuntime3dPerf('perf-scenario-complete');
+            return;
+          }
+
+          let nextPhase = 'cooldown';
+          if (elapsed < idlePhaseMs) {
+            nextPhase = 'idle';
+          } else if (elapsed < idlePhaseMs + activePhaseMs) {
+            nextPhase = 'active';
+          }
+
+          if (nextPhase !== currentPhase) {
+            currentPhase = nextPhase;
+            signalRuntime3dPerf(`perf-phase-${currentPhase}`, { elapsedMs: elapsed });
+          }
+
+          if (currentPhase === 'idle') {
+            return;
+          }
+
+          const actions = ['feed', 'pet', 'clean'];
+          const action = actions[Math.floor(Math.random() * actions.length)];
+          if (currentPhase === 'active' || Math.random() < 0.5) {
+            performCareAction(action);
+          }
+
+          petController.moveToTarget(getRandomTarget());
+          petController.playTemporaryAnimation(
+            Math.random() < 0.5 ? 'celebrate' : 'idle-look',
+            currentPhase === 'active' ? 1200 : 900
+          );
+
+          if (currentPhase === 'active' && Math.random() < 0.35) {
+            growthSystem.addInteraction('chat');
+            chatBubble.show('性能压测交互中。', 1200);
+          }
+        };
+
+        perfTimer = setInterval(runPerfStep, 2200);
+      }
+
       async function loadGrowthDiary() {
         try {
           if (window.electronAPI && window.electronAPI.storeGet) {
@@ -638,6 +731,9 @@
       await petController.init();
       chatBubble.init(petController);
       characterPicker.init(petController);
+      signalRuntime3dPerf('interactive-ready', {
+        marker: 'pet-controller-ready'
+      });
       await growthSystem.init({
         characterId: petController.currentCharacterId,
         characterConfig: petController.registry.get(petController.currentCharacterId)
@@ -731,10 +827,15 @@
 
       hideInputPanel();
 
-      const initialWeatherPayload = await weatherService.fetchWeather();
-      if (initialWeatherPayload) {
-        petController.applyWeatherState(initialWeatherPayload);
-      }
+      weatherService.fetchWeather()
+        .then((initialWeatherPayload) => {
+          if (initialWeatherPayload) {
+            petController.applyWeatherState(initialWeatherPayload);
+          }
+        })
+        .catch((error) => {
+          console.warn('initial weather fetch failed:', error);
+        });
 
       if (window.electronAPI && window.electronAPI.getSystemSnapshot) {
         const snapshot = await window.electronAPI.getSystemSnapshot();
@@ -1051,7 +1152,7 @@
         });
       }
 
-      const shouldRunOnboarding = await onboardingGuide.shouldRun();
+      const shouldRunOnboarding = runtime3dPerfMode ? false : await onboardingGuide.shouldRun();
       if (shouldRunOnboarding) {
         proactiveBehavior.setSuppressed(true);
         onboardingGuide.start({
@@ -1096,6 +1197,10 @@
 
           handler();
         });
+      }
+
+      if (runtime3dPerfMode) {
+        startRuntime3dPerfScenario();
       }
 
       window.addEventListener('pet:move', function(event) {

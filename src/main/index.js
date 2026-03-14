@@ -12,6 +12,8 @@ const BUILT_IN_LLM = {
 
 const DAILY_LIMIT = 100;
 const RUNTIME3D_PREFIX = 'runtime3d';
+const RUNTIME3D_PERF_MODE = process.env.AIDESKPET_RUNTIME3D_PERF === '1';
+const RUNTIME3D_PERF_REPORT = (process.env.AIDESKPET_RUNTIME3D_PERF_REPORT || '').trim();
 
 const RUNTIME3D_KEY_MAP = {
   characterId: 'runtime3d.character.id',
@@ -92,6 +94,23 @@ function readRuntime3dValue(key, defaultValue = undefined) {
 
 function writeRuntime3dValue(key, value) {
   store.set(resolveRuntime3dKey(key), value);
+}
+
+function appendRuntime3dPerfSignal(stage, detail = {}) {
+  if (!RUNTIME3D_PERF_MODE || !RUNTIME3D_PERF_REPORT) {
+    return;
+  }
+
+  const payload = {
+    stage: String(stage || 'unknown'),
+    at: Date.now(),
+    detail: detail && typeof detail === 'object' ? detail : {}
+  };
+
+  try {
+    fs.appendFileSync(RUNTIME3D_PERF_REPORT, `${JSON.stringify(payload)}\n`);
+  } catch (_error) {
+  }
 }
 
 let autoUpdater = null;
@@ -398,6 +417,10 @@ function createWindow() {
     }
   });
 
+  mainWindow.webContents.on('did-finish-load', () => {
+    appendRuntime3dPerfSignal('renderer-loaded');
+  });
+
   mainWindow.webContents.session.setPermissionRequestHandler((_webContents, permission, callback) => {
     if (permission === 'media' || permission === 'microphone' || permission === 'audioCapture') {
       callback(true);
@@ -671,6 +694,12 @@ function registerIpc() {
     };
   });
 
+  ipcMain.on('runtime3d:perf-signal', (_event, payload = {}) => {
+    const stage = payload && payload.stage ? payload.stage : 'renderer-signal';
+    const detail = payload && payload.detail ? payload.detail : {};
+    appendRuntime3dPerfSignal(stage, detail);
+  });
+
   ipcMain.handle('store:get', (_event, key) => {
     return readRuntime3dValue(key);
   });
@@ -732,6 +761,7 @@ function registerIpc() {
 
 app.whenReady().then(async () => {
   await initStore();
+  appendRuntime3dPerfSignal('app-ready');
   registerIpc();
   createWindow();
   createTray();

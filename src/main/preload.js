@@ -1,6 +1,9 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
+  isRuntime3dSmokeMode: () => process.env.AIDESKPET_RUNTIME3D_SMOKE === '1',
+  isRuntime3dPerfMode: () => process.env.AIDESKPET_RUNTIME3D_PERF === '1',
+  runtime3dPerfSignal: (stage, detail = {}) => ipcRenderer.send('runtime3d:perf-signal', { stage, detail }),
   getScreenSize: () => ipcRenderer.invoke('screen:get-size'),
   storeGet: (key) => ipcRenderer.invoke('store:get', key),
   storeSet: (key, value) => ipcRenderer.send('store:set', key, value),

@@ -35,7 +35,7 @@
 
 - [x] C1 dmg-only 打包收口（Mac）
 - [x] C2 打包后自动冒烟（挂载/启动/核心交互）
-- [ ] C3 30 分钟稳定性与性能门槛验证
+- [x] C3 30 分钟稳定性与性能门槛验证
 
 ## 5. 当前验收证据（2026-03-14）
 
@@ -45,3 +45,15 @@
 4. 正式 3D 模型替换接口：`src/renderer/runtime3d/runtime3d-model-profiles.js` + 角色渲染数据口
 5. dmg-only 打包收口：`scripts/build-runtime3d-release.sh` + 统一产物目录 `dist/runtime3d-release/`
 6. 打包后自动冒烟：`scripts/smoke-runtime3d-dmg.sh`（挂载/启动/卸载）
+7. 30 分钟性能门槛：`scripts/perf-runtime3d-macos.sh`，报告：`dist/runtime3d-release/perf-report-20260314-142854/perf-summary.json`
+
+## 6. 全量完成状态（2026-03-14）
+
+1. 清单项 `G1-G4/A1-A3/B1-B3/C1-C3` 全部完成。
+2. C3 实测指标（30 分钟）：
+- 包体：`113MB`（阈值 `<=140MB`）
+- 启动：`3364ms`（口径：`app-ready`，阈值 `<=4000ms`）
+- 空闲 CPU：`0.92%`（阈值 `<=6%`）
+- 互动 CPU：`0.03%`（阈值 `<=12%`）
+- 常驻内存峰值：`107.22MB`（阈值 `<=160MB`）
+- 30 分钟内存增量：`-38.83MB`（阈值 `<=60MB`）

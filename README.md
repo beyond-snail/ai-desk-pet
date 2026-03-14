@@ -19,6 +19,7 @@ cleanroom 分支命令（非 npm 主入口）：
 make check-runtime3d
 make smoke-runtime3d
 make build-runtime3d-release
+make perf-runtime3d-macos
 ```
 
 Runtime3D 打包产物（Mac 先行）：
@@ -34,6 +35,16 @@ Runtime3D 安装步骤（macOS）：
 1. 双击打开对应架构的 `.dmg`
 2. 将 `AIDeskPet.app` 拖入 `Applications`
 3. 首次运行若被系统拦截，执行：系统设置 -> 隐私与安全性 -> 仍要打开
+
+Runtime3D 性能压测（30 分钟）：
+
+```bash
+make perf-runtime3d-macos
+```
+
+报告输出目录：
+
+- `dist/runtime3d-release/perf-report-<timestamp>/perf-summary.json`
 
 ## 当前状态
 
